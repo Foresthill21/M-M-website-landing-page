@@ -320,13 +320,20 @@ COINS.forEach(c => rows[c.id] = {
 
 /* Reference benchmarks. Same shape as rows, but excluded from the main table
    and from basket-average calculations. */
-/* DeFiLlama unlock links. Their /protocol/unlocks/<slug> URLs use
-   inconsistent slug conventions (some -v2, some -finance, some bare) and
-   guessing wrong 404s. Instead we send users to DeFiLlama's global unlocks
-   ranking page and pre-fill a search query with the ticker — every token
-   with unlock data will be one keystroke or click away, and tokens without
-   an entry there simply won't show a result. */
-const dlUnlockUrl = t => `https://defillama.com/unlocks?search=${encodeURIComponent(t)}`;
+/* DeFiLlama unlock-page slugs, verified one-by-one against their site.
+   Pattern: defillama.com/unlocks/<slug>. Slugs are inconsistent across the
+   site (some use -finance, some don't, ether.fi has a dot), so the only
+   safe approach is to check each. */
+const DL_UNLOCK_SLUGS = {
+  UNI:'uniswap', CRV:'curve-finance', AERO:'aerodrome', JUP:'jupiter',
+  PENDLE:'pendle', HYPE:'hyperliquid', AAVE:'aave', MORPHO:'morpho',
+  SKY:'sky', KMNO:'kamino', EUL:'euler', ONDO:'ondo-finance',
+  CFG:'centrifuge', SYRUP:'maple-finance', ETHFI:'ether.fi', ENA:'ethena',
+  FF:'falcon-finance', CC:'canton', ZRO:'layerzero', VIRTUAL:'virtuals-protocol'
+};
+const dlUnlockUrl = t => DL_UNLOCK_SLUGS[t]
+  ? `https://defillama.com/unlocks/${DL_UNLOCK_SLUGS[t]}`
+  : `https://defillama.com/unlocks?search=${encodeURIComponent(t)}`;
 
 /* Reference benchmarks. Same shape as rows, but excluded from the main table
    and from basket-average calculations. */
