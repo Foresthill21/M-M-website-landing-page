@@ -1,0 +1,1111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DeFi Token Monitor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75,600;75,700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lightweight-charts/4.2.0/lightweight-charts.standalone.production.min.js"></script>
+<style>
+  :root{
+    --bg:#0c1016;
+    --panel:#111721;
+    --panel-2:#151d29;
+    --line:#1e2937;
+    --line-soft:#182230;
+    --text:#e8eef5;
+    --muted:#8494a7;
+    --faint:#5b6b7e;
+    --pos:#3ecf9a;
+    --neg:#f26d85;
+    --accent:#f2b13e;
+    --accent-dim:rgba(242,177,62,.14);
+    --mono:'IBM Plex Mono',ui-monospace,monospace;
+    --sans:'IBM Plex Sans',system-ui,sans-serif;
+    --disp:'Archivo',var(--sans);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:14px}
+  a{color:inherit;text-decoration:none}
+  a:hover{color:var(--accent)}
+  :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+  .wrap{max-width:1560px;margin:0 auto;padding:22px 20px 40px}
+
+  /* ---------- header ---------- */
+  header{display:flex;flex-wrap:wrap;align-items:flex-end;gap:14px 24px;margin-bottom:6px}
+  .brand h1{font-family:var(--disp);font-stretch:75%;font-weight:700;font-size:26px;letter-spacing:.04em;text-transform:uppercase}
+  .brand h1 span{color:var(--accent)}
+  .brand p{color:var(--muted);font-size:12.5px;margin-top:3px}
+  .brand p.hint{margin-top:8px;font-family:var(--disp);font-stretch:75%;font-weight:600;font-size:15px;letter-spacing:.03em;color:var(--accent);text-transform:uppercase}
+  .status{margin-left:auto;display:flex;align-items:center;gap:14px}
+  .sync{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:11.5px;color:var(--muted);letter-spacing:.05em}
+  .dot{width:8px;height:8px;border-radius:50%;background:var(--pos);box-shadow:0 0 0 0 rgba(62,207,154,.5);animation:pulse 2.2s infinite}
+  .dot.err{background:var(--neg);animation:none}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(62,207,154,.45)}70%{box-shadow:0 0 0 7px rgba(62,207,154,0)}100%{box-shadow:0 0 0 0 rgba(62,207,154,0)}}
+  @media (prefers-reduced-motion:reduce){.dot{animation:none}}
+  button.refresh{font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;color:var(--accent);background:var(--accent-dim);border:1px solid rgba(242,177,62,.35);border-radius:6px;padding:7px 13px;cursor:pointer}
+  button.refresh:hover{background:rgba(242,177,62,.22)}
+  button.refresh:disabled{opacity:.5;cursor:wait}
+
+  .note{margin:10px 0 16px;padding:9px 12px;border:1px solid var(--line-soft);border-left:3px solid var(--accent);border-radius:6px;background:var(--panel);color:var(--muted);font-size:12.5px;line-height:1.5}
+  .note b{color:var(--text);font-weight:600}
+  .note.hidden{display:none}
+
+  /* ---------- benchmark panel ---------- */
+  .bench{border:1px solid var(--line);border-radius:10px;background:var(--panel);margin:0 0 14px;overflow:hidden}
+  .bench-hdr{padding:12px 16px 8px;border-bottom:1px solid var(--line-soft);display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 14px}
+  .bench-hdr h2{font-family:var(--disp);font-stretch:75%;font-weight:700;font-size:14px;letter-spacing:.06em;text-transform:uppercase;color:var(--text)}
+  .bench-hdr p{color:var(--muted);font-size:12px;line-height:1.4}
+  .bench table{border-collapse:collapse;width:100%;min-width:640px}
+  .bench th,.bench td{padding:9px 14px;font-family:var(--mono);font-size:12.5px;font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap;border-bottom:1px solid var(--line-soft)}
+  .bench thead th{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600;background:var(--panel-2)}
+  .bench thead th.left{text-align:left}
+  .bench td.left{text-align:left}
+  .bench tbody tr:last-child td{border-bottom:none}
+  .bench .lbl{font-family:var(--sans);font-weight:600;color:var(--text);font-size:13px}
+  .bench .lbl.sml{font-size:12.5px}
+  .bench .sub{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.04em;color:var(--faint);margin-top:1px}
+  .bench .row-basket td{background:rgba(242,177,62,.06)}
+  .bench .row-basket .lbl{color:var(--accent)}
+  .bench .row-bench a{color:var(--accent);font-weight:600;font-family:var(--sans);font-size:13px}
+  .bench .row-bench a:hover{text-decoration:underline}
+  .bench .row-delta td{background:#0e131b;color:var(--muted)}
+  .bench .row-delta .lbl{color:var(--muted);font-weight:500}
+  @media(max-width:700px){.bench{overflow-x:auto}.bench-hdr h2{font-size:12.5px}}
+
+  /* ---------- table ---------- */
+  .table-shell{border:1px solid var(--line);border-radius:10px;background:var(--panel);overflow:auto;max-height:78vh}
+  table{border-collapse:separate;border-spacing:0;width:100%;min-width:1420px}
+  thead th{position:sticky;top:0;z-index:3;background:var(--panel-2);border-bottom:1px solid var(--line);
+    font-family:var(--mono);font-size:10.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);
+    padding:11px 12px;white-space:nowrap;cursor:pointer;user-select:none;text-align:right}
+  thead th:hover{color:var(--text)}
+  thead th.sorted{color:var(--accent)}
+  thead th .sub{display:block;font-size:9px;color:var(--faint);letter-spacing:.06em;text-transform:none;margin-top:2px}
+  thead th.left{text-align:left}
+  th .arrow{display:inline-block;width:10px;color:var(--accent);font-size:9px;transform:translateY(-1px)}
+  tbody td{padding:10px 12px;border-bottom:1px solid var(--line-soft);font-family:var(--mono);font-size:13px;text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+  tbody tr:last-child td{border-bottom:none}
+  tbody tr:hover td{background:#141c28}
+  td.left{text-align:left}
+  .proj{font-family:var(--sans);font-weight:600;font-size:13.5px}
+  .proj a:hover{color:var(--accent)}
+  .chain{display:block;font-size:10.5px;color:var(--faint);font-family:var(--mono);margin-top:1px;letter-spacing:.04em}
+  .tick a{color:var(--accent);font-weight:600;letter-spacing:.03em}
+  .tick a:hover{text-decoration:underline}
+  .pos{color:var(--pos)}
+  .neg{color:var(--neg)}
+  .na{color:var(--faint)}
+  .supply-cell .bar{display:block;height:3px;width:84px;margin:5px 0 0 auto;background:#233144;border-radius:2px;overflow:hidden}
+  .supply-cell .bar i{display:block;height:100%;background:linear-gradient(90deg,#3a7bd5,#3ecf9a)}
+  .skel{display:inline-block;width:52px;height:11px;border-radius:3px;background:linear-gradient(90deg,#1a2432 25%,#233144 50%,#1a2432 75%);background-size:200% 100%;animation:sh 1.4s infinite}
+  @keyframes sh{0%{background-position:200% 0}100%{background-position:-200% 0}}
+  @media (prefers-reduced-motion:reduce){.skel{animation:none}}
+
+  /* ---------- chart modal ---------- */
+  .clickable{cursor:pointer}
+  .overlay{position:fixed;inset:0;background:rgba(5,8,12,.78);backdrop-filter:blur(3px);z-index:50;display:none;align-items:center;justify-content:center;padding:18px}
+  .overlay.open{display:flex}
+  .modal{width:min(1240px,100%);max-height:94vh;display:flex;flex-direction:column;background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden;box-shadow:0 24px 80px rgba(0,0,0,.6)}
+  .m-head{display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;padding:13px 16px;border-bottom:1px solid var(--line);background:var(--panel-2)}
+  .m-title{font-family:var(--disp);font-stretch:75%;font-weight:700;font-size:18px;letter-spacing:.03em;text-transform:uppercase}
+  .m-title .tk{color:var(--accent)}
+  .m-price{font-family:var(--mono);font-size:14px}
+  .m-links{display:flex;gap:12px;font-family:var(--mono);font-size:11px;color:var(--muted)}
+  .m-links a{color:var(--muted);border-bottom:1px dotted var(--faint)}
+  .m-links a:hover{color:var(--accent)}
+  .m-close{margin-left:auto;background:none;border:1px solid var(--line);border-radius:6px;color:var(--muted);font-size:16px;line-height:1;padding:6px 10px;cursor:pointer}
+  .m-close:hover{color:var(--text);border-color:var(--muted)}
+  .m-bar{display:flex;flex-wrap:wrap;align-items:center;gap:6px 18px;padding:9px 16px;border-bottom:1px solid var(--line-soft)}
+  .seg{display:flex;gap:4px;flex-wrap:wrap}
+  .seg-label{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;color:var(--faint);text-transform:uppercase;margin-right:2px;align-self:center}
+  .seg button{font-family:var(--mono);font-size:11px;letter-spacing:.04em;color:var(--muted);background:none;border:1px solid var(--line);border-radius:5px;padding:5px 9px;cursor:pointer}
+  .seg button:hover{color:var(--text);border-color:var(--muted)}
+  .seg button.on{color:var(--accent);border-color:rgba(242,177,62,.55);background:var(--accent-dim)}
+  .m-body{position:relative;flex:1;min-height:0;overflow-y:auto;padding:8px 10px 12px}
+  .pane{position:relative}
+  .pane-label{position:absolute;top:6px;left:10px;z-index:5;font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;color:var(--faint);text-transform:uppercase;pointer-events:none}
+  #paneMain{height:400px}
+  #paneRSI,#paneMACD{height:120px;border-top:1px solid var(--line-soft);display:none}
+  .lite-mode #paneRSI.show,.lite-mode #paneMACD.show{display:block}
+  #paneTV{height:min(560px,62vh);display:none}
+  .tv-mode #paneTV{display:block}
+  .tv-mode #paneMain,.tv-mode #paneRSI,.tv-mode #paneMACD{display:none}
+  .tv-mode #tfSeg,.tv-mode #indSeg{display:none}
+  .m-status{position:absolute;inset:0;display:none;align-items:center;justify-content:center;z-index:10;font-family:var(--mono);font-size:12px;color:var(--muted);letter-spacing:.06em;background:rgba(17,23,33,.75)}
+  .m-status.show{display:flex}
+  .m-note{padding:7px 16px 11px;font-family:var(--mono);font-size:10.5px;color:var(--faint);line-height:1.5;border-top:1px solid var(--line-soft)}
+  @media(max-width:760px){#paneMain{height:300px}.m-title{font-size:15px}}
+
+  footer{margin-top:14px;color:var(--faint);font-size:11.5px;line-height:1.65;font-family:var(--mono)}
+  footer b{color:var(--muted);font-weight:600}
+  @media(max-width:700px){.brand h1{font-size:21px}.wrap{padding:14px 10px 30px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand">
+      <h1>DeFi Token <span>Monitor</span></h1>
+      <p>20 tokens · returns, valuation &amp; supply inflation · click any column to sort</p>
+      <p class="hint">↓ Click any project or ticker for an interactive TradingView chart</p>
+    </div>
+    <div class="status">
+      <div class="sync"><span class="dot" id="dot"></span><span id="syncLabel">CONNECTING…</span></div>
+      <button class="refresh" id="refreshBtn">↻ REFRESH</button>
+    </div>
+  </header>
+
+  <div class="note" id="histNote">
+    <b>Loading history…</b> Live quotes stream in first; <b>6M return</b> and <b>inflation</b> columns fill in one token at a time
+    (CoinGecko's free API is rate-limited, so the full pass takes ~1 minute). Prices auto-refresh every 60s.
+  </div>
+
+  <section class="bench" aria-label="Basket vs benchmarks">
+    <div class="bench-hdr">
+      <h2>Basket vs Benchmarks</h2>
+      <p>Average return across the 20 tokens vs Bitcoin, Ethereum and the CRYPTOCAP:OTHERS altcoin index (top 100 excluding top 10, market-cap weighted). Δ rows show basket − benchmark in percentage points. Click any benchmark to open its chart.</p>
+    </div>
+    <div style="overflow-x:auto">
+    <table>
+      <thead>
+        <tr>
+          <th class="left">&nbsp;</th>
+          <th>1D</th><th>7D</th><th>30D</th><th>6M</th><th>1Y</th>
+        </tr>
+      </thead>
+      <tbody id="benchBody">
+        <tr class="row-basket">
+          <td class="left"><span class="lbl">Basket avg</span><span class="sub">20 tokens</span></td>
+          <td id="bA-r1d">—</td><td id="bA-r7d">—</td><td id="bA-r30d">—</td><td id="bA-r6m">—</td><td id="bA-r1y">—</td>
+        </tr>
+        <tr class="row-bench">
+          <td class="left"><a class="chart-open" data-id="bitcoin" title="Open TradingView chart">Bitcoin</a><span class="sub">BTC</span></td>
+          <td id="bB-r1d">—</td><td id="bB-r7d">—</td><td id="bB-r30d">—</td><td id="bB-r6m">—</td><td id="bB-r1y">—</td>
+        </tr>
+        <tr class="row-bench">
+          <td class="left"><a class="chart-open" data-id="ethereum" title="Open TradingView chart">Ethereum</a><span class="sub">ETH</span></td>
+          <td id="bE-r1d">—</td><td id="bE-r7d">—</td><td id="bE-r30d">—</td><td id="bE-r6m">—</td><td id="bE-r1y">—</td>
+        </tr>
+        <tr class="row-bench">
+          <td class="left"><a class="chart-open" data-id="__others" title="Open TradingView chart">Altcoin market</a><span class="sub">CRYPTOCAP:OTHERS</span></td>
+          <td id="bO-r1d">—</td><td id="bO-r7d">—</td><td id="bO-r30d">—</td><td id="bO-r6m">—</td><td id="bO-r1y">—</td>
+        </tr>
+        <tr class="row-delta">
+          <td class="left"><span class="lbl sml">Δ vs BTC</span></td>
+          <td id="bDB-r1d">—</td><td id="bDB-r7d">—</td><td id="bDB-r30d">—</td><td id="bDB-r6m">—</td><td id="bDB-r1y">—</td>
+        </tr>
+        <tr class="row-delta">
+          <td class="left"><span class="lbl sml">Δ vs ETH</span></td>
+          <td id="bDE-r1d">—</td><td id="bDE-r7d">—</td><td id="bDE-r30d">—</td><td id="bDE-r6m">—</td><td id="bDE-r1y">—</td>
+        </tr>
+        <tr class="row-delta">
+          <td class="left"><span class="lbl sml">Δ vs OTHERS</span></td>
+          <td id="bDO-r1d">—</td><td id="bDO-r7d">—</td><td id="bDO-r30d">—</td><td id="bDO-r6m">—</td><td id="bDO-r1y">—</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+  </section>
+
+  <div class="table-shell">
+    <table id="tbl">
+      <thead><tr id="headRow"></tr></thead>
+      <tbody id="body"></tbody>
+    </table>
+  </div>
+
+  <footer>
+    <b>Sources:</b> live prices, returns, market cap, FDV and supply from the CoinGecko public API (which aggregates exchange + on-chain data).
+    Clicking a project or ticker opens an interactive chart — TradingView's live embed by default, with a CoinGecko-powered Lite fallback; the ⛓ icon opens the token contract on <b>Etherscan / Solscan / BaseScan</b>.<br>
+    <b>Method:</b> inflation = growth in circulating supply, where historical supply is implied from CoinGecko daily history (market cap ÷ price).
+    6M inflation is annualized as (S₀/S₋₁₈₂)^(365/182) − 1; 12M inflation is the raw 1-year change. “—” means the token has insufficient trading history.
+    Nothing here is investment advice.
+  </footer>
+</div>
+
+<!-- ================= chart modal ================= -->
+<div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-label="Interactive chart">
+  <div class="modal">
+    <div class="m-head">
+      <div class="m-title" id="mTitle">— <span class="tk"></span></div>
+      <div class="m-price" id="mPrice"></div>
+      <div class="m-links" id="mLinks"></div>
+      <button class="m-close" id="mClose" aria-label="Close chart">✕</button>
+    </div>
+    <div class="m-bar">
+      <div class="seg" id="srcSeg">
+        <span class="seg-label">Source</span>
+        <button data-src="tv" class="on">TradingView</button>
+        <button data-src="lite">Lite</button>
+      </div>
+      <div class="seg" id="tfSeg">
+        <span class="seg-label">Range</span>
+        <button data-tf="1">24H</button><button data-tf="7">7D</button><button data-tf="30">1M</button>
+        <button data-tf="90" class="on">3M</button><button data-tf="180">6M</button><button data-tf="365">1Y</button>
+      </div>
+      <div class="seg" id="indSeg">
+        <span class="seg-label">Indicators</span>
+        <button data-ind="sma20">SMA 20</button><button data-ind="sma50">SMA 50</button>
+        <button data-ind="ema21">EMA 21</button><button data-ind="bb">BBands</button>
+        <button data-ind="vol" class="on">Vol</button>
+        <button data-ind="rsi">RSI 14</button><button data-ind="macd">MACD</button>
+        <button data-ind="log">Log scale</button>
+      </div>
+    </div>
+    <div class="m-body" id="mBody">
+      <div class="pane" id="paneTV"></div>
+      <div class="pane" id="paneMain"><span class="pane-label" id="mainLabel"></span></div>
+      <div class="pane" id="paneRSI"><span class="pane-label">RSI 14 · 30/70</span></div>
+      <div class="pane" id="paneMACD"><span class="pane-label">MACD 12·26·9</span></div>
+      <div class="m-status" id="mStatus">LOADING CANDLES…</div>
+    </div>
+    <div class="m-note" id="mNote">
+      <b>TradingView</b> mode streams live exchange candles with TradingView's full indicator + drawing toolkit (use the magnifier in its top bar to switch trading pair or exchange).
+      If the panel stays blank, your environment blocks third-party embeds — switch to <b>Lite</b>, which draws candles from CoinGecko locally.
+    </div>
+  </div>
+</div>
+
+<script>
+/* ------------------------------------------------------------------ */
+/* Universe                                                            */
+/* ------------------------------------------------------------------ */
+const COINS = [
+  {id:'uniswap',                 t:'UNI',     name:'Uniswap',        chain:'Ethereum', exp:'https://etherscan.io/token/0x1f9840a85d5af5bf1d1762f925bdaddc4201f984'},
+  {id:'curve-dao-token',         t:'CRV',     name:'Curve',          chain:'Ethereum', exp:'https://etherscan.io/token/0xD533a949740bb3306d119CC777fa900bA034cd52'},
+  {id:'aerodrome-finance',       t:'AERO',    name:'Aerodrome',      chain:'Base',     exp:'https://basescan.org/token/0x940181a94A35A4569E4529A3CDfB74e38FD98631'},
+  {id:'jupiter-exchange-solana', t:'JUP',     name:'Jupiter',        chain:'Solana',   exp:'https://solscan.io/token/JUPyiwrYJFskUPiHa7hkeR8VUtAeFoSYbKedZNsDvCN'},
+  {id:'pendle',                  t:'PENDLE',  name:'Pendle',         chain:'Ethereum', exp:'https://etherscan.io/token/0x808507121b80c02388fad14726482e061b8da827'},
+  {id:'hyperliquid',             t:'HYPE',    name:'Hyperliquid',    chain:'HyperEVM', exp:null},
+  {id:'aave',                    t:'AAVE',    name:'Aave',           chain:'Ethereum', exp:'https://etherscan.io/token/0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9'},
+  {id:'morpho',                  t:'MORPHO',  name:'Morpho',         chain:'Ethereum', exp:'https://etherscan.io/token/0x58D97B57BB95320F9a05dC918Aef65434969c2B2'},
+  {id:'sky',                     t:'SKY',     name:'Sky',            chain:'Ethereum', exp:'https://etherscan.io/token/0x56072C95FAA701256059aa122697B133aDEd9279'},
+  {id:'kamino',                  t:'KMNO',    name:'Kamino',         chain:'Solana',   exp:'https://solscan.io/token/KMNo3nJsBXfcpJTVhZcXLW7RmTwTt4GVFE7suUBo9sS'},
+  {id:'euler',                   t:'EUL',     name:'Euler',          chain:'Ethereum', exp:'https://etherscan.io/token/0xd9Fcd98c322942075A5C3860693e9f4f03AAE07b'},
+  {id:'ondo-finance',            t:'ONDO',    name:'Ondo',           chain:'Ethereum', exp:'https://etherscan.io/token/0xfAbA6f8e4a5E8Ab82F62fe7C39859FA577269BE3'},
+  {id:'centrifuge',              t:'CFG',     name:'Centrifuge',     chain:'Ethereum', exp:null},
+  {id:'syrup',                   t:'SYRUP',   name:'Maple (Syrup)',  chain:'Ethereum', exp:null},
+  {id:'ether-fi',                t:'ETHFI',   name:'Ether.fi',       chain:'Ethereum', exp:'https://etherscan.io/token/0xFe0c30065B384F05761f15d0CC899D4F9F9Cc0eB'},
+  {id:'ethena',                  t:'ENA',     name:'Ethena',         chain:'Ethereum', exp:'https://etherscan.io/token/0x57e114B691Db790C35207b2e685D4A43181e6061'},
+  {id:'falcon-finance-ff',       t:'FF',      name:'Falcon Finance', chain:'Ethereum', exp:'https://etherscan.io/token/0xfa1c09fc8b491b6a4d3ff53a10cad29381b3f949'},
+  {id:'canton',                  t:'CC',      name:'Canton',         chain:'Canton',   exp:null},
+  {id:'layerzero',               t:'ZRO',     name:'LayerZero',      chain:'Ethereum', exp:'https://etherscan.io/token/0x6985884C4392D348587B19cb9eAAf157F13271cd'},
+  {id:'virtual-protocol',        t:'VIRTUAL', name:'Virtuals',       chain:'Base',     exp:'https://basescan.org/token/0x0b3e328455c4059EEb9e3f84b5543F74E24e7E1b'},
+];
+
+const CG = 'https://api.coingecko.com/api/v3';
+
+/* Preferred TradingView pairs (highest-liquidity venue). If a listing ever
+   moves, the widget's own symbol search can switch pair/exchange live. */
+const TV_SYMBOLS = {
+  BTC:'BINANCE:BTCUSDT', ETH:'BINANCE:ETHUSDT', OTHERS:'CRYPTOCAP:OTHERS',
+  UNI:'BINANCE:UNIUSDT', CRV:'BINANCE:CRVUSDT', AERO:'COINBASE:AEROUSD',
+  JUP:'BINANCE:JUPUSDT', PENDLE:'BINANCE:PENDLEUSDT', HYPE:'BYBIT:HYPEUSDT',
+  AAVE:'BINANCE:AAVEUSDT', MORPHO:'BINANCE:MORPHOUSDT', SKY:'BINANCE:SKYUSDT',
+  KMNO:'BINANCE:KMNOUSDT', EUL:'GATEIO:EULUSDT', ONDO:'BINANCE:ONDOUSDT',
+  CFG:'GATEIO:CFGUSDT', SYRUP:'BINANCE:SYRUPUSDT', ETHFI:'BINANCE:ETHFIUSDT',
+  ENA:'BINANCE:ENAUSDT', FF:'BINANCE:FFUSDT', CC:'COINBASE:CCUSD',
+  ZRO:'BINANCE:ZROUSDT', VIRTUAL:'BINANCE:VIRTUALUSDT'
+};
+const HALF_YEAR = 182, YEAR = 365;
+
+/* row state, keyed by coingecko id */
+const rows = {};
+COINS.forEach(c => rows[c.id] = {
+  cfg:c, price:null, r1d:null, r7d:null, r30d:null, r6m:null, r1y:null,
+  mcap:null, fdv:null, circ:null, max:null, inf6m:null, inf12m:null,
+  histDone:false, histFail:false
+});
+
+/* Reference benchmarks. Same shape as rows, but excluded from the main table
+   and from basket-average calculations. */
+const BENCHMARKS = [
+  {id:'bitcoin',  t:'BTC',    name:'Bitcoin',        chain:'Bitcoin'},
+  {id:'ethereum', t:'ETH',    name:'Ethereum',       chain:'Ethereum', exp:'https://etherscan.io/'},
+  {id:'__others', t:'OTHERS', name:'Altcoin market', chain:'CRYPTOCAP index (excl. top 10)', index:true},
+];
+const benchmarks = {};
+BENCHMARKS.forEach(c => benchmarks[c.id] = {
+  cfg:c, price:null, r1d:null, r7d:null, r30d:null, r6m:null, r1y:null,
+  mcap:null, fdv:null, circ:null, max:null, inf6m:null, inf12m:null,
+  histDone:false, histFail:false
+});
+const findCoin = id => rows[id] || benchmarks[id];
+
+/* ------------------------------------------------------------------ */
+/* Columns / sorting                                                   */
+/* ------------------------------------------------------------------ */
+const COLS = [
+  {key:'name',   label:'Project',        sub:'',            left:true,  str:true},
+  {key:'t',      label:'Ticker',         sub:'',            left:true,  str:true},
+  {key:'price',  label:'Price',          sub:'USD'},
+  {key:'r1d',    label:'1D',             sub:'return'},
+  {key:'r7d',    label:'7D',             sub:'return'},
+  {key:'r30d',   label:'30D',            sub:'return'},
+  {key:'r6m',    label:'6M',             sub:'return'},
+  {key:'r1y',    label:'1Y',             sub:'return'},
+  {key:'mcap',   label:'Mkt Cap',        sub:'USD'},
+  {key:'fdv',    label:'FDV',            sub:'USD'},
+  {key:'circ',   label:'Circ. Supply',   sub:'vs max'},
+  {key:'max',    label:'Max Supply',     sub:''},
+  {key:'inf6m',  label:'6M Inflation',   sub:'annualized'},
+  {key:'inf12m', label:'12M Inflation',  sub:'trailing'},
+];
+let sortKey = 'mcap', sortDir = -1; // desc by default
+
+function buildHead(){
+  const tr = document.getElementById('headRow');
+  tr.innerHTML = '';
+  COLS.forEach(col=>{
+    const th = document.createElement('th');
+    th.className = (col.left?'left ':'') + (sortKey===col.key?'sorted':'');
+    th.innerHTML = `<span class="arrow">${sortKey===col.key?(sortDir===1?'▲':'▼'):''}</span>${col.label}` +
+                   (col.sub?`<span class="sub">${col.sub}</span>`:'');
+    th.onclick = ()=>{
+      if(sortKey===col.key){ sortDir*=-1; }
+      else { sortKey=col.key; sortDir = col.str ? 1 : -1; }
+      render();
+    };
+    tr.appendChild(th);
+  });
+}
+
+function sortedRows(){
+  const list = Object.values(rows);
+  const col = COLS.find(c=>c.key===sortKey);
+  return list.sort((a,b)=>{
+    let va = col.str ? (sortKey==='name'?a.cfg.name:a.cfg.t) : a[sortKey];
+    let vb = col.str ? (sortKey==='name'?b.cfg.name:b.cfg.t) : b[sortKey];
+    const aN = va===null||va===undefined, bN = vb===null||vb===undefined;
+    if(aN&&bN) return 0; if(aN) return 1; if(bN) return -1;   // nulls last
+    if(col.str) return String(va).localeCompare(String(vb))*sortDir;
+    return (va-vb)*sortDir;
+  });
+}
+
+/* ------------------------------------------------------------------ */
+/* Formatting                                                          */
+/* ------------------------------------------------------------------ */
+const fmtUsd = v => v===null?naCell():'$'+(
+  v>=1000 ? v.toLocaleString('en-US',{maximumFractionDigits:0}) :
+  v>=1    ? v.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}) :
+  v>=0.01 ? v.toFixed(4) : v.toPrecision(3));
+
+function fmtBig(v){
+  if(v===null||v===undefined) return naCell();
+  const a=Math.abs(v);
+  if(a>=1e12) return '$'+(v/1e12).toFixed(2)+'T';
+  if(a>=1e9)  return '$'+(v/1e9 ).toFixed(2)+'B';
+  if(a>=1e6)  return '$'+(v/1e6 ).toFixed(1)+'M';
+  return '$'+Math.round(v).toLocaleString();
+}
+function fmtSupply(v){
+  if(v===null||v===undefined) return null;
+  const a=Math.abs(v);
+  if(a>=1e12) return (v/1e12).toFixed(2)+'T';
+  if(a>=1e9)  return (v/1e9 ).toFixed(2)+'B';
+  if(a>=1e6)  return (v/1e6 ).toFixed(1)+'M';
+  return Math.round(v).toLocaleString();
+}
+const naCell = () => '<span class="na">—</span>';
+const skel   = () => '<span class="skel"></span>';
+
+function fmtPct(v, pending){
+  if(v===null||v===undefined) return pending ? skel() : naCell();
+  const cls = v>=0?'pos':'neg';
+  const s = (v>=0?'+':'')+v.toFixed(v!==0&&Math.abs(v)<0.1?2:1)+'%';
+  return `<span class="${cls}">${s}</span>`;
+}
+
+/* ------------------------------------------------------------------ */
+/* Render                                                              */
+/* ------------------------------------------------------------------ */
+const TFS = ['r1d','r7d','r30d','r6m','r1y'];
+
+function fmtDelta(basket, bench){
+  if(basket===null||basket===undefined||bench===null||bench===undefined) return '<span class="na">—</span>';
+  const d = basket - bench;
+  const cls = d>=0?'pos':'neg';
+  const s = (d>=0?'+':'') + d.toFixed(1) + ' pp';
+  return `<span class="${cls}">${s}</span>`;
+}
+
+function renderBenchmarks(){
+  const btc = benchmarks.bitcoin, eth = benchmarks.ethereum, oth = benchmarks.__others;
+  const avgs = {};
+  TFS.forEach(k=>{
+    const vals = Object.values(rows).map(r=>r[k]).filter(v=>v!==null&&v!==undefined);
+    avgs[k] = vals.length ? vals.reduce((a,b)=>a+b,0)/vals.length : null;
+  });
+  TFS.forEach(k=>{
+    document.getElementById('bA-'+k).innerHTML  = fmtPct(avgs[k]);
+    document.getElementById('bB-'+k).innerHTML  = fmtPct(btc[k]);
+    document.getElementById('bE-'+k).innerHTML  = fmtPct(eth[k]);
+    document.getElementById('bO-'+k).innerHTML  = fmtPct(oth[k]);
+    document.getElementById('bDB-'+k).innerHTML = fmtDelta(avgs[k], btc[k]);
+    document.getElementById('bDE-'+k).innerHTML = fmtDelta(avgs[k], eth[k]);
+    document.getElementById('bDO-'+k).innerHTML = fmtDelta(avgs[k], oth[k]);
+  });
+}
+
+function render(){
+  renderBenchmarks();
+  buildHead();
+  const tb = document.getElementById('body');
+  tb.innerHTML = '';
+  sortedRows().forEach(r=>{
+    const c=r.cfg;
+    const pend = !r.histDone && !r.histFail;
+    const supplyCell = r.circ===null ? naCell() :
+      `<div class="supply-cell">${fmtSupply(r.circ)}${
+        (r.max && r.max>0) ? `<span class="bar"><i style="width:${Math.min(100,r.circ/r.max*100).toFixed(1)}%"></i></span>` : ''
+      }</div>`;
+    const tvSym = encodeURIComponent(c.t+'USD');
+    const tr=document.createElement('tr');
+    tr.innerHTML = `
+      <td class="left proj">
+        <a class="clickable chart-open" data-id="${c.id}" title="Open interactive chart">${c.name}</a>
+        <span class="chain">${c.chain}${c.exp?` · <a href="${c.exp}" target="_blank" rel="noopener" title="View contract on block explorer">⛓ explorer</a>`:''}</span>
+      </td>
+      <td class="left tick"><a class="clickable chart-open" data-id="${c.id}" title="Open interactive chart">${c.t}</a></td>
+      <td>${fmtUsd(r.price)}</td>
+      <td>${fmtPct(r.r1d)}</td>
+      <td>${fmtPct(r.r7d)}</td>
+      <td>${fmtPct(r.r30d)}</td>
+      <td>${fmtPct(r.r6m, pend)}</td>
+      <td>${fmtPct(r.r1y)}</td>
+      <td>${fmtBig(r.mcap)}</td>
+      <td>${fmtBig(r.fdv)}</td>
+      <td>${supplyCell}</td>
+      <td>${r.max?fmtSupply(r.max):naCell()}</td>
+      <td>${fmtPct(r.inf6m, pend)}</td>
+      <td>${fmtPct(r.inf12m, pend)}</td>`;
+    tb.appendChild(tr);
+  });
+}
+
+/* ------------------------------------------------------------------ */
+/* Data: live quotes                                                   */
+/* ------------------------------------------------------------------ */
+function setSync(msg, err){
+  document.getElementById('syncLabel').textContent = msg;
+  document.getElementById('dot').classList.toggle('err', !!err);
+}
+
+/* All CoinGecko calls go through one paced queue so we never trip the
+   free-tier rate limit. Chart clicks are enqueued with priority=true and
+   jump ahead of the background history back-fill. */
+const q = {items:[], busy:false, last:0};
+const MIN_GAP = 2400;                       /* ms between calls ≈ 25/min */
+function cgFetch(url, priority=false){
+  return new Promise((resolve,reject)=>{
+    const item={url,resolve,reject,tries:0};
+    priority ? q.items.unshift(item) : q.items.push(item);
+    pump();
+  });
+}
+async function pump(){
+  if(q.busy) return;
+  q.busy=true;
+  while(q.items.length){
+    const item=q.items[0];
+    const wait=Math.max(0, q.last+MIN_GAP-Date.now());
+    if(wait) await sleep(wait);
+    try{
+      const res = await fetch(item.url);
+      q.last=Date.now();
+      if(res.status===429){
+        item.tries++;
+        if(item.tries>=4){ q.items.shift(); item.reject(new Error('rate limited')); }
+        else { setSync('RATE-LIMITED — BACKING OFF…'); await sleep(22000); }
+      }else if(!res.ok){
+        q.items.shift(); item.reject(new Error('HTTP '+res.status));
+      }else{
+        const j=await res.json();
+        q.items.shift(); item.resolve(j);
+      }
+    }catch(e){
+      q.last=Date.now();
+      item.tries++;
+      if((e instanceof TypeError && item.tries>=2) || item.tries>=3){ q.items.shift(); item.reject(e); }
+      else await sleep(4000);
+    }
+  }
+  q.busy=false;
+}
+const sleep = ms => new Promise(r=>setTimeout(r,ms));
+
+async function loadMarkets(){
+  setSync('SYNCING…');
+  const ids = [...COINS.map(c=>c.id), ...BENCHMARKS.map(c=>c.id)].join(',');
+  const url = `${CG}/coins/markets?vs_currency=usd&ids=${ids}&order=market_cap_desc&per_page=50&price_change_percentage=24h,7d,30d,1y&precision=full`;
+  try{
+    const data = await cgFetch(url, true);
+    const seen = new Set();
+    data.forEach(d=>{
+      const r = findCoin(d.id); if(!r) return;
+      seen.add(d.id);
+      r.price = d.current_price;
+      r.r1d  = num(d.price_change_percentage_24h_in_currency);
+      r.r7d  = num(d.price_change_percentage_7d_in_currency);
+      r.r30d = num(d.price_change_percentage_30d_in_currency);
+      r.r1y  = num(d.price_change_percentage_1y_in_currency);
+      r.mcap = num(d.market_cap);
+      r.fdv  = num(d.fully_diluted_valuation);
+      r.circ = num(d.circulating_supply);
+      r.max  = num(d.max_supply);
+    });
+    /* resolve any ids CoinGecko didn't recognize via its search endpoint */
+    for(const c of COINS){
+      if(!seen.has(c.id)){
+        try{
+          const s = await cgFetch(`${CG}/search?query=${encodeURIComponent(c.t)}`, true);
+          const hit = (s.coins||[]).find(x=>x.symbol && x.symbol.toLowerCase()===c.t.toLowerCase());
+          if(hit && hit.id!==c.id){
+            rows[hit.id] = rows[c.id]; delete rows[c.id];
+            c.id = hit.id;
+            const m = await cgFetch(`${CG}/coins/markets?vs_currency=usd&ids=${hit.id}&price_change_percentage=24h,7d,30d,1y&precision=full`, true);
+            if(m[0]){ const d=m[0], r=rows[c.id];
+              r.price=d.current_price; r.r1d=num(d.price_change_percentage_24h_in_currency);
+              r.r7d=num(d.price_change_percentage_7d_in_currency); r.r30d=num(d.price_change_percentage_30d_in_currency);
+              r.r1y=num(d.price_change_percentage_1y_in_currency); r.mcap=num(d.market_cap);
+              r.fdv=num(d.fully_diluted_valuation); r.circ=num(d.circulating_supply); r.max=num(d.max_supply);
+            }
+          }
+        }catch(e){/* leave blank */}
+      }
+    }
+    setSync('LIVE · '+new Date().toLocaleTimeString());
+  }catch(e){
+    if(e instanceof TypeError){ enterOfflineDemo(); return; }
+    setSync('QUOTE FEED ERROR — RETRYING', true);
+  }
+  loadOthers();  /* fire-and-forget; renders when done */
+  render();
+}
+
+/* Approximates TradingView's CRYPTOCAP:OTHERS (total mcap minus top 10) by
+   summing the market caps of coins ranked 11-100. For each timeframe we
+   reconstruct the prior aggregate market cap from each coin's return, so
+   the result reflects the actual mcap change of the group — matching the
+   index's methodology rather than a naive average of individual returns. */
+async function loadOthers(){
+  const r = benchmarks.__others; if(!r) return;
+  try{
+    const top = await cgFetch(
+      `${CG}/coins/markets?vs_currency=usd&per_page=100&page=1&order=market_cap_desc&price_change_percentage=24h,7d,30d,1y&precision=full`
+    );
+    if(!Array.isArray(top) || top.length < 20) return;
+    const others = top.slice(10);   /* ranks 11-100 */
+    const currentSum = others.reduce((s,c)=> s + (c.market_cap||0), 0);
+    r.mcap = currentSum;
+    const compute = retKey => {
+      let prior = 0;
+      for(const c of others){
+        const ret = c[retKey], mc = c.market_cap;
+        if(ret===null || ret===undefined || !mc) continue;
+        prior += mc / (1 + ret/100);
+      }
+      return prior>0 ? (currentSum/prior - 1)*100 : null;
+    };
+    r.r1d  = compute('price_change_percentage_24h_in_currency');
+    r.r7d  = compute('price_change_percentage_7d_in_currency');
+    r.r30d = compute('price_change_percentage_30d_in_currency');
+    r.r1y  = compute('price_change_percentage_1y_in_currency');
+    /* r.r6m intentionally left null — free tier lacks a total-mcap history
+       endpoint, and reconstructing it from 100 individual histories would
+       burn most of the API budget. The chart still shows 6M via TradingView. */
+    r.histDone = true;
+    render();
+  }catch(e){ /* leave blank; chart still works */ }
+}
+const num = v => (v===undefined||v===null||Number.isNaN(v)) ? null : v;
+
+/* ------------------------------------------------------------------ */
+/* Offline preview mode                                                */
+/* Sandboxed viewers (e.g. chat artifact previews) block outbound      */
+/* requests entirely. Detect that and fall back to labeled sample data */
+/* instead of retrying forever.                                        */
+/* ------------------------------------------------------------------ */
+let OFFLINE = false;
+const hashStr = s => { let h=0; for(const ch of s){ h=(h*31+ch.charCodeAt(0))>>>0; } return h; };
+const rnd = (seed,i) => { const x=Math.sin(seed+i*997)*10000; return x-Math.floor(x); };
+
+function enterOfflineDemo(){
+  if(OFFLINE) return;
+  OFFLINE = true;
+  setSync('OFFLINE PREVIEW — SAMPLE DATA', true);
+  const note = document.getElementById('histNote');
+  note.classList.remove('hidden');
+  note.innerHTML = '<b>Live feeds are blocked in this preview sandbox</b>, so the numbers below are illustrative sample data — useful for exploring the layout and sorting, not for trading. For live quotes and interactive charts, download this file and open it in your browser, or publish it to a host.';
+  COINS.forEach(c=>{
+    const s = hashStr(c.t), r = rows[c.id];
+    const price = Math.pow(10, rnd(s,1)*3 - 1);
+    const mcap  = (0.2 + rnd(s,2)*14) * 1e9;
+    r.price = price;
+    r.r1d  = (rnd(s,3)-0.5)*8;   r.r7d = (rnd(s,4)-0.5)*20;
+    r.r30d = (rnd(s,5)-0.5)*40;  r.r6m = (rnd(s,6)-0.4)*80;  r.r1y = (rnd(s,7)-0.4)*160;
+    r.mcap = mcap;               r.fdv = mcap*(1 + rnd(s,8)*2.5);
+    r.circ = mcap/price;         r.max = rnd(s,9)>0.25 ? (mcap/price)*(1+rnd(s,10)*2) : null;
+    r.inf6m = rnd(s,11)*22;      r.inf12m = rnd(s,12)*30;
+    r.histDone = true;
+  });
+  /* Sample data for benchmarks: illustrative baseline, calmer than the basket */
+  const bench = {
+    bitcoin:  {price:98450, r1d: 0.8, r7d:-1.4, r30d: 6.2, r6m: 24.1, r1y: 58.3},
+    ethereum: {price: 3520, r1d: 1.5, r7d:-0.8, r30d: 8.4, r6m: 12.6, r1y: 32.7},
+    __others: {r1d: 1.9, r7d:-2.6, r30d: 11.3, r6m: null, r1y: 47.4},
+  };
+  Object.entries(bench).forEach(([id,v])=>{ Object.assign(benchmarks[id], v, {histDone:true}); });
+  render();
+}
+
+/* ------------------------------------------------------------------ */
+/* Data: 1-year daily history → 6M return + inflation                  */
+/* ------------------------------------------------------------------ */
+function nearest(arr, targetTs, tolDays=6){
+  /* arr = [[ts, value], ...] ascending; return value closest to targetTs within tolerance */
+  let best=null, bestD=Infinity;
+  for(const [ts,v] of arr){
+    const d=Math.abs(ts-targetTs);
+    if(d<bestD){bestD=d;best=v;}
+  }
+  return bestD <= tolDays*864e5 ? best : null;
+}
+
+async function loadHistory(coin){
+  const r = findCoin(coin.id);
+  try{
+    const d = await cgFetch(`${CG}/coins/${coin.id}/market_chart?vs_currency=usd&days=365&interval=daily`);
+    mcCache[coin.id+':365'] = d;   /* reuse for chart volume / candle fallback */
+    const prices=d.prices||[], mcaps=d.market_caps||[];
+    if(prices.length<10) throw new Error('thin history');
+    const now = Date.now();
+    const pNow = prices[prices.length-1][1];
+
+    const p6  = nearest(prices, now-HALF_YEAR*864e5);
+    if(p6 && pNow) r.r6m = (pNow/p6-1)*100;
+
+    /* implied circulating supply series: mcap / price */
+    const supplyAt = (ts)=>{
+      const m = nearest(mcaps, ts), p = nearest(prices, ts);
+      return (m && p && p>0 && m>0) ? m/p : null;
+    };
+    const sNow = (r.circ!==null) ? r.circ : supplyAt(now);
+    const s6   = supplyAt(now-HALF_YEAR*864e5);
+    const s12  = supplyAt(now-(YEAR-3)*864e5);
+    if(sNow && s6 && s6>0){
+      r.inf6m = (Math.pow(sNow/s6, YEAR/HALF_YEAR)-1)*100;
+    }
+    /* only report 12M if the series actually spans ~a year */
+    const spanDays = (prices[prices.length-1][0]-prices[0][0])/864e5;
+    if(sNow && s12 && s12>0 && spanDays>=350){
+      r.inf12m = (sNow/s12-1)*100;
+    }
+    /* fallback 6M return check: token younger than ~6 months */
+    if(spanDays < HALF_YEAR-8) r.r6m = r.r6m ?? null;
+    r.histDone = true;
+  }catch(e){
+    r.histFail = true;
+  }
+  render();
+}
+
+async function loadAllHistory(){
+  /* Load benchmark history first so the comparison panel's 6M row fills in
+     before the long-running back-fill of the 20 tokens starts. */
+  for(const c of BENCHMARKS){
+    if(OFFLINE) return;
+    if(c.index) continue;              /* no CoinGecko history for indices */
+    await loadHistory(c);
+  }
+  for(const c of COINS){
+    if(OFFLINE) return;
+    await loadHistory(c);
+  }
+  if(!OFFLINE) document.getElementById('histNote').classList.add('hidden');
+}
+
+/* ------------------------------------------------------------------ */
+/* Interactive TA chart modal                                          */
+/* ------------------------------------------------------------------ */
+const chartState = {
+  coin:null, tf:90, src:'tv',
+  ind:{sma20:false,sma50:false,ema21:false,bb:false,vol:true,rsi:false,macd:false,log:false},
+  charts:[], series:{}, cache:{}, syncing:false, reqToken:0
+};
+
+const $ = id => document.getElementById(id);
+
+document.addEventListener('click', e=>{
+  const el = e.target.closest('.chart-open');
+  if(el) openChart(el.dataset.id);
+});
+$('mClose').onclick = closeChart;
+$('overlay').addEventListener('click', e=>{ if(e.target===$('overlay')) closeChart(); });
+document.addEventListener('keydown', e=>{ if(e.key==='Escape' && $('overlay').classList.contains('open')) closeChart(); });
+
+$('srcSeg').addEventListener('click', e=>{
+  const b=e.target.closest('button[data-src]'); if(!b) return;
+  chartState.src = b.dataset.src;
+  [...$('srcSeg').querySelectorAll('button')].forEach(x=>x.classList.toggle('on', x===b));
+  renderSource();
+});
+
+$('tfSeg').addEventListener('click', e=>{
+  const b=e.target.closest('button[data-tf]'); if(!b) return;
+  chartState.tf = +b.dataset.tf;
+  [...$('tfSeg').querySelectorAll('button')].forEach(x=>x.classList.toggle('on', x===b));
+  drawChart();
+});
+$('indSeg').addEventListener('click', e=>{
+  const b=e.target.closest('button[data-ind]'); if(!b) return;
+  const k=b.dataset.ind;
+  chartState.ind[k]=!chartState.ind[k];
+  b.classList.toggle('on', chartState.ind[k]);
+  drawChart(true); /* redraw from cache, no refetch */
+});
+
+function openChart(id){
+  const r = findCoin(id); if(!r) return;
+  chartState.coin = r.cfg;
+  const c = r.cfg;
+  const idx = !!c.index;
+  if(idx) chartState.src = 'tv';       /* CoinGecko has no candles for an index */
+  [...$('srcSeg').querySelectorAll('button')].forEach(x=>x.classList.toggle('on', x.dataset.src===chartState.src));
+  $('srcSeg').querySelector('[data-src="lite"]').style.display = idx ? 'none' : '';
+  $('mTitle').innerHTML = `${c.name} <span class="tk">${c.t}${idx?'':'/USD'}</span>`;
+  $('mPrice').innerHTML = idx
+    ? (r.r1d!==null ? `${fmtPct(r.r1d)} <span style="color:var(--faint);font-size:11px">24h · market-cap change</span>` : '')
+    : (r.price!==null ? `${fmtUsd(r.price)} &nbsp;${fmtPct(r.r1d)} <span style="color:var(--faint);font-size:11px">24h</span>` : '');
+  const tvSymUrl = idx ? (TV_SYMBOLS[c.t]||'').replace(':','-') : (c.t+'USD');
+  $('mLinks').innerHTML =
+    `<a href="https://www.tradingview.com/symbols/${encodeURIComponent(tvSymUrl)}/" target="_blank" rel="noopener">TradingView ↗</a>` +
+    (idx?'':`<a href="https://www.coingecko.com/en/coins/${c.id}" target="_blank" rel="noopener">CoinGecko ↗</a>`) +
+    (c.exp?`<a href="${c.exp}" target="_blank" rel="noopener">Explorer ↗</a>`:'');
+  $('overlay').classList.add('open');
+  document.body.style.overflow='hidden';
+  renderSource();
+}
+
+function renderSource(){
+  const modal = document.querySelector('.modal');
+  if(OFFLINE){
+    modal.classList.remove('tv-mode');
+    modal.classList.add('lite-mode');
+    destroyCharts();
+    $('paneTV').innerHTML='';
+    const st=$('mStatus');
+    st.textContent='CHARTS NEED LIVE NETWORK ACCESS — DOWNLOAD THIS FILE AND OPEN IT IN YOUR BROWSER, OR PUBLISH IT TO A HOST.';
+    st.classList.add('show');
+    return;
+  }
+  const tv = chartState.src==='tv';
+  modal.classList.toggle('tv-mode', tv);
+  modal.classList.toggle('lite-mode', !tv);
+  if(tv){
+    chartState.reqToken++;            /* cancel any in-flight lite loads */
+    destroyCharts();
+    $('mStatus').classList.remove('show');
+    loadTV();
+  }else{
+    $('paneTV').innerHTML='';
+    drawChart();
+  }
+}
+
+function loadTV(){
+  const c = chartState.coin; if(!c) return;
+  const pane = $('paneTV');
+  pane.innerHTML='';
+  const holder = document.createElement('div');
+  holder.className='tradingview-widget-container';
+  holder.style.cssText='height:100%;width:100%';
+  const inner = document.createElement('div');
+  inner.className='tradingview-widget-container__widget';
+  inner.style.cssText='height:100%;width:100%';
+  holder.appendChild(inner);
+  const s = document.createElement('script');
+  s.type='text/javascript';
+  s.src='https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js';
+  s.async=true;
+  s.text = JSON.stringify({
+    autosize:true,
+    symbol: TV_SYMBOLS[c.t] || (c.t+'USD'),
+    interval:'240',
+    timezone:'Etc/UTC',
+    theme:'dark',
+    style:'1',
+    locale:'en',
+    backgroundColor:'rgba(12,16,22,1)',
+    gridColor:'rgba(30,41,55,0.5)',
+    hide_top_toolbar:false,
+    hide_legend:false,
+    allow_symbol_change:true,
+    save_image:true,
+    studies:['STD;RSI'],
+    support_host:'https://www.tradingview.com'
+  });
+  holder.appendChild(s);
+  pane.appendChild(holder);
+}
+
+function closeChart(){
+  $('overlay').classList.remove('open');
+  document.body.style.overflow='';
+  destroyCharts();
+  $('paneTV').innerHTML='';
+  chartState.reqToken++;   /* invalidate in-flight loads */
+}
+
+function destroyCharts(){
+  chartState.charts.forEach(ch=>{ try{ch.remove();}catch(e){} });
+  chartState.charts=[]; chartState.series={};
+  ['paneMain','paneRSI','paneMACD'].forEach(id=>{
+    const el=$(id); [...el.querySelectorAll('div')].forEach(d=>d.remove());
+  });
+}
+
+/* ---------- data ---------- */
+const mcCache = {};   /* raw market_chart responses, keyed id:days */
+
+async function getMarketChart(id, days){
+  const key = id+':'+days;
+  if(!mcCache[key]) mcCache[key] = await cgFetch(`${CG}/coins/${id}/market_chart?vs_currency=usd&days=${days}`, true);
+  return mcCache[key];
+}
+
+function synthCandles(prices, days){
+  /* fallback: aggregate market_chart price points into OHLC buckets */
+  if(!prices || prices.length<8) return [];
+  const bucketMs = days<=1 ? 30*60e3 : days<=30 ? 4*3600e3 : 24*3600e3;
+  const out=[]; let cur=null;
+  for(const [t,p] of prices){
+    const b = Math.floor(t/bucketMs)*bucketMs;
+    if(!cur || cur.b!==b){
+      if(cur) out.push(cur);
+      cur={b, time:Math.floor(b/1000), open:p, high:p, low:p, close:p};
+    }else{
+      cur.high=Math.max(cur.high,p); cur.low=Math.min(cur.low,p); cur.close=p;
+    }
+  }
+  if(cur) out.push(cur);
+  return out.map(({b,...c})=>c);
+}
+
+async function getCandles(id, days){
+  const key = id+':'+days;
+  if(chartState.cache[key]) return chartState.cache[key];
+  let candles=[], approx=false;
+  try{
+    const ohlc = await cgFetch(`${CG}/coins/${id}/ohlc?vs_currency=usd&days=${days}`, true);
+    candles = (ohlc||[]).map(([t,o,h,l,c])=>({time:Math.floor(t/1000),open:o,high:h,low:l,close:c}))
+                        .filter(c=>c.open>0&&c.close>0);
+  }catch(e){ /* fall through to synthetic candles */ }
+  if(candles.length<8){
+    /* OHLC throttled or empty — build approximate candles from price history
+       (already cached for 1Y ranges by the inflation back-fill) */
+    const chart = await getMarketChart(id, days===365?365:days);
+    candles = synthCandles(chart.prices, days);
+    approx = candles.length>=8;
+    if(!approx) throw new Error('no history');
+  }
+  /* dedupe + ascending (API can repeat the live candle) */
+  const seen={}; const cd=[];
+  candles.sort((a,b)=>a.time-b.time).forEach(c=>{ if(!seen[c.time]){seen[c.time]=1;cd.push(c);} });
+  const out={candles:cd, approx};
+  chartState.cache[key]=out;
+  return out;
+}
+
+async function getVolume(id, days, cd){
+  const chart = await getMarketChart(id, days===365?365:days);
+  const volRaw = chart.total_volumes||[];
+  return cd.map(c=>{
+    const v = nearest(volRaw, c.time*1000, 30);
+    return {time:c.time, value:v||0, color: c.close>=c.open ? 'rgba(62,207,154,.35)' : 'rgba(242,109,133,.35)'};
+  });
+}
+
+/* ---------- indicator math ---------- */
+const closes = cd => cd.map(c=>c.close);
+function smaSeries(cd,n){
+  const out=[]; let sum=0;
+  for(let i=0;i<cd.length;i++){ sum+=cd[i].close; if(i>=n) sum-=cd[i-n].close;
+    if(i>=n-1) out.push({time:cd[i].time,value:sum/n}); }
+  return out;
+}
+function emaArr(vals,n){
+  const k=2/(n+1), out=new Array(vals.length).fill(null);
+  let ema=null;
+  for(let i=0;i<vals.length;i++){
+    if(i===n-1){ ema = vals.slice(0,n).reduce((a,b)=>a+b,0)/n; out[i]=ema; }
+    else if(i>=n){ ema = vals[i]*k + ema*(1-k); out[i]=ema; }
+  }
+  return out;
+}
+function emaSeries(cd,n){
+  const e=emaArr(closes(cd),n);
+  return cd.map((c,i)=>e[i]===null?null:{time:c.time,value:e[i]}).filter(Boolean);
+}
+function bbSeries(cd,n=20,mult=2){
+  const up=[],lo=[],mid=[];
+  for(let i=n-1;i<cd.length;i++){
+    const win=cd.slice(i-n+1,i+1).map(c=>c.close);
+    const m=win.reduce((a,b)=>a+b,0)/n;
+    const sd=Math.sqrt(win.reduce((a,b)=>a+(b-m)*(b-m),0)/n);
+    mid.push({time:cd[i].time,value:m});
+    up.push({time:cd[i].time,value:m+mult*sd});
+    lo.push({time:cd[i].time,value:m-mult*sd});
+  }
+  return {up,lo,mid};
+}
+function rsiSeries(cd,n=14){
+  const out=[]; let ag=0,al=0;
+  for(let i=1;i<cd.length;i++){
+    const ch=cd[i].close-cd[i-1].close, g=Math.max(ch,0), l=Math.max(-ch,0);
+    if(i<=n){ ag+=g/n; al+=l/n; if(i===n) out.push({time:cd[i].time,value:al===0?100:100-100/(1+ag/al)}); }
+    else { ag=(ag*(n-1)+g)/n; al=(al*(n-1)+l)/n; out.push({time:cd[i].time,value:al===0?100:100-100/(1+ag/al)}); }
+  }
+  return out;
+}
+function macdSeries(cd){
+  const c=closes(cd), e12=emaArr(c,12), e26=emaArr(c,26);
+  const macd=cd.map((x,i)=>(e12[i]!==null&&e26[i]!==null)?{time:x.time,value:e12[i]-e26[i]}:null).filter(Boolean);
+  const sig9=emaArr(macd.map(m=>m.value),9);
+  const signal=macd.map((m,i)=>sig9[i]===null?null:{time:m.time,value:sig9[i]}).filter(Boolean);
+  const sigMap={}; signal.forEach(s=>sigMap[s.time]=s.value);
+  const hist=macd.filter(m=>sigMap[m.time]!==undefined)
+                 .map(m=>({time:m.time,value:m.value-sigMap[m.time],
+                           color:(m.value-sigMap[m.time])>=0?'rgba(62,207,154,.45)':'rgba(242,109,133,.45)'}));
+  return {macd,signal,hist};
+}
+
+/* ---------- drawing ---------- */
+const CHART_OPTS = {
+  autoSize:true,
+  layout:{background:{color:'transparent'},textColor:'#8494a7',fontFamily:"'IBM Plex Mono',monospace",fontSize:10},
+  grid:{vertLines:{color:'#16202d'},horzLines:{color:'#16202d'}},
+  crosshair:{mode:0,vertLine:{color:'#5b6b7e',labelBackgroundColor:'#233144'},horzLine:{color:'#5b6b7e',labelBackgroundColor:'#233144'}},
+  rightPriceScale:{borderColor:'#1e2937'},
+  timeScale:{borderColor:'#1e2937',timeVisible:true,secondsVisible:false},
+};
+
+function syncCharts(){
+  const chs=chartState.charts;
+  chs.forEach(src=>{
+    src.timeScale().subscribeVisibleLogicalRangeChange(range=>{
+      if(chartState.syncing||!range) return;
+      chartState.syncing=true;
+      chs.forEach(o=>{ if(o!==src) o.timeScale().setVisibleLogicalRange(range); });
+      chartState.syncing=false;
+    });
+  });
+}
+
+async function drawChart(fromCache){
+  if(!chartState.coin) return;
+  const my = ++chartState.reqToken;
+  const st=$('mStatus');
+  st.textContent='LOADING CANDLES…'; st.classList.add('show');
+  destroyCharts();
+
+  let data;
+  try{ data = await getCandles(chartState.coin.id, chartState.tf); }
+  catch(e){
+    if(my!==chartState.reqToken) return;
+    st.textContent='CANDLE FEED IS BUSY — RETRYING AUTOMATICALLY…';
+    await sleep(8000);
+    if(my!==chartState.reqToken) return;
+    try{ data = await getCandles(chartState.coin.id, chartState.tf); }
+    catch(e2){
+      if(my!==chartState.reqToken) return;
+      st.textContent='NO CANDLE DATA FOR THIS RANGE — THE TOKEN MAY BE TOO NEW, OR THE FEED IS SATURATED. TRY ANOTHER RANGE.';
+      return;
+    }
+  }
+  if(my!==chartState.reqToken) return;   /* user closed or switched */
+  if(!data.candles.length){ st.textContent='NO TRADING HISTORY FOR THIS RANGE.'; return; }
+  st.classList.remove('show');
+
+  const I=chartState.ind, cd=data.candles;
+  const gLabel = chartState.tf<=2 ? '30-min candles'
+               : chartState.tf<=30 ? '4-hour candles'
+               : data.approx ? 'daily candles · approx (from price ticks)' : '4-day candles';
+  $('mainLabel').textContent = `${chartState.coin.t}/USD · ${gLabel}`;
+
+  /* main pane */
+  const main = LightweightCharts.createChart($('paneMain'), {...CHART_OPTS,
+    rightPriceScale:{...CHART_OPTS.rightPriceScale, mode: I.log?1:0}});
+  const candle = main.addCandlestickSeries({
+    upColor:'#3ecf9a',downColor:'#f26d85',borderUpColor:'#3ecf9a',borderDownColor:'#f26d85',
+    wickUpColor:'#3ecf9a',wickDownColor:'#f26d85',
+    priceFormat:{type:'price',precision:cd[cd.length-1].close<0.1?5:cd[cd.length-1].close<10?4:2,
+                 minMove:cd[cd.length-1].close<0.1?0.00001:cd[cd.length-1].close<10?0.0001:0.01}});
+  candle.setData(cd);
+
+  if(I.vol){
+    const v = main.addHistogramSeries({priceScaleId:'vol',priceFormat:{type:'volume'},lastValueVisible:false,priceLineVisible:false});
+    main.priceScale('vol').applyOptions({scaleMargins:{top:.82,bottom:0}});
+    getVolume(chartState.coin.id, chartState.tf, cd)
+      .then(vol=>{ if(my===chartState.reqToken) v.setData(vol); })
+      .catch(()=>{});   /* volume is decorative — fail silently */
+  }
+  const lineOpts={lineWidth:1,priceLineVisible:false,lastValueVisible:false,crosshairMarkerVisible:false};
+  if(I.sma20) main.addLineSeries({...lineOpts,color:'#f2b13e'}).setData(smaSeries(cd,20));
+  if(I.sma50) main.addLineSeries({...lineOpts,color:'#3a7bd5'}).setData(smaSeries(cd,50));
+  if(I.ema21) main.addLineSeries({...lineOpts,color:'#c084fc'}).setData(emaSeries(cd,21));
+  if(I.bb){
+    const bb=bbSeries(cd);
+    main.addLineSeries({...lineOpts,color:'rgba(132,148,167,.7)'}).setData(bb.up);
+    main.addLineSeries({...lineOpts,color:'rgba(132,148,167,.7)'}).setData(bb.lo);
+    main.addLineSeries({...lineOpts,color:'rgba(132,148,167,.35)',lineStyle:2}).setData(bb.mid);
+  }
+  chartState.charts.push(main);
+
+  /* RSI pane */
+  $('paneRSI').classList.toggle('show', I.rsi);
+  if(I.rsi){
+    const rc = LightweightCharts.createChart($('paneRSI'), CHART_OPTS);
+    const rs = rc.addLineSeries({color:'#f2b13e',lineWidth:1,priceLineVisible:false,lastValueVisible:false});
+    rs.setData(rsiSeries(cd));
+    [30,70].forEach(lv=>rs.createPriceLine({price:lv,color:'#334259',lineWidth:1,lineStyle:2,axisLabelVisible:false}));
+    chartState.charts.push(rc);
+  }
+  /* MACD pane */
+  $('paneMACD').classList.toggle('show', I.macd);
+  if(I.macd){
+    const mc = LightweightCharts.createChart($('paneMACD'), CHART_OPTS);
+    const {macd,signal,hist}=macdSeries(cd);
+    mc.addHistogramSeries({priceLineVisible:false,lastValueVisible:false}).setData(hist);
+    mc.addLineSeries({color:'#3a7bd5',lineWidth:1,priceLineVisible:false,lastValueVisible:false}).setData(macd);
+    mc.addLineSeries({color:'#f2b13e',lineWidth:1,priceLineVisible:false,lastValueVisible:false}).setData(signal);
+    chartState.charts.push(mc);
+  }
+
+  syncCharts();
+  main.timeScale().fitContent();
+}
+
+/* ------------------------------------------------------------------ */
+/* Boot                                                                */
+/* ------------------------------------------------------------------ */
+document.getElementById('refreshBtn').onclick = async (e)=>{
+  e.target.disabled = true;
+  await loadMarkets();
+  e.target.disabled = false;
+};
+
+(async ()=>{
+  render();
+  await loadMarkets();
+  if(OFFLINE) return;
+  setInterval(()=>{ if(!OFFLINE) loadMarkets(); }, 60000);
+  loadAllHistory();
+})();
+</script>
+</body>
+</html>
