@@ -159,14 +159,13 @@
   </header>
 
   <div class="note" id="histNote">
-    <b>Loading history…</b> Live quotes stream in first; <b>6M return</b> and <b>inflation</b> columns fill in one token at a time
-    (CoinGecko's free API is rate-limited, so the full pass takes ~1 minute). Prices auto-refresh every 60s.
+    <b>Loading history…</b> Live quotes stream in first. The 6M return and inflation columns fill in per-token over ~1 minute, then OTHERS 6M/1Y is reconstructed from the top-100's mcap history over ~3 more minutes (CoinGecko free-tier rate limits). Prices auto-refresh every 60s.
   </div>
 
   <section class="bench" aria-label="Basket vs benchmarks">
     <div class="bench-hdr">
       <h2>Basket vs Benchmarks</h2>
-      <p>Average return across the 20 tokens vs Bitcoin, Ethereum and the CRYPTOCAP:OTHERS altcoin index (total crypto mcap excl. top 10). OTHERS 1D/7D/30D are approximated from CoinGecko's top-100; 6M/1Y are shown as "—" because snapshot reconstruction misses coins that dropped out of the top 100 and would bias the number upward — click the OTHERS row for the real long-window returns on TradingView. Δ rows show basket − benchmark in percentage points.</p>
+      <p>Average return across the 20 tokens vs Bitcoin, Ethereum and CRYPTOCAP:OTHERS (total crypto mcap excl. top 10). OTHERS 1D/7D/30D come from current top-100 constituents; 6M/1Y (marked ≈) are estimated by summing 365-day mcap history for the same top 100 and identifying that moment's top 10 — this fixes composition drift but misses coins that died or fell out of the top 100, so the number trends slightly less-negative than TradingView's continuous index (click OTHERS for the ground truth). Δ rows: basket − benchmark in percentage points.</p>
     </div>
     <div style="overflow-x:auto">
     <table>
@@ -220,8 +219,7 @@
   <footer>
     <b>Sources:</b> live prices, returns, market cap, FDV and supply from the CoinGecko public API (which aggregates exchange + on-chain data).
     Clicking a project or ticker opens an interactive chart — TradingView's live embed by default, with a CoinGecko-powered Lite fallback; the ⛓ icon opens the token contract on <b>Etherscan / Solscan / BaseScan</b>.<br>
-    <b>Method:</b> inflation = growth in circulating supply, where historical supply is implied from CoinGecko daily history (market cap ÷ price).
-    6M inflation is annualized as (S₀/S₋₁₈₂)^(365/182) − 1; 12M inflation is the raw 1-year change. “—” means the token has insufficient trading history.
+    <b>Method:</b> the inflation columns (marked <span style="color:var(--faint)">≈</span>) approximate supply growth from CoinGecko daily history — historical circulating supply is inferred as mcap ÷ price, sampled as a rolling 30-day median around each anchor date to smooth reporting noise, then annualized: (S₀/S₋₁₈₂)^(365/182) − 1 for 6M, raw (S₀/S₋₃₆₅) − 1 for 12M. This is an <b>estimate</b>, not an audit — token migrations, supply reclassifications and delayed CoinGecko snapshots can distort the reading (e.g. SYRUP's Nov-2024 MPL migration). For the authoritative vesting-schedule inflation, click <b>unlocks ↗</b> in each row to open the token's DeFiLlama unlock page. "—" means the token has insufficient trading history.
     Nothing here is investment advice.
   </footer>
 </div>
@@ -319,6 +317,16 @@ COINS.forEach(c => rows[c.id] = {
   mcap:null, fdv:null, circ:null, max:null, inf6m:null, inf12m:null,
   histDone:false, histFail:false
 });
+
+/* Reference benchmarks. Same shape as rows, but excluded from the main table
+   and from basket-average calculations. */
+/* DeFiLlama unlock links. Their /protocol/unlocks/<slug> URLs use
+   inconsistent slug conventions (some -v2, some -finance, some bare) and
+   guessing wrong 404s. Instead we send users to DeFiLlama's global unlocks
+   ranking page and pre-fill a search query with the ticker — every token
+   with unlock data will be one keystroke or click away, and tokens without
+   an entry there simply won't show a result. */
+const dlUnlockUrl = t => `https://defillama.com/unlocks?search=${encodeURIComponent(t)}`;
 
 /* Reference benchmarks. Same shape as rows, but excluded from the main table
    and from basket-average calculations. */
@@ -440,14 +448,19 @@ function renderBenchmarks(){
     const vals = Object.values(rows).map(r=>r[k]).filter(v=>v!==null&&v!==undefined);
     avgs[k] = vals.length ? vals.reduce((a,b)=>a+b,0)/vals.length : null;
   });
+  const approxTilde = html => html.startsWith('<span class="na">') ? html
+    : `<span title="Approximation — see panel note" style="color:var(--faint);margin-right:2px">≈</span>${html}`;
   TFS.forEach(k=>{
+    const isLong = k==='r6m' || k==='r1y';
     document.getElementById('bA-'+k).innerHTML  = fmtPct(avgs[k]);
     document.getElementById('bB-'+k).innerHTML  = fmtPct(btc[k]);
     document.getElementById('bE-'+k).innerHTML  = fmtPct(eth[k]);
-    document.getElementById('bO-'+k).innerHTML  = fmtPct(oth[k]);
+    const othCell = fmtPct(oth[k]);
+    document.getElementById('bO-'+k).innerHTML  = isLong ? approxTilde(othCell) : othCell;
     document.getElementById('bDB-'+k).innerHTML = fmtDelta(avgs[k], btc[k]);
     document.getElementById('bDE-'+k).innerHTML = fmtDelta(avgs[k], eth[k]);
-    document.getElementById('bDO-'+k).innerHTML = fmtDelta(avgs[k], oth[k]);
+    const dOthCell = fmtDelta(avgs[k], oth[k]);
+    document.getElementById('bDO-'+k).innerHTML = isLong ? approxTilde(dOthCell) : dOthCell;
   });
 }
 
@@ -463,12 +476,17 @@ function render(){
       `<div class="supply-cell">${fmtSupply(r.circ)}${
         (r.max && r.max>0) ? `<span class="bar"><i style="width:${Math.min(100,r.circ/r.max*100).toFixed(1)}%"></i></span>` : ''
       }</div>`;
+    const approxTilde = html => html.startsWith('<span class="na">') || html.startsWith('<span class="skel">') ? html
+      : `<span title="Approximated from mcap÷price history — click the ↗ in the row for the authoritative DeFiLlama unlock schedule" style="color:var(--faint);margin-right:2px">≈</span>${html}`;
+    const inf6mCell  = approxTilde(fmtPct(r.inf6m, pend));
+    const inf12mCell = approxTilde(fmtPct(r.inf12m, pend));
+    const dlLink = `<a href="${dlUnlockUrl(c.t)}" target="_blank" rel="noopener" title="Authoritative unlock schedule on DeFiLlama">unlocks ↗</a>`;
     const tvSym = encodeURIComponent(c.t+'USD');
     const tr=document.createElement('tr');
     tr.innerHTML = `
       <td class="left proj">
         <a class="clickable chart-open" data-id="${c.id}" title="Open interactive chart">${c.name}</a>
-        <span class="chain">${c.chain}${c.exp?` · <a href="${c.exp}" target="_blank" rel="noopener" title="View contract on block explorer">⛓ explorer</a>`:''}</span>
+        <span class="chain">${c.chain}${c.exp?` · <a href="${c.exp}" target="_blank" rel="noopener" title="View contract on block explorer">⛓ explorer</a>`:''} · ${dlLink}</span>
       </td>
       <td class="left tick"><a class="clickable chart-open" data-id="${c.id}" title="Open interactive chart">${c.t}</a></td>
       <td>${fmtUsd(r.price)}</td>
@@ -481,8 +499,8 @@ function render(){
       <td>${fmtBig(r.fdv)}</td>
       <td>${supplyCell}</td>
       <td>${r.max?fmtSupply(r.max):naCell()}</td>
-      <td>${fmtPct(r.inf6m, pend)}</td>
-      <td>${fmtPct(r.inf12m, pend)}</td>`;
+      <td>${inf6mCell}</td>
+      <td>${inf12mCell}</td>`;
     tb.appendChild(tr);
   });
 }
@@ -592,6 +610,10 @@ async function loadMarkets(){
    reconstruct the prior aggregate market cap from each coin's return, so
    the result reflects the actual mcap change of the group — matching the
    index's methodology rather than a naive average of individual returns. */
+/* Cached top-100 markets snapshot, populated by loadOthers. Used later by
+   loadOthersHistory to drive which coin histories we need to fetch. */
+let othersTop100 = null;
+
 async function loadOthers(){
   const r = benchmarks.__others; if(!r) return;
   try{
@@ -599,7 +621,8 @@ async function loadOthers(){
       `${CG}/coins/markets?vs_currency=usd&per_page=100&page=1&order=market_cap_desc&price_change_percentage=24h,7d,30d,1y&precision=full`
     );
     if(!Array.isArray(top) || top.length < 20) return;
-    const others = top.slice(10);   /* ranks 11-100 */
+    othersTop100 = top;                 /* saved for the history compute below */
+    const others = top.slice(10);       /* ranks 11-100 */
     const currentSum = others.reduce((s,c)=> s + (c.market_cap||0), 0);
     r.mcap = currentSum;
     const compute = retKey => {
@@ -614,16 +637,79 @@ async function loadOthers(){
     r.r1d  = compute('price_change_percentage_24h_in_currency');
     r.r7d  = compute('price_change_percentage_7d_in_currency');
     r.r30d = compute('price_change_percentage_30d_in_currency');
-    /* r.r6m and r.r1y intentionally left null.
-       Over long windows, top-100 constituents shift too much for a
-       snapshot-based reconstruction — coins that fell out of the top 100
-       get excluded and coins that pumped in get counted, biasing the
-       result upward (survivorship bias). CoinGecko's free tier has no
-       total-mcap history endpoint that would let us match the real index.
-       Longer OTHERS returns are viewable via the TradingView chart. */
+    /* r.r6m and r.r1y get filled in later by loadOthersHistory, which
+       sums 365-day mcap history for the top 100 to reconstruct OTHERS
+       at each historical timestamp (survivorship-biased but usable). */
     r.histDone = true;
     render();
   }catch(e){ /* leave blank; chart still works */ }
+}
+
+/* Reconstructs OTHERS 6M and 1Y returns by summing 365-day market-cap
+   history for the current top 100 coins, then at each target timestamp
+   re-sorting to identify that moment's top 10 (which differs from today's)
+   and summing ranks 11+. Updates the panel progressively as coin histories
+   finish loading. Compared to the snapshot-based fallback this fixes
+   top-10 composition shift, but still misses coins that died or fell out
+   of the top 100 entirely, so the result trends slightly less-negative
+   than TradingView's continuous CRYPTOCAP:OTHERS index. */
+async function loadOthersHistory(){
+  const r = benchmarks.__others; if(!r) return;
+  if(!othersTop100 || othersTop100.length < 50) return;
+  if(r.r1y !== null) return;                             /* already computed */
+
+  const HALF_YEAR = 182, YEAR = 365, now = Date.now();
+  const t6m = now - HALF_YEAR*864e5, t1y = now - YEAR*864e5;
+
+  /* Build the history map, seeded with anything already cached from
+     loadHistory or previous chart-modal opens. */
+  const histories = new Map();
+  for(const [key,data] of Object.entries(mcCache)){
+    if(key.endsWith(':365')) histories.set(key.slice(0,-4), data);
+  }
+
+  const compute = () => {
+    const priceHistMcaps = (targetTs) => {
+      const caps = [];
+      for(const h of histories.values()){
+        const mc = nearest(h.market_caps || [], targetTs, 10);
+        if(mc && mc>0) caps.push(mc);
+      }
+      if(caps.length < 40) return null;   /* need decent coverage to trust the sum */
+      caps.sort((a,b)=>b-a);
+      return caps.slice(10).reduce((s,m)=>s+m, 0);
+    };
+    const nowSum = priceHistMcaps(now);
+    const s6m   = priceHistMcaps(t6m);
+    const s1y   = priceHistMcaps(t1y);
+    if(nowSum && s6m) r.r6m = (nowSum/s6m - 1)*100;
+    if(nowSum && s1y) r.r1y = (nowSum/s1y - 1)*100;
+    render();
+  };
+
+  const missing = othersTop100.filter(c => !histories.has(c.id));
+  const total = missing.length;
+  let done = 0, batchSize = 15;
+
+  compute();   /* first pass with what's already cached */
+
+  for(const c of missing){
+    if(OFFLINE) return;
+    try{
+      const h = await cgFetch(`${CG}/coins/${c.id}/market_chart?vs_currency=usd&days=365&interval=daily`);
+      mcCache[c.id+':365'] = h;
+      histories.set(c.id, h);
+    }catch(e){ /* skip this coin; keep going */ }
+    done++;
+    if(done % batchSize === 0 || done === total){
+      compute();
+      setSync(`COMPUTING OTHERS · ${done}/${total}`);
+    }
+  }
+
+  compute();
+  setSync('LIVE · '+new Date().toLocaleTimeString());
+  document.getElementById('histNote').classList.add('hidden');
 }
 const num = v => (v===undefined||v===null||Number.isNaN(v)) ? null : v;
 
@@ -660,7 +746,7 @@ function enterOfflineDemo(){
   const bench = {
     bitcoin:  {price:98450, r1d: 0.8, r7d:-1.4, r30d: 6.2, r6m: 24.1, r1y: 58.3},
     ethereum: {price: 3520, r1d: 1.5, r7d:-0.8, r30d: 8.4, r6m: 12.6, r1y: 32.7},
-    __others: {r1d: 1.9, r7d:-2.6, r30d: 11.3, r6m: null, r1y: null},
+    __others: {r1d: 1.9, r7d:-2.6, r30d: 11.3, r6m:-18.2, r1y:-42.7},
   };
   Object.entries(bench).forEach(([id,v])=>{ Object.assign(benchmarks[id], v, {histDone:true}); });
   render();
@@ -692,14 +778,27 @@ async function loadHistory(coin){
     const p6  = nearest(prices, now-HALF_YEAR*864e5);
     if(p6 && pNow) r.r6m = (pNow/p6-1)*100;
 
-    /* implied circulating supply series: mcap / price */
-    const supplyAt = (ts)=>{
-      const m = nearest(mcaps, ts), p = nearest(prices, ts);
-      return (m && p && p>0 && m>0) ? m/p : null;
+    /* Implied circulating supply = mcap / price, but a single day's data
+       can be distorted by supply audits, migrations, or reporting lag
+       (e.g. SYRUP's Nov-2024 MPL→SYRUP migration made mid-2025 data noisy).
+       Sampling a rolling 30-day median around the anchor date smooths those
+       one-off spikes. Result is still an approximation — for the ground
+       truth, click through to the token's DeFiLlama unlock schedule. */
+    const priceByTs = new Map(prices.map(([t,p])=>[t,p]));
+    const supplyMedianAround = (targetTs, windowDays=30) => {
+      const half = windowDays*864e5/2, vals = [];
+      for(const [ts,mc] of mcaps){
+        if(Math.abs(ts-targetTs) > half) continue;
+        const p = priceByTs.get(ts) || nearest(prices, ts, 2);
+        if(p && p>0 && mc && mc>0) vals.push(mc/p);
+      }
+      if(vals.length < 4) return null;
+      vals.sort((a,b)=>a-b);
+      return vals[Math.floor(vals.length/2)];
     };
-    const sNow = (r.circ!==null) ? r.circ : supplyAt(now);
-    const s6   = supplyAt(now-HALF_YEAR*864e5);
-    const s12  = supplyAt(now-(YEAR-3)*864e5);
+    const sNow = (r.circ!==null) ? r.circ : supplyMedianAround(now, 14);
+    const s6   = supplyMedianAround(now-HALF_YEAR*864e5);
+    const s12  = supplyMedianAround(now-(YEAR-3)*864e5);
     if(sNow && s6 && s6>0){
       r.inf6m = (Math.pow(sNow/s6, YEAR/HALF_YEAR)-1)*100;
     }
@@ -729,7 +828,10 @@ async function loadAllHistory(){
     if(OFFLINE) return;
     await loadHistory(c);
   }
-  if(!OFFLINE) document.getElementById('histNote').classList.add('hidden');
+  /* Fold OTHERS 6M/1Y into the same background chain so it reuses the
+     histories already cached above and only fetches the remaining ~78
+     top-100 coins. It handles hiding the loading note when it finishes. */
+  if(!OFFLINE) await loadOthersHistory();
 }
 
 /* ------------------------------------------------------------------ */
