@@ -166,7 +166,7 @@
   <section class="bench" aria-label="Basket vs benchmarks">
     <div class="bench-hdr">
       <h2>Basket vs Benchmarks</h2>
-      <p>Average return across the 20 tokens vs Bitcoin, Ethereum and the CRYPTOCAP:OTHERS altcoin index (top 100 excluding top 10, market-cap weighted). Δ rows show basket − benchmark in percentage points. Click any benchmark to open its chart.</p>
+      <p>Average return across the 20 tokens vs Bitcoin, Ethereum and the CRYPTOCAP:OTHERS altcoin index (total crypto mcap excl. top 10). OTHERS 1D/7D/30D are approximated from CoinGecko's top-100; 6M/1Y are shown as "—" because snapshot reconstruction misses coins that dropped out of the top 100 and would bias the number upward — click the OTHERS row for the real long-window returns on TradingView. Δ rows show basket − benchmark in percentage points.</p>
     </div>
     <div style="overflow-x:auto">
     <table>
@@ -614,10 +614,13 @@ async function loadOthers(){
     r.r1d  = compute('price_change_percentage_24h_in_currency');
     r.r7d  = compute('price_change_percentage_7d_in_currency');
     r.r30d = compute('price_change_percentage_30d_in_currency');
-    r.r1y  = compute('price_change_percentage_1y_in_currency');
-    /* r.r6m intentionally left null — free tier lacks a total-mcap history
-       endpoint, and reconstructing it from 100 individual histories would
-       burn most of the API budget. The chart still shows 6M via TradingView. */
+    /* r.r6m and r.r1y intentionally left null.
+       Over long windows, top-100 constituents shift too much for a
+       snapshot-based reconstruction — coins that fell out of the top 100
+       get excluded and coins that pumped in get counted, biasing the
+       result upward (survivorship bias). CoinGecko's free tier has no
+       total-mcap history endpoint that would let us match the real index.
+       Longer OTHERS returns are viewable via the TradingView chart. */
     r.histDone = true;
     render();
   }catch(e){ /* leave blank; chart still works */ }
@@ -657,7 +660,7 @@ function enterOfflineDemo(){
   const bench = {
     bitcoin:  {price:98450, r1d: 0.8, r7d:-1.4, r30d: 6.2, r6m: 24.1, r1y: 58.3},
     ethereum: {price: 3520, r1d: 1.5, r7d:-0.8, r30d: 8.4, r6m: 12.6, r1y: 32.7},
-    __others: {r1d: 1.9, r7d:-2.6, r30d: 11.3, r6m: null, r1y: 47.4},
+    __others: {r1d: 1.9, r7d:-2.6, r30d: 11.3, r6m: null, r1y: null},
   };
   Object.entries(bench).forEach(([id,v])=>{ Object.assign(benchmarks[id], v, {histDone:true}); });
   render();
