@@ -1,0 +1,1104 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Sora:wght@400;600;700&family=Instrument+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.13/dist/html-to-image.js"></script>
+<style>
+html,body{margin:0;padding:0;background:#f4f3fb;}
+*{box-sizing:border-box;}
+a{color:var(--acc,#5b53e0);text-decoration:none;}
+a:hover{opacity:0.8;text-decoration:underline;}
+button{font-family:inherit;}
+.thm-mm [data-shell]{position:relative;background:radial-gradient(1150px 660px at 78% -90px,#331c11 0%,#180f08 48%,#0d0704 100%)!important;}
+.thm-mm [data-shell]::before{content:"";position:absolute;inset:0;pointer-events:none;z-index:0;background-image:linear-gradient(rgba(184,127,53,.055) 1px,transparent 1px),linear-gradient(90deg,rgba(184,127,53,.055) 1px,transparent 1px);background-size:46px 46px;-webkit-mask-image:radial-gradient(1200px 720px at 70% 0%,#000 0%,transparent 92%);mask-image:radial-gradient(1200px 720px at 70% 0%,#000 0%,transparent 92%);}
+.thm-mm [data-shell]::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:0;background:repeating-linear-gradient(0deg,rgba(0,0,0,.14) 0 1px,transparent 1px 3px);opacity:.45;}
+.thm-mm [data-side]{position:relative;z-index:5;background:#0c0603!important;border-right:1px solid rgba(184,127,53,0.18);}
+.thm-mm [data-main]{position:relative;z-index:1;}
+.thm-mm h2,.thm-mm h3{letter-spacing:-0.02em;}
+.thm-mm header h2::after{content:"";display:inline-block;width:.5em;height:1.02em;margin-left:.16em;vertical-align:-0.14em;background:#f0a545;box-shadow:0 0 14px rgba(240,165,69,.75);animation:tblink 1.15s steps(1) infinite;}
+@keyframes tblink{0%,50%{opacity:1}50.01%,100%{opacity:0}}
+.thm-mm [data-col="1"]:not([data-stats]),.thm-mm [data-stats="1"]>div{position:relative;background:rgba(31,19,12,0.62)!important;border-color:rgba(184,127,53,0.18)!important;backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);}
+.thm-mm [data-col="1"]:not([data-stats])::before,.thm-mm [data-stats="1"]>div::before{content:"";position:absolute;top:-1px;left:-1px;width:16px;height:16px;border-top:1.5px solid #f0a545;border-left:1.5px solid #f0a545;pointer-events:none;z-index:2;filter:drop-shadow(0 0 3px rgba(240,165,69,.6));}
+.thm-mm [data-col="1"]:not([data-stats])::after,.thm-mm [data-stats="1"]>div::after{content:"";position:absolute;bottom:-1px;right:-1px;width:16px;height:16px;border-bottom:1.5px solid #f0a545;border-right:1.5px solid #f0a545;pointer-events:none;z-index:2;filter:drop-shadow(0 0 3px rgba(240,165,69,.6));}
+.thm-mm [data-stats="1"]>div>div:nth-of-type(2){text-shadow:0 0 15px rgba(240,165,69,.42);}
+.thm-etherfi [data-side]{border-right:1px solid rgba(255,255,255,0.08);}
+.thm-etherfi header h2{background:linear-gradient(90deg,#6d63f5,#38c6d9);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
+::-webkit-scrollbar{height:8px;width:8px;}
+::-webkit-scrollbar-thumb{background:rgba(140,140,160,0.4);border-radius:4px;}
+@media (max-width:920px){
+  [data-shell]{flex-direction:column!important;}
+  [data-side]{position:static!important;width:100%!important;height:auto!important;padding:12px 16px!important;gap:12px!important;}
+  [data-side] nav{flex-direction:row!important;overflow-x:auto!important;padding-bottom:4px!important;}
+  [data-side] nav button{white-space:nowrap!important;}
+  [data-main]{margin-left:0!important;padding:22px 14px 48px!important;}
+  [data-col]{grid-column:span 12!important;}
+  [data-brandsub]{display:none!important;}
+  [data-navfoot]{display:none!important;}
+  [data-stats]{grid-template-columns:repeat(2,1fr)!important;}
+}
+</style>
+</helmet>
+<div class="thm-{{ themeName }}" style="{{ themeVars }}"><div data-shell="1" style="display:flex;min-height:100vh;background:var(--bg,#f4f3fb);font-family:var(--fbody,'Instrument Sans'),sans-serif;color:var(--ink,#211d3a);">
+  <aside data-side="1" style="position:fixed;left:0;top:0;bottom:0;width:248px;background:var(--sidebg,#1b1830);display:flex;flex-direction:column;gap:24px;padding:24px 18px;z-index:5;">
+    <div style="display:flex;align-items:center;gap:11px;padding:0 6px;">
+      <div style="width:34px;height:34px;border-radius:10px;background:var(--brandgrad,linear-gradient(135deg,#6d63f5,#38c6d9));display:flex;align-items:center;justify-content:center;color:#fff;font-family:var(--fhead,'Sora'),sans-serif;font-weight:700;font-size:15px;flex-shrink:0;letter-spacing:-0.03em;">e</div>
+      <div>
+        <div style="color:#fff;font-family:var(--fhead,'Sora'),sans-serif;font-weight:700;font-size:15px;line-height:1.15;">ether.fi</div>
+        <div data-brandsub="1" style="color:rgba(255,255,255,0.5);font-size:11px;margin-top:2px;">Research dashboard</div>
+      </div>
+    </div>
+    <nav style="display:flex;flex-direction:column;gap:3px;">
+      <sc-for list="{{ navItems }}" as="n" hint-placeholder-count="5">
+        <button sc-camel-on-click="{{ n.click }}" style="{{ n.style }}"><span style="font-family:var(--fmono,'IBM Plex Mono'),monospace;font-size:10px;opacity:0.55;">{{ n.num }}</span><span>{{ n.label }}</span></button>
+      </sc-for>
+    </nav>
+    <div style="display:flex;flex-direction:column;gap:7px;padding:0 6px;">
+      <span style="font-size:10px;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.42);font-weight:600;">Color scheme</span>
+      <div style="display:flex;gap:3px;background:rgba(255,255,255,0.09);padding:3px;border-radius:9px;">
+        <sc-for list="{{ themeChips }}" as="c" hint-placeholder-count="4"><button sc-camel-on-click="{{ c.click }}" style="{{ c.style }}">{{ c.label }}</button></sc-for>
+      </div>
+    </div>
+    <div data-navfoot="1" style="margin-top:auto;display:flex;flex-direction:column;gap:12px;padding:0 6px;">
+      <div style="display:flex;align-items:center;gap:7px;font-size:11.5px;color:rgba(255,255,255,0.6);"><span style="{{ liveDotStyle }}"></span>{{ liveStatus }}</div>
+      {{ mmLogo }}
+      <div style="font-size:11px;color:rgba(255,255,255,0.4);line-height:1.5;">Prepared by Machines &amp; Money<br>July 2026 · machinesandmoney.xyz</div>
+    </div>
+  </aside>
+  <main data-main="1" style="flex:1;margin-left:248px;padding:34px 38px 60px;min-width:0;">
+
+    <sc-if value="{{ secOv }}" hint-placeholder-val="{{ true }}">
+    <section data-screen-label="Overview" style="display:flex;flex-direction:column;gap:20px;max-width:1240px;margin:0 auto;">
+      <header style="display:flex;flex-direction:column;gap:8px;margin-bottom:2px;">
+        <div style="font-family:var(--fmono,'IBM Plex Mono'),monospace;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--acc,#5b53e0);font-weight:600;">01 · Overview</div>
+        <h2 style="margin:0;font-family:var(--fhead,'Sora'),sans-serif;font-size:30px;font-weight:700;letter-spacing:-0.015em;max-width:760px;">ether.fi Dashboard</h2>
+        <p style="margin:0;font-size:14.5px;color:var(--mut,#7b7897);max-width:820px;line-height:1.6;">ether.fi is the largest liquid restaking protocol and a full onchain neobank — spanning eETH &amp; eBTC restaking, the Liquid vault suite, the ETHFI token, and the Cash card program. This dashboard tracks restaked asset value, token economics, card activity and protocol financials across the entire ether.fi ecosystem.</p>
+      </header>
+      <h3 style="margin:6px 0 -6px;font-family:var(--fhead,'Sora'),sans-serif;font-size:19px;font-weight:700;letter-spacing:-0.01em;">Key Metrics</h3>
+      <div data-stats="1" style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;">
+        <sc-for list="{{ ovStats }}" as="s" hint-placeholder-count="4">
+          <div style="background:var(--card,#fff);border:1px solid var(--line,#e7e5f2);border-radius:var(--radsm,14px);padding:16px 18px;display:flex;flex-direction:column;gap:5px;">
+            <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.05em;color:var(--mut,#7b7897);font-weight:600;">{{ s.k }}</div>
+            <div style="font-family:var(--fmono,'IBM Plex Mono'),monospace;font-size:19px;font-weight:600;">{{ s.v }}</div>
+            <div style="{{ s.subStyle }}">{{ s.sub }}</div>
+          </div>
+        </sc-for>
+      </div>
+      <div data-stats="1" style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;">
+        <sc-for list="{{ ovStats2 }}" as="s" hint-placeholder-count="4">
+          <div style="background:var(--card,#fff);border:1px solid var(--line,#e7e5f2);border-radius:var(--radsm,14px);padding:16px 18px;display:flex;flex-direction:column;gap:5px;">
+            <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.05em;color:var(--mut,#7b7897);font-weight:600;">{{ s.k }}</div>
+            <div style="font-family:var(--fmono,'IBM Plex Mono'),monospace;font-size:19px;font-weight:600;">{{ s.v }}</div>
+            <div style="{{ s.subStyle }}">{{ s.sub }}</div>
+          </div>
+        </sc-for>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(12,1fr);gap:18px;">
+        <div data-col="1" style="grid-column:span 12;background:var(--card,#fff);border:1px solid var(--line,#e7e5f2);border-radius:var(--radlg,16px);padding:22px 24px;display:flex;flex-direction:column;gap:14px;">
+          <div><h3 style="margin:0;font-family:var(--fhead,'Sora'),sans-serif;font-size:15.5px;font-weight:600;">ETHFI price</h3><p style="margin:3px 0 0;font-size:12.5px;color:var(--mut,#7b7897);">Interactive TradingView chart — full indicator suite available in the toolbar</p></div>
+          <iframe src="{{ tvSrc }}" title="ETHFI price chart" style="width:100%;height:460px;border:none;border-radius:10px;background:var(--chipbg,#efeef8);" allowfullscreen="true"></iframe>
+        </div>
+        <div data-col="1" style="grid-column:span 12;background:var(--card,#fff);border:1px solid var(--line,#e7e5f2);border-radius:var(--radlg,16px);padding:22px 24px;display:flex;flex-direction:column;gap:14px;">
+          <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:flex-start;"><div><h3 style="margin:0;font-family:var(--fhead,'Sora'),sans-serif;font-size:15.5px;font-weight:600;">Total restaked asset value</h3><p style="margin:3px 0 0;font-size:12.5px;color:var(--mut,#7b7897);">eETH, eBTC &amp; Liquid vaults, in USD · drag to zoom, double-click to reset</p></div>{{ bOvRestaked }}</div>
+          <div style="display:flex;gap:7px;align-items:center;"><span style="font-size:10.5px;text-transform:uppercase;letter-spacing:0.06em;color:var(--mut,#7b7897);font-weight:600;">Timeframe</span><div style="display:flex;gap:3px;background:var(--chipbg,#efeef8);padding:3px;border-radius:9px;"><sc-for list="{{ ovTfChips }}" as="c" hint-placeholder-count="6"><button sc-camel-on-click="{{ c.click }}" style="{{ c.style }}">{{ c.label }}</button></sc-for></div></div>
+          <div style="min-height:300px;">{{ chOvRestaked }}</div>
+        </div>
+        <div data-col="1" style="grid-column:span 7;background:var(--card,#fff);border:1px solid var(--line,#e7e5f2);border-radius:var(--radlg,16px);padding:22px 24px;display:flex;flex-direction:column;gap:14px;">
+          <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:flex-start;"><div><h3 style="margin:0;font-family:var(--fhead,'Sora'),sans-serif;font-size:15.5px;font-weight:600;">Cash spend &amp; transactions</h3><p style="margin:3px 0 0;font-size:12.5px;color:var(--mut,#7b7897);">Card spend volume ($) with daily transactions on the right axis</p></div>{{ bOvCash }}</div>
+          <div style="min-height:280px;">{{ chOvCash }}</div>
+        </div>
+        <div data-col="1" style="grid-column:span 5;background:var(--card,#fff);border:1px solid var(--line,#e7e5f2);border-radius:var(--radlg,16px);padding:22px 24px;display:flex;flex-direction:column;gap:14px;">
+          <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:flex-start;"><div><h3 style="margin:0;font-family:var(--fhead,'Sora'),sans-serif;font-size:15.5px;font-weight:600;">Revenue by source</h3><p style="margin:3px 0 0;font-size:12.5px;color:var(--mut,#7b7897);">Quarterly protocol revenue · modeled</p></div>{{ bOvRev }}</div>
+          <div style="min-height:280px;">{{ chOvRev }}</div>
+        </div>
+      </div>
+    </section>
+    </sc-if>
+
+    <sc-if value="{{ secEthfi }}" hint-placeholder-val="{{ false }}">
+    <section data-screen-label="ETHFI" style="display:flex;flex-direction:column;gap:20px;max-width:1240px;margin:0 auto;">
+      <header style="display:flex;flex-direction:column;gap:6px;margin-bottom:2px;">
+        <div style="font-family:var(--fmono,'IBM Plex Mono'),monospace;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--acc,#5b53e0);font-weight:600;">02 · ETHFI</div>
+        <h2 style="margin:0;font-family:var(--fhead,'Sora'),sans-serif;font-size:26px;font-weight:700;letter-spacing:-0.01em;">ETHFI Token Tracker</h2>
+        <p style="margin:0;font-size:14px;color:var(--mut,#7b7897);max-width:680px;">Detailed price, supply, holders and buyback stats for ether.fi's native ETHFI token.</p>
+      </header>
+      <div data-stats="1" style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;">
+        <sc-for list="{{ ethfiStats }}" as="s" hint-placeholder-count="4">
+          <div style="background:var(--card,#fff);border:1px solid var(--line,#e7e5f2);border-radius:var(--radsm,14px);padding:16px 18px;display:flex;flex-direction:column;gap:5px;">
+            <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.05em;color:var(--mut,#7b7897);font-weight:600;">{{ s.k }}</div>
+            <div style="font-family:var(--fmono,'IBM Plex Mono'),monospace;font-size:20px;font-weight:600;">{{ s.v }}</div>
+            <div style="{{ s.subStyle }}">{{ s.sub }}</div>
+          </div>
+        </sc-for>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(12,1fr);gap:18px;">
+        <div data-col="1" style="grid-column:span 12;background:var(--card,#fff);border:1px solid var(--line,#e7e5f2);border-radius:var(--radlg,16px);padding:22px 24px;display:flex;flex-direction:column;gap:14px;">
+          <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:flex-start;"><div><h3 style="margin:0;font-family:var(--fhead,'Sora'),sans-serif;font-size:15.5px;font-weight:600;">Price, market cap &amp; FDV</h3><p style="margin:3px 0 0;font-size:12.5px;color:var(--mut,#7b7897);">Toggle each metric · price on right axis when combined</p></div>{{ bEthfiPrice }}</div>
+          <div style="display:flex;gap:16px;flex-wrap:wrap;align-items:center;">
+            <div style="display:flex;gap:3px;background:var(--chipbg,#efeef8);padding:3px;border-radius:9px;flex-wrap:wrap;"><sc-for list="{{ ethfiMetricChips }}" as="c" hint-placeholder-count="3"><button sc-camel-on-click="{{ c.click }}" style="{{ c.style }}">{{ c.label }}</button></sc-for></div>
+            <div style="display:flex;gap:3px;background:var(--chipbg,#efeef8);padding:3px;border-radius:9px;"><sc-for list="{{ ethfiTfChips }}" as="c" hint-placeholder-count="6"><button sc-camel-on-click="{{ c.click }}" style="{{ c.style }}">{{ c.label }}</button></sc-for></div>
+          </div>
+          <div style="min-height:320px;">{{ chEthfiPrice }}</div>
+        </div>
+        <div data-col="1" style="grid-column:span 7;background:var(--card,#fff);border:1px solid var(--line,#e7e5f2);border-radius:var(--radlg,16px);padding:22px 24px;display:flex;flex-direction:column;gap:14px;">
+          <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:flex-start;"><div><h3 style="margin:0;font-family:var(--fhead,'Sora'),sans-serif;font-size:15.5px;font-weight:600;">Circulating supply</h3><p style="margin:3px 0 0;font-size:12.5px;color:var(--mut,#7b7897);">ETHFI in circulation · 1B max supply</p></div>{{ bEthfiSupply }}</div>
+          <div style="display:flex;gap:7px;align-items:center;"><span style="font-size:10.5px;text-transform:uppercase;letter-spacing:0.06em;color:var(--mut,#7b7897);font-weight:600;">Timeframe</span><div style="display:flex;gap:3px;background:var(--chipbg,#efeef8);padding:3px;border-radius:9px;"><sc-for list="{{ ethfiSupTfChips }}" as="c" hint-placeholder-count="6"><button sc-camel-on-click="{{ c.click }}" style="{{ c.style }}">{{ c.label }}</button></sc-for></div></div>
+          <div style="min-height:280px;">{{ chEthfiSupply }}</div>
+        </div>
+        <div data-col="1" style="grid-column:span 5;background:var(--card,#fff);border:1px solid var(--line,#e7e5f2);border-radius:var(--radlg,16px);padding:22px 24px;display:flex;flex-direction:column;gap:14px;">
+          <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:flex-start;"><div><h3 style="margin:0;font-family:var(--fhead,'Sora'),sans-serif;font-size:15.5px;font-weight:600;">Holders</h3><p style="margin:3px 0 0;font-size:12.5px;color:var(--mut,#7b7897);">Unique ETHFI addresses · latest count live via Blockscout</p></div>{{ bEthfiHolders }}</div>
+          <div style="min-height:280px;">{{ chEthfiHolders }}</div>
+        </div>
+        <div data-col="1" style="grid-column:span 12;background:var(--card,#fff);border:1px solid var(--line,#e7e5f2);border-radius:var(--radlg,16px);padding:22px 24px;display:flex;flex-direction:column;gap:16px;">
+          <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:flex-start;"><div><h3 style="margin:0;font-family:var(--fhead,'Sora'),sans-serif;font-size:15.5px;font-weight:600;">Top holders</h3><p style="margin:3px 0 0;font-size:12.5px;color:var(--mut,#7b7897);">Largest ETHFI addresses by current holdings · {{ holdersNote }}</p></div>{{ bEthfiHold }}</div>
+          <div style="display:flex;gap:26px;flex-wrap:wrap;align-items:flex-start;">
+            <div style="flex:1;min-width:440px;overflow-x:auto;">
+              <sc-raw-table style="width:100%;border-collapse:collapse;font-size:13px;">
+                <sc-raw-thead><sc-raw-tr>
+                  <sc-raw-th style="text-align:left;padding:7px 10px;font-size:10.5px;text-transform:uppercase;letter-spacing:0.05em;color:var(--mut,#7b7897);border-bottom:1px solid var(--line,#e7e5f2);">#</sc-raw-th>
+                  <sc-raw-th style="text-align:left;padding:7px 10px;font-size:10.5px;text-transform:uppercase;letter-spacing:0.05em;color:var(--mut,#7b7897);border-bottom:1px solid var(--line,#e7e5f2);">Holder</sc-raw-th>
+                  <sc-raw-th style="text-align:left;padding:7px 10px;font-size:10.5px;text-transform:uppercase;letter-spacing:0.05em;color:var(--mut,#7b7897);border-bottom:1px solid var(--line,#e7e5f2);">Address</sc-raw-th>
+                  <sc-raw-th style="text-align:right;padding:7px 10px;font-size:10.5px;text-transform:uppercase;letter-spacing:0.05em;color:var(--mut,#7b7897);border-bottom:1px solid var(--line,#e7e5f2);">Holdings</sc-raw-th>
+                  <sc-raw-th style="text-align:right;padding:7px 10px;font-size:10.5px;text-transform:uppercase;letter-spacing:0.05em;color:var(--mut,#7b7897);border-bottom:1px solid var(--line,#e7e5f2);">% supply</sc-raw-th>
+                </sc-raw-tr></sc-raw-thead>
+                <sc-raw-tbody>
+                  <sc-for list="{{ ethfiHoldRows }}" as="r" hint-placeholder-count="10">
+                    <sc-raw-tr>
+                      <sc-raw-td style="padding:8px 10px;font-family:var(--fmono,'IBM Plex Mono'),monospace;font-size:11.5px;color:var(--mut,#7b7897);border-bottom:1px solid var(--line2,#f0eff7);">{{ r.i }}</sc-raw-td>
+                      <sc-raw-td style="padding:8px 10px;font-weight:500;border-bottom:1px solid var(--line2,#f0eff7);">{{ r.name }}</sc-raw-td>
+                      <sc-raw-td style="padding:8px 10px;font-family:var(--fmono,'IBM Plex Mono'),monospace;font-size:11.5px;color:var(--mut,#7b7897);border-bottom:1px solid var(--line2,#f0eff7);">{{ r.addr }}</sc-raw-td>
+                      <sc-raw-td style="padding:8px 10px;text-align:right;font-family:var(--fmono,'IBM Plex Mono'),monospace;font-size:12px;border-bottom:1px solid var(--line2,#f0eff7);">{{ r.amt }}</sc-raw-td>
+                      <sc-raw-td style="padding:8px 10px;text-align:right;font-family:var(--fmono,'IBM Plex Mono'),monospace;font-size:12px;color:var(--mut,#7b7897);border-bottom:1px solid var(--line2,#f0eff7);">{{ r.pct }}</sc-raw-td>
+                    </sc-raw-tr>
+                  </sc-for>
+                </sc-raw-tbody>
+              </sc-raw-table>
+            </div>
+            <div style="width:330px;flex-shrink:0;">{{ pieEthfiHold }}</div>
+          </div>
+        </div>
+      </div>
+    </section>
+    </sc-if>
+
+    <sc-if value="{{ secCash }}" hint-placeholder-val="{{ false }}">
+    <section data-screen-label="Cash" style="display:flex;flex-direction:column;gap:20px;max-width:1240px;margin:0 auto;">
+      <header style="display:flex;flex-direction:column;gap:6px;margin-bottom:2px;">
+        <div style="font-family:var(--fmono,'IBM Plex Mono'),monospace;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--acc,#5b53e0);font-weight:600;">03 · Cash</div>
+        <h2 style="margin:0;font-family:var(--fhead,'Sora'),sans-serif;font-size:26px;font-weight:700;letter-spacing:-0.01em;">ether.fi Cash Tracker</h2>
+        <p style="margin:0;font-size:14px;color:var(--mut,#7b7897);max-width:680px;">Observing user activity within ether.fi's Cash card program.</p>
+      </header>
+      <div data-stats="1" style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;">
+        <sc-for list="{{ cashStats }}" as="s" hint-placeholder-count="4">
+          <div style="background:var(--card,#fff);border:1px solid var(--line,#e7e5f2);border-radius:var(--radsm,14px);padding:16px 18px;display:flex;flex-direction:column;gap:5px;">
+            <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.05em;color:var(--mut,#7b7897);font-weight:600;">{{ s.k }}</div>
+            <div style="font-family:var(--fmono,'IBM Plex Mono'),monospace;font-size:20px;font-weight:600;">{{ s.v }}</div>
+            <div style="{{ s.subStyle }}">{{ s.sub }}</div>
+          </div>
+        </sc-for>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(12,1fr);gap:18px;">
+        <div data-col="1" style="grid-column:span 12;background:var(--card,#fff);border:1px solid var(--line,#e7e5f2);border-radius:var(--radlg,16px);padding:22px 24px;display:flex;flex-direction:column;gap:14px;">
+          <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:flex-start;"><div><h3 style="margin:0;font-family:var(--fhead,'Sora'),sans-serif;font-size:15.5px;font-weight:600;">Spend volume, market share &amp; cashback</h3><p style="margin:3px 0 0;font-size:12.5px;color:var(--mut,#7b7897);">Spend &amp; cashback in $ · market share (% of crypto-card volume) on right axis</p></div>{{ bCashVol }}</div>
+          <div style="display:flex;gap:16px;flex-wrap:wrap;align-items:center;">
+            <div style="display:flex;gap:3px;background:var(--chipbg,#efeef8);padding:3px;border-radius:9px;flex-wrap:wrap;"><sc-for list="{{ cashVolChips }}" as="c" hint-placeholder-count="3"><button sc-camel-on-click="{{ c.click }}" style="{{ c.style }}">{{ c.label }}</button></sc-for></div>
+            <div style="display:flex;gap:3px;background:var(--chipbg,#efeef8);padding:3px;border-radius:9px;"><sc-for list="{{ cashVolTfChips }}" as="c" hint-placeholder-count="6"><button sc-camel-on-click="{{ c.click }}" style="{{ c.style }}">{{ c.label }}</button></sc-for></div>
+          </div>
+          <div style="min-height:300px;">{{ chCashVol }}</div>
+        </div>
+        <div data-col="1" style="grid-column:span 12;background:var(--card,#fff);border:1px solid var(--line,#e7e5f2);border-radius:var(--radlg,16px);padding:22px 24px;display:flex;flex-direction:column;gap:14px;">
+          <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:flex-start;"><div><h3 style="margin:0;font-family:var(--fhead,'Sora'),sans-serif;font-size:15.5px;font-weight:600;">Spend volume by transaction size</h3><p style="margin:3px 0 0;font-size:12.5px;color:var(--mut,#7b7897);">Toggle a bucket or view all · click legend to isolate</p></div>{{ bCashAmt }}</div>
+          <div style="display:flex;gap:16px;flex-wrap:wrap;align-items:center;">
+            <div style="display:flex;gap:3px;background:var(--chipbg,#efeef8);padding:3px;border-radius:9px;flex-wrap:wrap;"><sc-for list="{{ cashAmtChips }}" as="c" hint-placeholder-count="6"><button sc-camel-on-click="{{ c.click }}" style="{{ c.style }}">{{ c.label }}</button></sc-for></div>
+            <div style="display:flex;gap:3px;background:var(--chipbg,#efeef8);padding:3px;border-radius:9px;"><sc-for list="{{ cashAmtTfChips }}" as="c" hint-placeholder-count="6"><button sc-camel-on-click="{{ c.click }}" style="{{ c.style }}">{{ c.label }}</button></sc-for></div>
+            <div style="display:flex;gap:3px;background:var(--chipbg,#efeef8);padding:3px;border-radius:9px;"><sc-for list="{{ cashAmtModeChips }}" as="c" hint-placeholder-count="2"><button sc-camel-on-click="{{ c.click }}" style="{{ c.style }}">{{ c.label }}</button></sc-for></div>
+          </div>
+          <div style="min-height:280px;">{{ chCashAmt }}</div>
+        </div>
+        <h3 style="grid-column:span 12;margin:8px 0 -4px;font-family:var(--fhead,'Sora'),sans-serif;font-size:19px;font-weight:700;letter-spacing:-0.01em;">Users &amp; activity</h3>
+        <div data-col="1" style="grid-column:span 6;background:var(--card,#fff);border:1px solid var(--line,#e7e5f2);border-radius:var(--radlg,16px);padding:22px 24px;display:flex;flex-direction:column;gap:14px;">
+          <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:flex-start;"><div><h3 style="margin:0;font-family:var(--fhead,'Sora'),sans-serif;font-size:15.5px;font-weight:600;">Transactions, new &amp; active cards</h3><p style="margin:3px 0 0;font-size:12.5px;color:var(--mut,#7b7897);">Pick a metric</p></div>{{ bCashUser }}</div>
+          <div style="display:flex;gap:16px;flex-wrap:wrap;align-items:center;">
+            <div style="display:flex;gap:3px;background:var(--chipbg,#efeef8);padding:3px;border-radius:9px;flex-wrap:wrap;"><sc-for list="{{ cashUserChips }}" as="c" hint-placeholder-count="3"><button sc-camel-on-click="{{ c.click }}" style="{{ c.style }}">{{ c.label }}</button></sc-for></div>
+            <div style="display:flex;gap:3px;background:var(--chipbg,#efeef8);padding:3px;border-radius:9px;"><sc-for list="{{ cashUserTfChips }}" as="c" hint-placeholder-count="6"><button sc-camel-on-click="{{ c.click }}" style="{{ c.style }}">{{ c.label }}</button></sc-for></div>
+          </div>
+          <div style="min-height:260px;">{{ chCashUser }}</div>
+        </div>
+        <div data-col="1" style="grid-column:span 6;background:var(--card,#fff);border:1px solid var(--line,#e7e5f2);border-radius:var(--radlg,16px);padding:22px 24px;display:flex;flex-direction:column;gap:14px;">
+          <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:flex-start;"><div><h3 style="margin:0;font-family:var(--fhead,'Sora'),sans-serif;font-size:15.5px;font-weight:600;">Transactions by size</h3><p style="margin:3px 0 0;font-size:12.5px;color:var(--mut,#7b7897);">Transaction count by bucket</p></div>{{ bCashTxAmt }}</div>
+          <div style="display:flex;gap:16px;flex-wrap:wrap;align-items:center;">
+            <div style="display:flex;gap:3px;background:var(--chipbg,#efeef8);padding:3px;border-radius:9px;flex-wrap:wrap;"><sc-for list="{{ cashTxAmtChips }}" as="c" hint-placeholder-count="6"><button sc-camel-on-click="{{ c.click }}" style="{{ c.style }}">{{ c.label }}</button></sc-for></div>
+            <div style="display:flex;gap:3px;background:var(--chipbg,#efeef8);padding:3px;border-radius:9px;"><sc-for list="{{ cashTxAmtTfChips }}" as="c" hint-placeholder-count="6"><button sc-camel-on-click="{{ c.click }}" style="{{ c.style }}">{{ c.label }}</button></sc-for></div>
+          </div>
+          <div style="min-height:260px;">{{ chCashTxAmt }}</div>
+        </div>
+        <div data-col="1" style="grid-column:span 6;background:var(--card,#fff);border:1px solid var(--line,#e7e5f2);border-radius:var(--radlg,16px);padding:22px 24px;display:flex;flex-direction:column;gap:14px;">
+          <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:flex-start;"><div><h3 style="margin:0;font-family:var(--fhead,'Sora'),sans-serif;font-size:15.5px;font-weight:600;">On-ramp &amp; off-ramp volume</h3><p style="margin:3px 0 0;font-size:12.5px;color:var(--mut,#7b7897);">Fiat rails by stablecoin</p></div>{{ bCashRamp }}</div>
+          <div style="display:flex;gap:16px;flex-wrap:wrap;align-items:center;">
+            <div style="display:flex;gap:7px;align-items:center;"><span style="font-size:10.5px;text-transform:uppercase;letter-spacing:0.06em;color:var(--mut,#7b7897);font-weight:600;">Flow</span><div style="display:flex;gap:3px;background:var(--chipbg,#efeef8);padding:3px;border-radius:9px;"><sc-for list="{{ rampDirChips }}" as="c" hint-placeholder-count="3"><button sc-camel-on-click="{{ c.click }}" style="{{ c.style }}">{{ c.label }}</button></sc-for></div></div>
+            <div style="display:flex;gap:7px;align-items:center;"><span style="font-size:10.5px;text-transform:uppercase;letter-spacing:0.06em;color:var(--mut,#7b7897);font-weight:600;">Denom</span><div style="display:flex;gap:3px;background:var(--chipbg,#efeef8);padding:3px;border-radius:9px;"><sc-for list="{{ rampDenomChips }}" as="c" hint-placeholder-count="3"><button sc-camel-on-click="{{ c.click }}" style="{{ c.style }}">{{ c.label }}</button></sc-for></div></div>
+            <div style="display:flex;gap:3px;background:var(--chipbg,#efeef8);padding:3px;border-radius:9px;"><sc-for list="{{ rampTfChips }}" as="c" hint-placeholder-count="6"><button sc-camel-on-click="{{ c.click }}" style="{{ c.style }}">{{ c.label }}</button></sc-for></div>
+          </div>
+          <div style="min-height:260px;">{{ chCashRamp }}</div>
+        </div>
+        <div data-col="1" style="grid-column:span 6;background:var(--card,#fff);border:1px solid var(--line,#e7e5f2);border-radius:var(--radlg,16px);padding:22px 24px;display:flex;flex-direction:column;gap:14px;">
+          <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:flex-start;"><div><h3 style="margin:0;font-family:var(--fhead,'Sora'),sans-serif;font-size:15.5px;font-weight:600;">UserSafe balances</h3><p style="margin:3px 0 0;font-size:12.5px;color:var(--mut,#7b7897);">Assets held in Cash UserSafes by platform</p></div>{{ bUserSafe }}</div>
+          <div style="display:flex;gap:16px;flex-wrap:wrap;align-items:center;">
+            <div style="display:flex;gap:3px;background:var(--chipbg,#efeef8);padding:3px;border-radius:9px;flex-wrap:wrap;"><sc-for list="{{ userSafeChips }}" as="c" hint-placeholder-count="6"><button sc-camel-on-click="{{ c.click }}" style="{{ c.style }}">{{ c.label }}</button></sc-for></div>
+            <div style="display:flex;gap:3px;background:var(--chipbg,#efeef8);padding:3px;border-radius:9px;"><sc-for list="{{ userSafeModeChips }}" as="c" hint-placeholder-count="2"><button sc-camel-on-click="{{ c.click }}" style="{{ c.style }}">{{ c.label }}</button></sc-for></div>
+            <div style="display:flex;gap:3px;background:var(--chipbg,#efeef8);padding:3px;border-radius:9px;"><sc-for list="{{ userSafeTfChips }}" as="c" hint-placeholder-count="6"><button sc-camel-on-click="{{ c.click }}" style="{{ c.style }}">{{ c.label }}</button></sc-for></div>
+          </div>
+          <div style="min-height:260px;">{{ chUserSafe }}</div>
+        </div>
+        <div data-col="1" style="grid-column:span 12;background:var(--card,#fff);border:1px solid var(--line,#e7e5f2);border-radius:var(--radlg,16px);padding:22px 24px;display:flex;flex-direction:column;gap:14px;">
+          <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:flex-start;"><div style="display:flex;align-items:center;gap:10px;"><div><h3 style="margin:0;font-family:var(--fhead,'Sora'),sans-serif;font-size:15.5px;font-weight:600;">Most active hours</h3><p style="margin:3px 0 0;font-size:12.5px;color:var(--mut,#7b7897);">Share of card transactions by hour of day</p></div>{{ bHours }}</div>
+            <div style="display:flex;gap:3px;background:var(--chipbg,#efeef8);padding:3px;border-radius:9px;"><sc-for list="{{ hoursTzChips }}" as="c" hint-placeholder-count="2"><button sc-camel-on-click="{{ c.click }}" style="{{ c.style }}">{{ c.label }}</button></sc-for></div>
+          </div>
+          <div style="min-height:220px;">{{ chHours }}</div>
+        </div>
+      </div>
+    </section>
+    </sc-if>
+
+    <sc-if value="{{ secRe }}" hint-placeholder-val="{{ false }}">
+    <section data-screen-label="Restaking" style="display:flex;flex-direction:column;gap:20px;max-width:1240px;margin:0 auto;">
+      <header style="display:flex;flex-direction:column;gap:6px;margin-bottom:2px;">
+        <div style="font-family:var(--fmono,'IBM Plex Mono'),monospace;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--acc,#5b53e0);font-weight:600;">04 · Restaking</div>
+        <h2 style="margin:0;font-family:var(--fhead,'Sora'),sans-serif;font-size:26px;font-weight:700;letter-spacing:-0.01em;">Restaked Asset Tracker</h2>
+        <p style="margin:0;font-size:14px;color:var(--mut,#7b7897);max-width:700px;">Detailed supply, utilization and holder data for all ether.fi restaked assets — eETH, weETH, eBTC and the Liquid vaults.</p>
+      </header>
+      <div data-stats="1" style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;">
+        <sc-for list="{{ reStats }}" as="s" hint-placeholder-count="4">
+          <div style="background:var(--card,#fff);border:1px solid var(--line,#e7e5f2);border-radius:var(--radsm,14px);padding:16px 18px;display:flex;flex-direction:column;gap:5px;">
+            <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.05em;color:var(--mut,#7b7897);font-weight:600;">{{ s.k }}</div>
+            <div style="font-family:var(--fmono,'IBM Plex Mono'),monospace;font-size:20px;font-weight:600;">{{ s.v }}</div>
+            <div style="{{ s.subStyle }}">{{ s.sub }}</div>
+          </div>
+        </sc-for>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(12,1fr);gap:18px;">
+        <div data-col="1" style="grid-column:span 6;background:var(--card,#fff);border:1px solid var(--line,#e7e5f2);border-radius:var(--radlg,16px);padding:22px 24px;display:flex;flex-direction:column;gap:14px;">
+          <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:flex-start;"><div><h3 style="margin:0;font-family:var(--fhead,'Sora'),sans-serif;font-size:15.5px;font-weight:600;">eETH supply by platform</h3><p style="margin:3px 0 0;font-size:12.5px;color:var(--mut,#7b7897);">weETH held across integrations · stacked</p></div>{{ bEeth }}</div>
+          <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;">
+            <div style="display:flex;gap:3px;background:var(--chipbg,#efeef8);padding:3px;border-radius:9px;"><sc-for list="{{ eethDenomChips }}" as="c" hint-placeholder-count="2"><button sc-camel-on-click="{{ c.click }}" style="{{ c.style }}">{{ c.label }}</button></sc-for></div>
+            <div style="display:flex;gap:3px;background:var(--chipbg,#efeef8);padding:3px;border-radius:9px;flex-wrap:wrap;"><sc-for list="{{ eethPlatChips }}" as="c" hint-placeholder-count="6"><button sc-camel-on-click="{{ c.click }}" style="{{ c.style }}">{{ c.label }}</button></sc-for></div>
+            <div style="display:flex;gap:3px;background:var(--chipbg,#efeef8);padding:3px;border-radius:9px;"><sc-for list="{{ eethTfChips }}" as="c" hint-placeholder-count="6"><button sc-camel-on-click="{{ c.click }}" style="{{ c.style }}">{{ c.label }}</button></sc-for></div>
+          </div>
+          <div style="min-height:280px;">{{ chEeth }}</div>
+        </div>
+        <div data-col="1" style="grid-column:span 6;background:var(--card,#fff);border:1px solid var(--line,#e7e5f2);border-radius:var(--radlg,16px);padding:22px 24px;display:flex;flex-direction:column;gap:14px;">
+          <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:flex-start;"><div><h3 style="margin:0;font-family:var(--fhead,'Sora'),sans-serif;font-size:15.5px;font-weight:600;">eBTC supply by platform</h3><p style="margin:3px 0 0;font-size:12.5px;color:var(--mut,#7b7897);">eBTC held across integrations · stacked</p></div>{{ bEbtc }}</div>
+          <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;">
+            <div style="display:flex;gap:3px;background:var(--chipbg,#efeef8);padding:3px;border-radius:9px;"><sc-for list="{{ ebtcDenomChips }}" as="c" hint-placeholder-count="2"><button sc-camel-on-click="{{ c.click }}" style="{{ c.style }}">{{ c.label }}</button></sc-for></div>
+            <div style="display:flex;gap:3px;background:var(--chipbg,#efeef8);padding:3px;border-radius:9px;flex-wrap:wrap;"><sc-for list="{{ ebtcPlatChips }}" as="c" hint-placeholder-count="6"><button sc-camel-on-click="{{ c.click }}" style="{{ c.style }}">{{ c.label }}</button></sc-for></div>
+            <div style="display:flex;gap:3px;background:var(--chipbg,#efeef8);padding:3px;border-radius:9px;"><sc-for list="{{ ebtcTfChips }}" as="c" hint-placeholder-count="6"><button sc-camel-on-click="{{ c.click }}" style="{{ c.style }}">{{ c.label }}</button></sc-for></div>
+          </div>
+          <div style="min-height:280px;">{{ chEbtc }}</div>
+        </div>
+        <div data-col="1" style="grid-column:span 6;background:var(--card,#fff);border:1px solid var(--line,#e7e5f2);border-radius:var(--radlg,16px);padding:22px 24px;display:flex;flex-direction:column;gap:14px;">
+          <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:flex-start;"><div><h3 style="margin:0;font-family:var(--fhead,'Sora'),sans-serif;font-size:15.5px;font-weight:600;">Restaking APY</h3><p style="margin:3px 0 0;font-size:12.5px;color:var(--mut,#7b7897);">Annualized yield · weETH, eBTC &amp; Liquid ETH · click legend to isolate</p></div>{{ bRApy }}</div>
+          <div style="display:flex;gap:7px;align-items:center;"><span style="font-size:10.5px;text-transform:uppercase;letter-spacing:0.06em;color:var(--mut,#7b7897);font-weight:600;">Timeframe</span><div style="display:flex;gap:3px;background:var(--chipbg,#efeef8);padding:3px;border-radius:9px;"><sc-for list="{{ rApyTfChips }}" as="c" hint-placeholder-count="6"><button sc-camel-on-click="{{ c.click }}" style="{{ c.style }}">{{ c.label }}</button></sc-for></div></div>
+          <div style="min-height:260px;">{{ chRApy }}</div>
+        </div>
+        <div data-col="1" style="grid-column:span 6;background:var(--card,#fff);border:1px solid var(--line,#e7e5f2);border-radius:var(--radlg,16px);padding:22px 24px;display:flex;flex-direction:column;gap:14px;">
+          <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:flex-start;"><div><h3 style="margin:0;font-family:var(--fhead,'Sora'),sans-serif;font-size:15.5px;font-weight:600;">Utilization</h3><p style="margin:3px 0 0;font-size:12.5px;color:var(--mut,#7b7897);">Share of supply deployed in lending markets</p></div>{{ bRUtil }}</div>
+          <div style="display:flex;gap:7px;align-items:center;"><span style="font-size:10.5px;text-transform:uppercase;letter-spacing:0.06em;color:var(--mut,#7b7897);font-weight:600;">Timeframe</span><div style="display:flex;gap:3px;background:var(--chipbg,#efeef8);padding:3px;border-radius:9px;"><sc-for list="{{ rApyTfChips }}" as="c" hint-placeholder-count="6"><button sc-camel-on-click="{{ c.click }}" style="{{ c.style }}">{{ c.label }}</button></sc-for></div></div>
+          <div style="min-height:260px;">{{ chRUtil }}</div>
+        </div>
+        <div data-col="1" style="grid-column:span 12;background:var(--card,#fff);border:1px solid var(--line,#e7e5f2);border-radius:var(--radlg,16px);padding:22px 24px;display:flex;flex-direction:column;gap:14px;">
+          <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:flex-start;"><div><h3 style="margin:0;font-family:var(--fhead,'Sora'),sans-serif;font-size:15.5px;font-weight:600;">Yield paid to holders</h3><p style="margin:3px 0 0;font-size:12.5px;color:var(--mut,#7b7897);">Estimated restaking yield distributed, in $</p></div>{{ bRYield }}</div>
+          <div style="display:flex;gap:16px;flex-wrap:wrap;align-items:center;">
+            <div style="display:flex;gap:3px;background:var(--chipbg,#efeef8);padding:3px;border-radius:9px;flex-wrap:wrap;"><sc-for list="{{ rYieldChips }}" as="c" hint-placeholder-count="4"><button sc-camel-on-click="{{ c.click }}" style="{{ c.style }}">{{ c.label }}</button></sc-for></div>
+            <div style="display:flex;gap:3px;background:var(--chipbg,#efeef8);padding:3px;border-radius:9px;"><sc-for list="{{ rYieldTfChips }}" as="c" hint-placeholder-count="5"><button sc-camel-on-click="{{ c.click }}" style="{{ c.style }}">{{ c.label }}</button></sc-for></div>
+          </div>
+          <div style="min-height:260px;">{{ chRYield }}</div>
+        </div>
+        <div data-col="1" style="grid-column:span 12;background:var(--card,#fff);border:1px solid var(--line,#e7e5f2);border-radius:var(--radlg,16px);padding:22px 24px;display:flex;flex-direction:column;gap:14px;">
+          <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:flex-start;"><div><h3 style="margin:0;font-family:var(--fhead,'Sora'),sans-serif;font-size:15.5px;font-weight:600;">Holders</h3><p style="margin:3px 0 0;font-size:12.5px;color:var(--mut,#7b7897);">Unique addresses by asset and combined total · latest counts live via Blockscout</p></div>{{ bRHolders }}</div>
+          <div style="display:flex;gap:7px;align-items:center;"><span style="font-size:10.5px;text-transform:uppercase;letter-spacing:0.06em;color:var(--mut,#7b7897);font-weight:600;">Timeframe</span><div style="display:flex;gap:3px;background:var(--chipbg,#efeef8);padding:3px;border-radius:9px;"><sc-for list="{{ rHoldTfChips }}" as="c" hint-placeholder-count="6"><button sc-camel-on-click="{{ c.click }}" style="{{ c.style }}">{{ c.label }}</button></sc-for></div></div>
+          <div style="min-height:300px;">{{ chRHolders }}</div>
+        </div>
+        <div data-col="1" style="grid-column:span 12;background:var(--card,#fff);border:1px solid var(--line,#e7e5f2);border-radius:var(--radlg,16px);padding:22px 24px;display:flex;flex-direction:column;gap:16px;">
+          <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:center;">
+            <div style="display:flex;align-items:center;gap:10px;"><div><h3 style="margin:0;font-family:var(--fhead,'Sora'),sans-serif;font-size:15.5px;font-weight:600;">Top holders</h3><p style="margin:3px 0 0;font-size:12.5px;color:var(--mut,#7b7897);">Largest addresses by current holdings · {{ holdersNote }}</p></div>{{ bRHold }}</div>
+            <div style="display:flex;gap:3px;background:var(--chipbg,#efeef8);padding:3px;border-radius:9px;"><sc-for list="{{ rHoldTabs }}" as="c" hint-placeholder-count="2"><button sc-camel-on-click="{{ c.click }}" style="{{ c.style }}">{{ c.label }}</button></sc-for></div>
+          </div>
+          <div style="display:flex;gap:26px;flex-wrap:wrap;align-items:flex-start;">
+            <div style="flex:1;min-width:440px;overflow-x:auto;">
+              <sc-raw-table style="width:100%;border-collapse:collapse;font-size:13px;">
+                <sc-raw-thead><sc-raw-tr>
+                  <sc-raw-th style="text-align:left;padding:7px 10px;font-size:10.5px;text-transform:uppercase;letter-spacing:0.05em;color:var(--mut,#7b7897);border-bottom:1px solid var(--line,#e7e5f2);">#</sc-raw-th>
+                  <sc-raw-th style="text-align:left;padding:7px 10px;font-size:10.5px;text-transform:uppercase;letter-spacing:0.05em;color:var(--mut,#7b7897);border-bottom:1px solid var(--line,#e7e5f2);">Holder</sc-raw-th>
+                  <sc-raw-th style="text-align:left;padding:7px 10px;font-size:10.5px;text-transform:uppercase;letter-spacing:0.05em;color:var(--mut,#7b7897);border-bottom:1px solid var(--line,#e7e5f2);">Address</sc-raw-th>
+                  <sc-raw-th style="text-align:right;padding:7px 10px;font-size:10.5px;text-transform:uppercase;letter-spacing:0.05em;color:var(--mut,#7b7897);border-bottom:1px solid var(--line,#e7e5f2);">Holdings</sc-raw-th>
+                  <sc-raw-th style="text-align:right;padding:7px 10px;font-size:10.5px;text-transform:uppercase;letter-spacing:0.05em;color:var(--mut,#7b7897);border-bottom:1px solid var(--line,#e7e5f2);">% supply</sc-raw-th>
+                </sc-raw-tr></sc-raw-thead>
+                <sc-raw-tbody>
+                  <sc-for list="{{ rHoldRows }}" as="r" hint-placeholder-count="10">
+                    <sc-raw-tr>
+                      <sc-raw-td style="padding:8px 10px;font-family:var(--fmono,'IBM Plex Mono'),monospace;font-size:11.5px;color:var(--mut,#7b7897);border-bottom:1px solid var(--line2,#f0eff7);">{{ r.i }}</sc-raw-td>
+                      <sc-raw-td style="padding:8px 10px;font-weight:500;border-bottom:1px solid var(--line2,#f0eff7);">{{ r.name }}</sc-raw-td>
+                      <sc-raw-td style="padding:8px 10px;font-family:var(--fmono,'IBM Plex Mono'),monospace;font-size:11.5px;color:var(--mut,#7b7897);border-bottom:1px solid var(--line2,#f0eff7);">{{ r.addr }}</sc-raw-td>
+                      <sc-raw-td style="padding:8px 10px;text-align:right;font-family:var(--fmono,'IBM Plex Mono'),monospace;font-size:12px;border-bottom:1px solid var(--line2,#f0eff7);">{{ r.amt }}</sc-raw-td>
+                      <sc-raw-td style="padding:8px 10px;text-align:right;font-family:var(--fmono,'IBM Plex Mono'),monospace;font-size:12px;color:var(--mut,#7b7897);border-bottom:1px solid var(--line2,#f0eff7);">{{ r.pct }}</sc-raw-td>
+                    </sc-raw-tr>
+                  </sc-for>
+                </sc-raw-tbody>
+              </sc-raw-table>
+            </div>
+            <div style="width:330px;flex-shrink:0;">{{ pieRHold }}</div>
+          </div>
+        </div>
+        <h3 style="grid-column:span 12;margin:8px 0 -4px;font-family:var(--fhead,'Sora'),sans-serif;font-size:19px;font-weight:700;letter-spacing:-0.01em;">Liquid Vaults</h3>
+        <div data-col="1" style="grid-column:span 12;background:var(--card,#fff);border:1px solid var(--line,#e7e5f2);border-radius:var(--radlg,16px);padding:22px 24px;display:flex;flex-direction:column;gap:14px;">
+          <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:flex-start;"><div><h3 style="margin:0;font-family:var(--fhead,'Sora'),sans-serif;font-size:15.5px;font-weight:600;">Liquid vaults by platform</h3><p style="margin:3px 0 0;font-size:12.5px;color:var(--mut,#7b7897);">TVL or deposits, absolute or as % market share · stacked by vault</p></div>{{ bLiquid }}</div>
+          <div style="display:flex;gap:16px;flex-wrap:wrap;align-items:center;">
+            <div style="display:flex;gap:3px;background:var(--chipbg,#efeef8);padding:3px;border-radius:9px;flex-wrap:wrap;"><sc-for list="{{ liquidPlatChips }}" as="c" hint-placeholder-count="7"><button sc-camel-on-click="{{ c.click }}" style="{{ c.style }}">{{ c.label }}</button></sc-for></div>
+            <div style="display:flex;gap:3px;background:var(--chipbg,#efeef8);padding:3px;border-radius:9px;"><sc-for list="{{ liquidModeChips }}" as="c" hint-placeholder-count="2"><button sc-camel-on-click="{{ c.click }}" style="{{ c.style }}">{{ c.label }}</button></sc-for></div>
+            <div style="display:flex;gap:3px;background:var(--chipbg,#efeef8);padding:3px;border-radius:9px;"><sc-for list="{{ liquidTfChips }}" as="c" hint-placeholder-count="6"><button sc-camel-on-click="{{ c.click }}" style="{{ c.style }}">{{ c.label }}</button></sc-for></div>
+          </div>
+          <div style="min-height:300px;">{{ chLiquid }}</div>
+        </div>
+      </div>
+    </section>
+    </sc-if>
+
+    <sc-if value="{{ secFin }}" hint-placeholder-val="{{ false }}">
+    <section data-screen-label="Financials" style="display:flex;flex-direction:column;gap:20px;max-width:1240px;margin:0 auto;">
+      <header style="display:flex;flex-direction:column;gap:6px;margin-bottom:2px;">
+        <div style="font-family:var(--fmono,'IBM Plex Mono'),monospace;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--acc,#5b53e0);font-weight:600;">05 · Financials</div>
+        <h2 style="margin:0;font-family:var(--fhead,'Sora'),sans-serif;font-size:26px;font-weight:700;letter-spacing:-0.01em;">ether.fi Financials Tracker</h2>
+        <p style="margin:0;font-size:14px;color:var(--mut,#7b7897);max-width:720px;">Tracking ether.fi's financial position: revenue generation, profitability, buybacks and valuation.</p>
+      </header>
+      <div data-stats="1" style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;">
+        <sc-for list="{{ finStats }}" as="s" hint-placeholder-count="4">
+          <div style="background:var(--card,#fff);border:1px solid var(--line,#e7e5f2);border-radius:var(--radsm,14px);padding:16px 18px;display:flex;flex-direction:column;gap:5px;">
+            <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.05em;color:var(--mut,#7b7897);font-weight:600;">{{ s.k }}</div>
+            <div style="font-family:var(--fmono,'IBM Plex Mono'),monospace;font-size:20px;font-weight:600;">{{ s.v }}</div>
+            <div style="{{ s.subStyle }}">{{ s.sub }}</div>
+          </div>
+        </sc-for>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(12,1fr);gap:18px;">
+        <div data-col="1" style="grid-column:span 12;background:var(--card,#fff);border:1px solid var(--line,#e7e5f2);border-radius:var(--radlg,16px);padding:22px 24px;display:flex;flex-direction:column;gap:14px;">
+          <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:flex-start;"><div><h3 style="margin:0;font-family:var(--fhead,'Sora'),sans-serif;font-size:15.5px;font-weight:600;">Revenue by source</h3><p style="margin:3px 0 0;font-size:12.5px;color:var(--mut,#7b7897);">Quarterly revenue stacked by source</p></div>{{ bFinRev }}</div>
+          <div style="display:flex;gap:16px;flex-wrap:wrap;align-items:center;">
+            <div style="display:flex;gap:3px;background:var(--chipbg,#efeef8);padding:3px;border-radius:9px;flex-wrap:wrap;"><sc-for list="{{ revSourceChips }}" as="c" hint-placeholder-count="5"><button sc-camel-on-click="{{ c.click }}" style="{{ c.style }}">{{ c.label }}</button></sc-for></div>
+            <div style="display:flex;gap:3px;background:var(--chipbg,#efeef8);padding:3px;border-radius:9px;"><sc-for list="{{ finTfChips }}" as="c" hint-placeholder-count="3"><button sc-camel-on-click="{{ c.click }}" style="{{ c.style }}">{{ c.label }}</button></sc-for></div>
+          </div>
+          <div style="min-height:320px;">{{ chFinRev }}</div>
+        </div>
+        <div data-col="1" style="grid-column:span 7;background:var(--card,#fff);border:1px solid var(--line,#e7e5f2);border-radius:var(--radlg,16px);padding:22px 24px;display:flex;flex-direction:column;gap:14px;">
+          <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:flex-start;"><div><h3 style="margin:0;font-family:var(--fhead,'Sora'),sans-serif;font-size:15.5px;font-weight:600;">ETHFI buybacks</h3><p style="margin:3px 0 0;font-size:12.5px;color:var(--mut,#7b7897);">Protocol buybacks of ETHFI from the open market</p></div>{{ bBuyback }}</div>
+          <div style="display:flex;gap:16px;flex-wrap:wrap;align-items:center;">
+            <div style="display:flex;gap:3px;background:var(--chipbg,#efeef8);padding:3px;border-radius:9px;"><sc-for list="{{ bbUnitChips }}" as="c" hint-placeholder-count="2"><button sc-camel-on-click="{{ c.click }}" style="{{ c.style }}">{{ c.label }}</button></sc-for></div>
+            <div style="display:flex;gap:3px;background:var(--chipbg,#efeef8);padding:3px;border-radius:9px;"><sc-for list="{{ bbTfChips }}" as="c" hint-placeholder-count="5"><button sc-camel-on-click="{{ c.click }}" style="{{ c.style }}">{{ c.label }}</button></sc-for></div>
+          </div>
+          <div style="min-height:280px;">{{ chBuyback }}</div>
+        </div>
+        <div data-col="1" style="grid-column:span 5;background:var(--card,#fff);border:1px solid var(--line,#e7e5f2);border-radius:var(--radlg,16px);padding:22px 24px;display:flex;flex-direction:column;gap:14px;">
+          <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:flex-start;"><div><h3 style="margin:0;font-family:var(--fhead,'Sora'),sans-serif;font-size:15.5px;font-weight:600;">Buyback summary</h3><p style="margin:3px 0 0;font-size:12.5px;color:var(--mut,#7b7897);">Value, tokens acquired and average price</p></div>{{ bBbSummary }}</div>
+          <div style="overflow-x:auto;">
+          <sc-raw-table style="width:100%;min-width:320px;border-collapse:collapse;font-size:13px;">
+            <sc-raw-thead><sc-raw-tr>
+              <sc-raw-th style="text-align:left;padding:7px 8px;font-size:10.5px;text-transform:uppercase;letter-spacing:0.05em;color:var(--mut,#7b7897);border-bottom:1px solid var(--line,#e7e5f2);">Period</sc-raw-th>
+              <sc-raw-th style="text-align:right;padding:7px 8px;font-size:10.5px;text-transform:uppercase;letter-spacing:0.05em;color:var(--mut,#7b7897);border-bottom:1px solid var(--line,#e7e5f2);">$ value</sc-raw-th>
+              <sc-raw-th style="text-align:right;padding:7px 8px;font-size:10.5px;text-transform:uppercase;letter-spacing:0.05em;color:var(--mut,#7b7897);border-bottom:1px solid var(--line,#e7e5f2);">ETHFI</sc-raw-th>
+              <sc-raw-th style="text-align:right;padding:7px 8px;font-size:10.5px;text-transform:uppercase;letter-spacing:0.05em;color:var(--mut,#7b7897);border-bottom:1px solid var(--line,#e7e5f2);">Avg price</sc-raw-th>
+            </sc-raw-tr></sc-raw-thead>
+            <sc-raw-tbody>
+              <sc-for list="{{ bbRows }}" as="r" hint-placeholder-count="5">
+                <sc-raw-tr>
+                  <sc-raw-td style="padding:9px 8px;font-weight:500;border-bottom:1px solid var(--line2,#f0eff7);">{{ r.period }}</sc-raw-td>
+                  <sc-raw-td style="padding:9px 8px;text-align:right;font-family:var(--fmono,'IBM Plex Mono'),monospace;font-size:12px;border-bottom:1px solid var(--line2,#f0eff7);">{{ r.usd }}</sc-raw-td>
+                  <sc-raw-td style="padding:9px 8px;text-align:right;font-family:var(--fmono,'IBM Plex Mono'),monospace;font-size:12px;border-bottom:1px solid var(--line2,#f0eff7);">{{ r.tok }}</sc-raw-td>
+                  <sc-raw-td style="padding:9px 8px;text-align:right;font-family:var(--fmono,'IBM Plex Mono'),monospace;font-size:12px;color:var(--mut,#7b7897);border-bottom:1px solid var(--line2,#f0eff7);">{{ r.avg }}</sc-raw-td>
+                </sc-raw-tr>
+              </sc-for>
+            </sc-raw-tbody>
+          </sc-raw-table>
+          </div>
+        </div>
+        <div data-col="1" style="grid-column:span 12;background:var(--card,#fff);border:1px solid var(--line,#e7e5f2);border-radius:var(--radlg,16px);padding:22px 24px;display:flex;flex-direction:column;gap:14px;">
+          <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:flex-start;"><div><h3 style="margin:0;font-family:var(--fhead,'Sora'),sans-serif;font-size:15.5px;font-weight:600;">Valuation ratios</h3><p style="margin:3px 0 0;font-size:12.5px;color:var(--mut,#7b7897);">P/S, P/F and fully-diluted variants · ETHFI market cap &amp; FDV over trailing-twelve-month revenue and fees</p></div>{{ bFinVal }}</div>
+          <div style="display:flex;gap:16px;flex-wrap:wrap;align-items:center;">
+            <div style="display:flex;gap:3px;background:var(--chipbg,#efeef8);padding:3px;border-radius:9px;flex-wrap:wrap;"><sc-for list="{{ valMetricChips }}" as="c" hint-placeholder-count="4"><button sc-camel-on-click="{{ c.click }}" style="{{ c.style }}">{{ c.label }}</button></sc-for></div>
+            <div style="display:flex;gap:3px;background:var(--chipbg,#efeef8);padding:3px;border-radius:9px;"><sc-for list="{{ valTfChips }}" as="c" hint-placeholder-count="6"><button sc-camel-on-click="{{ c.click }}" style="{{ c.style }}">{{ c.label }}</button></sc-for></div>
+          </div>
+          <div style="min-height:300px;">{{ chFinVal }}</div>
+        </div>
+      </div>
+    </section>
+    </sc-if>
+
+    <footer style="max-width:1240px;margin:36px auto 0;border-top:1px solid var(--line,#e7e5f2);padding-top:16px;font-size:12px;color:var(--mut,#7b7897);line-height:1.6;">
+      <strong style="color:var(--ink,#211d3a);">Sources &amp; methodology.</strong> ETHFI price &amp; supply, ETH/BTC prices, protocol TVL, holder counts and top-holder balances stream live from CoinGecko, DeFiLlama, Blockscout and Dune where marked; restaked-asset breakdowns, Cash activity, buybacks and financial statements are modeled and clearly badged. Charts show full available history — drag to zoom, double-click to reset; hover any card and click <strong style="color:var(--ink,#211d3a);">⬇ PNG</strong> to export a watermarked image. Prepared by Machines &amp; Money · machinesandmoney.xyz/etherfi · July 2026.
+    </footer>
+  </main>
+</div></div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:900},&quot;theme&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;mm&quot;,&quot;options&quot;:[&quot;mm&quot;,&quot;dark&quot;,&quot;light&quot;,&quot;etherfi&quot;],&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Appearance&quot;},&quot;dataMode&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;live&quot;,&quot;options&quot;:[&quot;live&quot;,&quot;illustrative&quot;],&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Data&quot;},&quot;showBadges&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Data&quot;}}">
+class Component extends DCLogic {
+  state = {
+    sec: 0, ready: 0, zoom: {}, hov: null, drag: null, pieHov: null, hid: {}, src: {}, theme: null,
+    ov: { tf: 'W' },
+    ethfi: { metrics: ['Price'], tf: 'W' }, ethfiSupTf: 'W',
+    cashVol: { metrics: ['Spend'], tf: 'W' }, cashAmt: { sel: null, tf: 'W', mode: 'abs' }, cashUser: 'Transactions', cashUserTf: 'W',
+    cashTxAmt: { sel: null, tf: 'W' }, ramp: { dir: 'All', denom: 'All', tf: 'W' }, uSafe: { sel: null, mode: 'abs', tf: 'W' }, hoursTz: 'UTC',
+    eeth: { platforms: null, tf: 'W', denom: 'ETH' }, ebtc: { platforms: null, tf: 'W', denom: 'BTC' },
+    rApy: ['eETH APY'], rApyTf: 'W', rYield: { sel: null, tf: 'M' }, rHold: 'eETH', rHoldTf: 'W',
+    liquid: { view: 'TVL', sel: null, mode: 'abs', tf: 'W' },
+    finTf: 'Q', rev: { sources: null }, bb: { unit: 'ETHFI', tf: 'W' }, val: { metrics: ['P/S'], tf: 'W' }
+  };
+  theme() { return this.state.theme ?? this.props.theme ?? 'mm'; }
+  themeDef() {
+    const T = {
+      mm: { bg: '#130b07', sidebg: '#0d0704', card: 'rgba(37,22,14,0.5)', line: 'rgba(184,127,53,0.18)', line2: 'rgba(184,127,53,0.10)', ink: '#f3ece3', mut: '#b5a596', acc: '#e0913f', chipbg: 'rgba(184,127,53,0.10)', chipOn: '#b87f35', chipInk: '#130b07', grid: 'rgba(184,127,53,0.10)', phbg: 'rgba(184,127,53,0.06)', tipbg: '#1c110a', pos: '#7bd46a', neg: '#e56b5a', radlg: '0px', radsm: '0px', rad: 0, fmono: "'Geist Mono','IBM Plex Mono'", fhead: "'Archivo'", fbody: "'Archivo'", brandgrad: 'linear-gradient(135deg,#e0913f,#b87f35)',
+        tok: { eETH: '#6580E1', weETH: '#8f9bff', eBTC: '#FD8A4C', Liquid: '#55C9A7', ETHFI: '#F0A545', Cash: '#4FA8A8' },
+        cat: ['#5B8DEF', '#F0A545', '#3FD08F', '#B98BEF', '#E85D5D', '#39C2D9', '#D9E24C', '#F08FB5', '#9AA7C7', '#7d8aa0'] },
+      dark: { radlg: '16px', radsm: '14px', rad: 7, bg: '#0a0c10', sidebg: '#06080c', card: '#12151c', line: 'rgba(255,255,255,0.09)', line2: 'rgba(255,255,255,0.055)', ink: '#e6e4da', mut: '#8f96a3', acc: '#ffa028', chipbg: 'rgba(255,255,255,0.06)', chipOn: 'rgba(255,255,255,0.16)', grid: 'rgba(255,255,255,0.06)', phbg: 'rgba(255,255,255,0.035)', tipbg: 'rgba(6,8,12,0.96)', pos: '#37d29c', neg: '#ff6b6b', fhead: "'IBM Plex Mono'", fbody: "'Instrument Sans'", brandgrad: 'linear-gradient(135deg,#ffa028,#c46a00)',
+        tok: { eETH: '#4fb3ff', weETH: '#7f9cf5', eBTC: '#ffa028', Liquid: '#37d29c', ETHFI: '#c792ea', Cash: '#ffd166' },
+        cat: ['#4fb3ff', '#ffa028', '#37d29c', '#c792ea', '#ff6b6b', '#26c6da', '#ffd166', '#f48fb1', '#a1887f', '#8f9bb3'] },
+      light: { radlg: '16px', radsm: '14px', rad: 7, bg: '#f6f6f4', sidebg: '#1d2430', card: '#ffffff', line: '#e4e3de', line2: '#efeeea', ink: '#22252a', mut: '#72757d', acc: '#2f4b7c', chipbg: '#edece8', chipOn: '#ffffff', grid: '#eeede9', phbg: '#f2f1ed', tipbg: 'rgba(29,36,48,0.95)', pos: '#2f7d5c', neg: '#b04a49', fhead: "'Sora'", fbody: "'Instrument Sans'", brandgrad: 'linear-gradient(135deg,#2f4b7c,#4a6b9c)',
+        tok: { eETH: '#2f4b7c', weETH: '#4d7fb0', eBTC: '#b58946', Liquid: '#3f8f7a', ETHFI: '#665191', Cash: '#a05b74' },
+        cat: ['#2f6fb0', '#e0862e', '#2f9e6e', '#7c4dbf', '#c0392b', '#0e9aa7', '#c78a1f', '#c2578f', '#8a6d3b', '#6b7280'] },
+      etherfi: { radlg: '16px', radsm: '14px', rad: 7, bg: '#f4f3fb', sidebg: '#1b1830', card: '#ffffff', line: '#e7e5f2', line2: '#f0eff7', ink: '#211d3a', mut: '#7b7897', acc: '#5b53e0', chipbg: '#efeef8', chipOn: '#ffffff', grid: '#edecf6', phbg: '#f2f1fa', tipbg: 'rgba(27,24,48,0.95)', pos: '#2f9e6e', neg: '#d0524f', fhead: "'Sora'", fbody: "'Instrument Sans'", brandgrad: 'linear-gradient(135deg,#6d63f5,#38c6d9)',
+        tok: { eETH: '#5b53e0', weETH: '#8079ee', eBTC: '#e08a3a', Liquid: '#2bb3c4', ETHFI: '#7b3fd1', Cash: '#e0568f' },
+        cat: ['#5b53e0', '#e0862e', '#2bb3c4', '#38b48e', '#d0524f', '#c9628f', '#c78a1f', '#7b6fe8', '#8a6d3b', '#9aa0b5'] }
+    };
+    return T[this.theme()] || T.mm;
+  }
+  componentDidMount() {
+    this.setupDL();
+    import(window.__resources && window.__resources.etherfiData ? window.__resources.etherfiData : './etherfi-data.js').then(m => {
+      this.M = m; this.mock = m.buildMock(); this.liveD = {};
+      this.setState({ ready: 1 });
+      if ((this.props.dataMode ?? 'live') !== 'illustrative') {
+        m.fetchLive((key, payload, srcName) => {
+          if (key === 'ethfiPrice') this.liveD.ethfiPrice = payload;
+          else if (key === 'ethfiCirc') this.liveD.ethfiSupply = payload;
+          else if (key === 'ethPrice') this.liveD.ethPrice = payload;
+          else if (key === 'btcPrice') this.liveD.btcPrice = payload;
+          else if (key === 'restakedTvl') this.liveD.restakedTvl = payload;
+          else if (key === 'feesTotal') this.liveD.feesTotal = payload;
+          else if (key.indexOf('topHolders.') === 0) { (this.liveD.topH = this.liveD.topH || {})[key.slice(11)] = payload; }
+          else if (key.indexOf('anchor.holders.') === 0) {
+            const sym = key.slice(15), hp = this.mock['holders.' + sym];
+            if (hp && hp.length && hp[hp.length - 1][1] > 0) { const f = payload / hp[hp.length - 1][1]; this.liveD['holders.' + sym] = hp.map(([t, vv]) => [t, vv * f]); }
+          } else this.liveD[key] = payload;
+          this.setState({ src: { ...this.state.src, [key]: srcName } });
+        });
+      }
+    });
+  }
+  usd(pts, px) { if (!pts) return []; return pts.map(([t, v]) => { const p = this.M.valueAt(px, t); return p == null ? null : [t, v * p]; }).filter(Boolean); }
+  hoursChart(tz) {
+    const R = React.createElement, C = this.C;
+    if (!this.state.ready) return this.ph(220);
+    const raw = this.g('activeHoursUTC'), shift = tz === 'EST' ? 5 : 0;
+    const data = raw.map((v, h) => ({ h: ((h - shift) + 24) % 24, v })).sort((a, b) => a.h - b.h);
+    const W = 1040, H = 220, PL = 46, PR = 14, PT = 12, PB = 28;
+    const maxV = Math.max(...data.map(d => d.v)) * 1.08, bw = (W - PL - PR) / 24 * 0.68;
+    const X = h => PL + (h + 0.5) / 24 * (W - PL - PR), Y = v => PT + (1 - v / maxV) * (H - PT - PB);
+    const kids = [];
+    this.ticks(0, maxV, 4).forEach(t => { kids.push(R('line', { key: 'g' + t, x1: PL, x2: W - PR, y1: Y(t), y2: Y(t), stroke: C.grid, strokeWidth: 1 })); kids.push(R('text', { key: 'gt' + t, x: PL - 8, y: Y(t) + 3.5, textAnchor: 'end', fontSize: 10.5, fill: C.mut, fontFamily: "var(--fmono,'IBM Plex Mono'),monospace" }, t.toFixed(0) + '%')); });
+    const hov = this.state.hov && this.state.hov.id === 'hours' ? this.state.hov.h : null;
+    data.forEach((d, i) => {
+      kids.push(R('rect', { key: 'b' + i, x: X(d.h) - bw / 2, y: Y(d.v), width: bw, height: Math.max(0.5, Y(0) - Y(d.v)), fill: C.tok.Cash, fillOpacity: hov == null || hov === d.h ? 0.9 : 0.4, rx: 3, style: { cursor: 'pointer' }, onPointerEnter: () => this.setState({ hov: { id: 'hours', h: d.h } }), onPointerLeave: () => this.setState({ hov: null }) }));
+      if (d.h % 3 === 0) kids.push(R('text', { key: 'x' + i, x: X(d.h), y: H - 8, textAnchor: 'middle', fontSize: 10, fill: C.mut, fontFamily: "var(--fmono,'IBM Plex Mono'),monospace" }, String(d.h).padStart(2, '0')));
+    });
+    if (hov != null) { const d = data.find(x => x.h === hov); if (d) { const hx = X(hov), bx = hx + 120 > W ? hx - 122 : hx + 8; kids.push(R('foreignObject', { key: 'tt', x: bx, y: PT, width: 118, height: 46, style: { pointerEvents: 'none' } }, R('div', { style: { background: C.tipbg, borderRadius: 8, padding: '6px 9px', color: '#fff', fontSize: 11, fontFamily: "'Instrument Sans',sans-serif" } }, R('div', { style: { color: 'rgba(255,255,255,0.6)', fontFamily: "var(--fmono,'IBM Plex Mono'),monospace", fontSize: 10 } }, String(hov).padStart(2, '0') + ':00 ' + tz), R('div', { style: { fontFamily: "var(--fmono,'IBM Plex Mono'),monospace" } }, d.v.toFixed(1) + '% of txns')))); } }
+    return R('svg', { viewBox: '0 0 ' + W + ' ' + H, style: { width: '100%', height: 'auto', display: 'block' } }, kids);
+  }
+  renderVals() {
+    const C = this.C = { ...this.themeDef() };
+    const S = this.state, R = React.createElement;
+    const secs = ['Overview', 'ETHFI', 'Cash', 'Restaking', 'Financials'];
+    const v = {
+      navItems: secs.map((label, i) => ({
+        label, num: String(i + 1).padStart(2, '0'), click: () => this.setState({ sec: i, hov: null, drag: null }),
+        style: { display: 'flex', alignItems: 'center', gap: 10, width: '100%', textAlign: 'left', border: 'none', cursor: 'pointer', padding: '9px 12px', borderRadius: this.theme() === 'mm' ? 4 : 9, fontSize: 13.5, fontWeight: 500, background: S.sec === i ? (this.theme() === 'mm' ? 'rgba(224,145,63,0.14)' : 'rgba(255,255,255,0.13)') : 'transparent', color: S.sec === i ? '#fff' : 'rgba(255,255,255,0.6)', boxShadow: S.sec === i && this.theme() === 'mm' ? 'inset 2px 0 0 #b87f35' : 'none', transition: 'all .15s' }
+      })),
+      secOv: S.sec === 0, secEthfi: S.sec === 1, secCash: S.sec === 2, secRe: S.sec === 3, secFin: S.sec === 4
+    };
+    v.themeVars = this.themeVarsObj();
+    v.themeName = this.theme();
+    v.mmLogo = this.M ? R('img', { src: 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(this.M.MM_LOGO_TPL.split('__C__').join('#ffffff')), alt: 'Machines & Money', style: { width: '100%', maxWidth: 164, height: 'auto', opacity: 0.8, display: 'block' } }) : null;
+    v.themeChips = [['M&M', 'mm'], ['Dark', 'dark'], ['Light', 'light'], ['ether.fi', 'etherfi']].map(([label, key]) => ({
+      label, click: () => this.setState({ theme: key }),
+      style: { flex: 1, padding: '5px 4px', borderRadius: this.theme() === 'mm' ? 4 : 7, fontSize: 11, fontWeight: 600, border: 'none', cursor: 'pointer', background: this.theme() === key ? (this.theme() === 'mm' ? '#b87f35' : 'rgba(255,255,255,0.22)') : 'transparent', color: this.theme() === key ? (this.theme() === 'mm' ? '#0a0a0a' : '#fff') : 'rgba(255,255,255,0.6)', transition: 'all .15s', whiteSpace: 'nowrap' }
+    }));
+    v.tvSrc = 'https://s.tradingview.com/widgetembed/?symbol=BINANCE%3AETHFIUSDT&interval=D&theme=' + (['mm', 'dark'].includes(this.theme()) ? 'dark' : 'light') + '&style=1&withdateranges=1&hidesidetoolbar=0&allow_symbol_change=1&saveimage=0&locale=en';
+    const liveN = Object.keys(S.src).length;
+    v.liveStatus = !S.ready ? 'Loading\u2026' : !this.liveOn() ? 'Illustrative mode' : liveN ? liveN + ' live feed' + (liveN > 1 ? 's' : '') + ' active' : 'Connecting live feeds\u2026';
+    v.liveDotStyle = { width: 7, height: 7, borderRadius: 999, background: liveN && this.liveOn() ? '#2f9e6e' : '#d3922e', flexShrink: 0 };
+    v.holdersNote = (this.liveD && this.liveD.topH) ? 'live onchain balances via Dune \u00b7 labels curated' : 'labels illustrative pending explorer integration';
+    const TF = ['D', 'W', 'M', 'Q', 'A', 'C'], TFF = ['W', 'M', 'Q', 'A', 'C'];
+    if (!S.ready) {
+      const ph = this.ph(280);
+      ['chOvRestaked', 'chOvCash', 'chOvRev', 'chEthfiPrice', 'chEthfiSupply', 'chEthfiHolders', 'chCashVol', 'chCashAmt', 'chCashUser', 'chCashTxAmt', 'chCashRamp', 'chUserSafe', 'chHours', 'chEeth', 'chEbtc', 'chRApy', 'chRUtil', 'chRYield', 'chRHolders', 'chLiquid', 'chFinRev', 'chBuyback', 'chFinVal'].forEach(k => v[k] = ph);
+      ['pieEthfiHold', 'pieRHold'].forEach(k => v[k] = this.ph(240));
+      ['ovStats', 'ovStats2', 'ethfiStats', 'cashStats', 'reStats', 'finStats', 'ethfiHoldRows', 'rHoldRows', 'bbRows', 'navItems2'].forEach(k => v[k] = v[k] || []);
+      ['ovTfChips', 'ethfiMetricChips', 'ethfiTfChips', 'ethfiSupTfChips', 'cashVolChips', 'cashVolTfChips', 'cashAmtChips', 'cashAmtTfChips', 'cashAmtModeChips', 'cashUserChips', 'cashUserTfChips', 'cashTxAmtChips', 'cashTxAmtTfChips', 'rampDirChips', 'rampDenomChips', 'rampTfChips', 'userSafeChips', 'userSafeModeChips', 'userSafeTfChips', 'hoursTzChips', 'eethDenomChips', 'eethPlatChips', 'eethTfChips', 'ebtcDenomChips', 'ebtcPlatChips', 'ebtcTfChips', 'rApyChips', 'rApyTfChips', 'rYieldChips', 'rYieldTfChips', 'rHoldTfChips', 'rHoldTabs', 'liquidViewChips', 'liquidPlatChips', 'liquidModeChips', 'liquidTfChips', 'revSourceChips', 'finTfChips', 'bbUnitChips', 'bbTfChips', 'valMetricChips', 'valTfChips'].forEach(k => v[k] = []);
+      ['bOvRestaked', 'bOvCash', 'bOvRev', 'bEthfiPrice', 'bEthfiSupply', 'bEthfiHolders', 'bCashVol', 'bCashAmt', 'bCashUser', 'bCashTxAmt', 'bCashRamp', 'bUserSafe', 'bEeth', 'bEbtc', 'bRApy', 'bRUtil', 'bRYield', 'bBbSummary', 'bRHolders', 'bLiquid', 'bFinRev', 'bBuyback', 'bFinVal', 'bEthfiHold', 'bHours', 'bRHold'].forEach(k => v[k] = '');
+      return v;
+    }
+    const V = this.M.valueAt, f$ = this.f$.bind(this), fN = this.fN.bind(this), fP = this.fP.bind(this);
+    const fX = x => x == null || isNaN(x) ? '\u2014' : x.toFixed(1) + 'x';
+    const usd = (pts, px) => this.usd(pts, px);
+    const eethP = this.g('eethPlatforms'), ebtcP = this.g('ebtcPlatforms'), liqT = this.g('liquidTvl') || this.mock.liquidTvl, liqD = this.mock.liquidDep;
+    const ethPx = this.g('ethPrice'), btcPx = this.g('btcPrice'), ethfiPx = this.g('ethfiPrice'), ethfiCirc = this.g('ethfiSupply');
+    const eethTotEth = this.g('eethSupplyTot') || this.M.mergeSum(Object.values(eethP)), ebtcTotBtc = this.g('ebtcSupplyTot') || this.M.mergeSum(Object.values(ebtcP)), liqTot = this.M.mergeSum(Object.values(liqT));
+    const eethNow = this.last(eethTotEth), ebtcNow = this.last(ebtcTotBtc), liqNow = this.last(liqTot);
+    const ethNow = this.last(ethPx), btcNow = this.last(btcPx), ethfiNow = this.last(ethfiPx), circNow = this.last(ethfiCirc);
+    const restakedNowUsd = eethNow * ethNow + ebtcNow * btcNow + liqNow;
+    const NOW = Date.now(), pad0 = pts => (pts && pts.length && pts[pts.length - 1][0] < NOW - 6 * 86400000) ? pts.concat([[NOW, 0]]) : (pts || []);
+    const bbTokRaw = this.g('buybackEthfi');
+    const bbTok = pad0(bbTokRaw), bbUsd = pad0((this.liveOn() && this.liveD && this.liveD.buybackEthfi) ? this.usd(bbTokRaw, ethfiPx) : this.g('buybackUsd'));
+    const bbCum = this.g('buybackEthfiCum') || (() => { let a = 0; return (bbTok || []).map(([t, v]) => [t, a += v]); })();
+    const bbCumUsd = this.usd(bbCum, ethfiPx);
+    // ===== 01 Overview =====
+    v.ovTfChips = this.chips(TF, S.ov.tf, x => this.set2('ov', { tf: x }));
+    v.chOvRestaked = this.chart({ id: 'ovRestaked', w: 1180, series: [{ name: 'eETH', color: C.tok.eETH, pts: usd(eethTotEth, ethPx) }, { name: 'eBTC', color: C.tok.eBTC, pts: usd(ebtcTotBtc, btcPx) }, { name: 'Liquid', color: C.tok.Liquid, pts: liqTot }], kind: 'stack', h: 300, fmt: f$, tf: S.ov.tf });
+    v.bOvRestaked = this.badge(['restakedTvl', 'ethPrice', 'btcPrice']);
+    v.chOvCash = this.chart({ id: 'ovCash', w: 668, dual: true, rFmt: fN, h: 280, fmt: f$, tf: S.ov.tf, series: [{ name: 'Spend ($)', color: C.tok.Cash, pts: this.g('cashSpend'), agg: 'sum' }, { name: 'Transactions', color: C.acc, pts: this.g('cashTx'), axis: 'R', fmt: fN, line: true, agg: 'sum' }], kind: 'bar' });
+    v.bOvCash = this.badge(['cashSpend', 'cashTx']);
+    v.chOvRev = this.chart({ id: 'ovRev', w: 456, total: true, series: (() => { const rb = this.g('revBy') || this.mock.revBy; return Object.keys(rb).filter(k => k !== 'Total').map((n, i) => ({ name: n, color: C.cat[i % C.cat.length], pts: rb[n], agg: 'sum' })); })(), kind: 'bar', h: 280, fmt: f$, tf: 'Q' });
+    v.bOvRev = this.badge(['revBy']);
+    const allTimeSpend = this.g('cashSpend').reduce((a, p) => a + p[1], 0);
+    const ttmRev = this.mock.fin.Revenue.slice(-4).reduce((a, p) => a + p[1], 0);
+    v.ovStats = [
+      { k: 'ETHFI price', v: ethfiNow ? '$' + ethfiNow.toFixed(3) : '\u2014', ...this.d30(ethfiPx) },
+      { k: 'All-time Cash spend', v: f$(allTimeSpend), sub: 'cumulative card volume', subStyle: this.subStyle() },
+      { k: 'Total restaked value', v: f$(restakedNowUsd), sub: 'eETH + eBTC + Liquid', subStyle: this.subStyle() },
+      { k: 'TTM revenue', v: f$(ttmRev), sub: 'trailing 4 quarters \u00b7 modeled', subStyle: this.subStyle() }
+    ];
+    v.ovStats2 = [
+      { k: 'eETH TVL', v: f$(eethNow * ethNow), ...this.d30(usd(eethTotEth, ethPx)) },
+      { k: 'eBTC TVL', v: f$(ebtcNow * btcNow), ...this.d30(usd(ebtcTotBtc, btcPx)) },
+      { k: 'Liquid TVL', v: f$(liqNow), ...this.d30(liqTot) },
+      { k: 'Total holders', v: fN(this.last(this.g('holders.total'))), sub: 'unique ecosystem addresses', subStyle: this.subStyle() }
+    ];
+    // ===== 02 ETHFI =====
+    const mcap = ethfiPx.map(([t, p]) => { const c = V(ethfiCirc, t); return c ? [t, p * c] : null; }).filter(Boolean);
+    const fdv = ethfiPx.map(([t, p]) => [t, p * this.mock.ethfiMax]);
+    const emAll = { Price: [ethfiPx, C.tok.ETHFI], 'Market cap': [mcap, C.acc], FDV: [fdv, C.cat[2]] };
+    const emSel0 = S.ethfi.metrics && S.ethfi.metrics.length ? S.ethfi.metrics.filter(m => emAll[m]) : [];
+    const emUse = emSel0.length ? emSel0 : Object.keys(emAll);
+    const emDual = emUse.includes('Price') && emUse.some(m => m !== 'Price');
+    v.ethfiMetricChips = this.multiChips(Object.keys(emAll), S.ethfi.metrics, x => this.set2('ethfi', { metrics: x }));
+    v.ethfiTfChips = this.chips(TF, S.ethfi.tf, x => this.set2('ethfi', { tf: x }));
+    v.chEthfiPrice = this.chart({ id: 'ethfiPrice', w: 1180, series: emUse.map(m => ({ name: m, color: emAll[m][1], pts: emAll[m][0], axis: emDual && m === 'Price' ? 'R' : undefined, fmt: m === 'Price' ? (x => '$' + x.toFixed(3)) : f$ })), kind: emUse.length > 1 ? 'line' : 'area', h: 320, dual: emDual, rFmt: x => '$' + x.toFixed(2), fmt: emUse.every(m => m === 'Price') ? (x => '$' + x.toFixed(3)) : f$, tf: S.ethfi.tf });
+    v.bEthfiPrice = this.badge(['ethfiPrice']);
+    v.ethfiSupTfChips = this.chips(TF, S.ethfiSupTf, x => this.setState({ ethfiSupTf: x }));
+    v.chEthfiSupply = this.chart({ id: 'ethfiSupply', w: 668, series: [{ name: 'Circulating ETHFI', color: C.tok.ETHFI, pts: ethfiCirc }], kind: 'area', h: 280, fmt: fN, tf: S.ethfiSupTf });
+    v.bEthfiSupply = this.badge(['ethfiCirc']);
+    v.chEthfiHolders = this.chart({ id: 'ethfiHolders', w: 456, series: [{ name: 'ETHFI holders', color: C.tok.ETHFI, pts: this.g('holders.ETHFI') }], kind: 'area', h: 280, fmt: fN });
+    v.bEthfiHolders = this.badge(['anchor.holders.ETHFI']);
+    v.ethfiHoldRows = this.holdRows('ETHFI', ethfiCirc, x => fN(x));
+    v.pieEthfiHold = this.holdPie('pieEthfi', 'ETHFI', ethfiCirc, x => fN(x) + ' ETHFI');
+    v.bEthfiHold = this.badge(['topHolders.ETHFI']);
+    const bbTokTotal = bbTok.reduce((a, p) => a + p[1], 0);
+    const buEnd = bbUsd.length ? bbUsd[bbUsd.length - 1][0] : 0;
+    const bbUsdTTM = bbUsd.filter(p => p[0] >= buEnd - 365 * 86400000).reduce((a, p) => a + p[1], 0);
+    const holdEthfi = this.g('holders.ETHFI'), holdEnd = holdEthfi.length ? holdEthfi[holdEthfi.length - 1][0] : 0;
+    const holdPrev = V(holdEthfi, holdEnd - 365 * 86400000), holdNowE = this.last(holdEthfi);
+    const holdYoY = holdNowE && holdPrev ? ((holdNowE - holdPrev) / holdPrev * 100) : null;
+    v.ethfiStats = [
+      { k: 'ETHFI price', v: ethfiNow ? '$' + ethfiNow.toFixed(3) : '\u2014', ...this.d30(ethfiPx) },
+      { k: 'Circulating supply', v: fN(circNow) + ' ETHFI', sub: (circNow / this.mock.ethfiMax * 100).toFixed(1) + '% of 1B max', subStyle: this.subStyle() },
+      { k: 'TTM buybacks', v: f$(bbUsdTTM), sub: fN(bbTokTotal) + ' ETHFI all-time', subStyle: this.subStyle() },
+      { k: 'Total holders', v: fN(holdNowE), sub: holdYoY != null ? ((holdYoY >= 0 ? '+' : '\u2212') + Math.abs(holdYoY).toFixed(0) + '% TTM YoY') : '', subStyle: this.subStyle(holdYoY >= 0 ? C.pos : C.neg) }
+    ];
+    // ===== 03 Cash =====
+    const cvAll = { Spend: [this.g('cashSpend'), f$, C.tok.Cash, 'sum', false], Cashback: [this.g('cashback'), f$, C.cat[3], 'sum', false], 'Market share': [this.mock.cashShare, fP, C.acc, 'last', true] };
+    const cvSel0 = S.cashVol.metrics && S.cashVol.metrics.length ? S.cashVol.metrics.filter(m => cvAll[m]) : [];
+    const cvUse = cvSel0.length ? cvSel0 : Object.keys(cvAll);
+    const cvDual = cvUse.includes('Market share') && cvUse.length > 1;
+    const cvOnlyShare = cvUse.length === 1 && cvUse[0] === 'Market share';
+    v.cashVolChips = this.multiChips(Object.keys(cvAll), S.cashVol.metrics, x => this.set2('cashVol', { metrics: x }));
+    v.cashVolTfChips = this.chips(TF, S.cashVol.tf, x => this.set2('cashVol', { tf: x }));
+    v.chCashVol = this.chart({ id: 'cashVol', w: 1180, series: cvUse.map(m => { const a = cvAll[m]; return { name: m, color: a[2], pts: a[0], fmt: a[1], axis: cvDual && a[4] ? 'R' : undefined, line: a[4], agg: a[3] }; }), kind: cvOnlyShare ? 'line' : 'bar', dual: cvDual, rFmt: fP, h: 300, fmt: cvOnlyShare ? fP : f$, tf: S.cashVol.tf });
+    v.bCashVol = this.badge(['cashSpend', 'cashback']);
+    const saKeys = Object.keys(this.g('spendByAmount')), saUse = (!S.cashAmt.sel || !S.cashAmt.sel.length) ? saKeys : S.cashAmt.sel.filter(x => this.g('spendByAmount')[x]);
+    v.cashAmtChips = this.multiChips(saKeys, S.cashAmt.sel, x => this.set2('cashAmt', { sel: x }));
+    v.cashAmtTfChips = this.chips(TF, S.cashAmt.tf, x => this.set2('cashAmt', { tf: x }));
+    v.cashAmtModeChips = this.chips(['$', '% share'], S.cashAmt.mode === 'share' ? '% share' : '$', x => this.set2('cashAmt', { mode: x === '$' ? 'abs' : 'share' }));
+    v.chCashAmt = this.chart({ id: 'cashAmt', w: 1180, series: saUse.map(n => ({ name: n, color: C.cat[saKeys.indexOf(n) % C.cat.length], pts: this.g('spendByAmount')[n], agg: 'sum' })), kind: S.cashAmt.mode === 'share' ? 'stack' : 'bar', pct: S.cashAmt.mode === 'share', h: 280, fmt: S.cashAmt.mode === 'share' ? fP : f$, tf: S.cashAmt.tf });
+    v.bCashAmt = this.badge(['spendByAmount']);
+    const cuAll = { Transactions: [this.g('cashTx'), 'sum', fN, C.tok.Cash], 'New cards': [this.g('newCards'), 'sum', fN, C.acc], 'Active cards': [this.g('activeCards'), 'last', fN, C.cat[2]] };
+    const cuSel = cuAll[S.cashUser] ? S.cashUser : 'Transactions';
+    v.cashUserChips = this.chips(Object.keys(cuAll), S.cashUser, x => this.setState({ cashUser: x }));
+    v.cashUserTfChips = this.chips(TF, S.cashUserTf, x => this.setState({ cashUserTf: x }));
+    v.chCashUser = this.chart({ id: 'cashUser', w: 562, series: [{ name: cuSel, color: cuAll[cuSel][3], pts: cuAll[cuSel][0], agg: cuAll[cuSel][1] }], kind: cuAll[cuSel][1] === 'sum' ? 'bar' : 'area', h: 260, fmt: cuAll[cuSel][2], tf: S.cashUserTf });
+    v.bCashUser = this.badge(['cashTx']);
+    const taKeys = Object.keys(this.g('txByAmount')), taUse = (!S.cashTxAmt.sel || !S.cashTxAmt.sel.length) ? taKeys : S.cashTxAmt.sel.filter(x => this.g('txByAmount')[x]);
+    v.cashTxAmtChips = this.multiChips(taKeys, S.cashTxAmt.sel, x => this.set2('cashTxAmt', { sel: x }));
+    v.cashTxAmtTfChips = this.chips(TF, S.cashTxAmt.tf, x => this.set2('cashTxAmt', { tf: x }));
+    v.chCashTxAmt = this.chart({ id: 'cashTxAmt', w: 562, series: taUse.map(n => ({ name: n, color: C.cat[taKeys.indexOf(n) % C.cat.length], pts: this.g('txByAmount')[n], agg: 'sum' })), kind: 'bar', h: 260, fmt: fN, tf: S.cashTxAmt.tf });
+    v.bCashTxAmt = this.badge(['txByAmount']);
+    v.rampDirChips = this.chips(['On-ramp', 'Off-ramp', 'All'], S.ramp.dir, x => this.set2('ramp', { dir: x }));
+    v.rampDenomChips = this.chips(['USDC', 'EURC', 'All'], S.ramp.denom, x => this.set2('ramp', { denom: x }));
+    v.rampTfChips = this.chips(TF, S.ramp.tf, x => this.set2('ramp', { tf: x }));
+    const denoms = S.ramp.denom === 'All' ? ['USDC', 'EURC'] : [S.ramp.denom];
+    const dirs = S.ramp.dir === 'All' ? [['On', this.g('onramp')], ['Off', this.g('offramp')]] : S.ramp.dir === 'On-ramp' ? [['On', this.g('onramp')]] : [['Off', this.g('offramp')]];
+    let rampSeries = [], rci = 0;
+    dirs.forEach(([dl, obj]) => denoms.forEach(dn => { rampSeries.push({ name: dl + '-ramp ' + dn, color: C.cat[rci % C.cat.length], pts: obj[dn], agg: 'sum' }); rci++; }));
+    v.chCashRamp = this.chart({ id: 'cashRamp', w: 562, series: rampSeries, kind: 'bar', h: 260, fmt: f$, tf: S.ramp.tf });
+    v.bCashRamp = this.badge(['onramp', 'offramp']);
+    const usKeys = Object.keys(this.g('userSafe')), usUse = (!S.uSafe.sel || !S.uSafe.sel.length) ? usKeys : S.uSafe.sel.filter(x => this.g('userSafe')[x]);
+    v.userSafeChips = this.multiChips(usKeys, S.uSafe.sel, x => this.set2('uSafe', { sel: x }));
+    v.userSafeModeChips = this.chips(['$', '% share'], S.uSafe.mode === 'abs' ? '$' : '% share', x => this.set2('uSafe', { mode: x === '$' ? 'abs' : 'share' }));
+    v.userSafeTfChips = this.chips(TF, S.uSafe.tf, x => this.set2('uSafe', { tf: x }));
+    v.chUserSafe = this.chart({ id: 'userSafe', w: 562, series: usUse.map(n => ({ name: n, color: C.cat[usKeys.indexOf(n) % C.cat.length], pts: this.g('userSafe')[n] })), kind: 'stack', pct: S.uSafe.mode === 'share', h: 260, fmt: S.uSafe.mode === 'share' ? fP : f$, tf: S.uSafe.tf });
+    v.bUserSafe = this.badge(['userSafe']);
+    v.hoursTzChips = this.chips(['UTC', 'EST'], S.hoursTz, x => this.setState({ hoursTz: x }));
+    v.chHours = this.hoursChart(S.hoursTz);
+    v.bHours = this.badge(['activeHoursUTC']);
+    const spendArr = this.g('cashSpend'), spEnd = spendArr.length ? spendArr[spendArr.length - 1][0] : 0;
+    const spend30 = spendArr.filter(p => p[0] >= spEnd - 30 * 86400000).reduce((a, p) => a + p[1], 0);
+    const spendPrev30 = spendArr.filter(p => p[0] >= spEnd - 60 * 86400000 && p[0] < spEnd - 30 * 86400000).reduce((a, p) => a + p[1], 0);
+    const momPct = spendPrev30 ? ((spend30 - spendPrev30) / spendPrev30 * 100) : null;
+    v.cashStats = [
+      { k: 'Total spend volume', v: f$(allTimeSpend), sub: 'all-time card spend', subStyle: this.subStyle() },
+      { k: '30D spend volume', v: f$(spend30), sub: momPct != null ? ((momPct >= 0 ? '+' : '\u2212') + Math.abs(momPct).toFixed(1) + '% MoM') : '', subStyle: this.subStyle(momPct >= 0 ? C.pos : C.neg) },
+      { k: 'Total transactions', v: fN(this.g('cashTx').reduce((a, p) => a + p[1], 0)), sub: 'all-time count', subStyle: this.subStyle() },
+      { k: 'Active users', v: fN(this.last(this.g('activeCards'))), sub: 'current active cards', subStyle: this.subStyle() }
+    ];
+    // ===== 04 Restaking =====
+    v.eethDenomChips = this.chips(['ETH', 'USD'], S.eeth.denom, x => this.set2('eeth', { denom: x }));
+    v.eethPlatChips = this.multiChips(Object.keys(eethP), S.eeth.platforms, x => this.set2('eeth', { platforms: x }));
+    v.eethTfChips = this.chips(TF, S.eeth.tf, x => this.set2('eeth', { tf: x }));
+    const eethKeys = (!S.eeth.platforms || !S.eeth.platforms.length) ? Object.keys(eethP) : S.eeth.platforms.filter(x => eethP[x]);
+    v.chEeth = this.chart({ id: 'eeth', w: 562, series: eethKeys.map(n => ({ name: n, color: C.cat[Object.keys(eethP).indexOf(n) % C.cat.length], pts: S.eeth.denom === 'USD' ? usd(eethP[n], ethPx) : eethP[n] })), kind: 'stack', h: 280, fmt: S.eeth.denom === 'USD' ? f$ : fN, tf: S.eeth.tf });
+    v.bEeth = this.badge(['eethPlatforms']);
+    v.ebtcDenomChips = this.chips(['BTC', 'USD'], S.ebtc.denom, x => this.set2('ebtc', { denom: x }));
+    v.ebtcPlatChips = this.multiChips(Object.keys(ebtcP), S.ebtc.platforms, x => this.set2('ebtc', { platforms: x }));
+    v.ebtcTfChips = this.chips(TF, S.ebtc.tf, x => this.set2('ebtc', { tf: x }));
+    const ebtcKeys = (!S.ebtc.platforms || !S.ebtc.platforms.length) ? Object.keys(ebtcP) : S.ebtc.platforms.filter(x => ebtcP[x]);
+    v.chEbtc = this.chart({ id: 'ebtc', w: 562, series: ebtcKeys.map(n => ({ name: n, color: C.cat[Object.keys(ebtcP).indexOf(n) % C.cat.length], pts: S.ebtc.denom === 'USD' ? usd(ebtcP[n], btcPx) : ebtcP[n] })), kind: 'stack', h: 280, fmt: S.ebtc.denom === 'USD' ? f$ : fN, tf: S.ebtc.tf });
+    v.bEbtc = this.badge(['ebtcPlatforms']);
+    const apyAll = { 'eETH APY': [this.g('apy.eETH'), C.tok.eETH], 'eBTC APY': [this.g('apy.eBTC'), C.tok.eBTC], 'Liquid APY': [this.g('apy.Liquid'), C.tok.Liquid], 'eETH util': [this.g('util.eETH'), C.cat[4]], 'eBTC util': [this.g('util.eBTC'), C.cat[5]] };
+    const raSel0 = S.rApy && S.rApy.length ? S.rApy.filter(m => apyAll[m]) : [];
+    const raUse = raSel0.length ? raSel0 : Object.keys(apyAll);
+    v.rApyChips = this.multiChips(Object.keys(apyAll), S.rApy, x => this.setState({ rApy: x }));
+    v.rApyTfChips = this.chips(TF, S.rApyTf, x => this.setState({ rApyTf: x }));
+    v.chRApy = this.chart({ id: 'rApy', w: 562, series: [{ name: 'eETH', color: C.tok.eETH, pts: this.g('apy.eETH') }, { name: 'eBTC', color: C.tok.eBTC, pts: this.g('apy.eBTC') }, { name: 'Liquid', color: C.tok.Liquid, pts: this.g('apy.Liquid') }], kind: 'line', h: 260, fmt: fP, tf: S.rApyTf });
+    v.chRUtil = this.chart({ id: 'rUtil', w: 562, autoMin: true, series: [{ name: 'eETH', color: C.tok.eETH, pts: this.g('util.eETH') }, { name: 'eBTC', color: C.tok.eBTC, pts: this.g('util.eBTC') }], kind: 'line', h: 260, fmt: fP, tf: S.rApyTf });
+    v.bRApy = this.badge(['apy.eETH', 'apy.eBTC', 'apy.Liquid']);
+    v.bRUtil = this.badge(['util.eETH', 'util.eBTC']);
+    const ryAll = { eETH: [this.mock['yield.eETH'], C.tok.eETH], eBTC: [this.mock['yield.eBTC'], C.tok.eBTC], Liquid: [this.mock['yield.Liquid'], C.tok.Liquid] };
+    const ryKeys = Object.keys(ryAll), ryUse = (!S.rYield.sel || !S.rYield.sel.length) ? ryKeys : S.rYield.sel.filter(x => ryAll[x]);
+    v.rYieldChips = this.multiChips(ryKeys, S.rYield.sel, x => this.set2('rYield', { sel: x }));
+    v.rYieldTfChips = this.chips(TFF, S.rYield.tf, x => this.set2('rYield', { tf: x }));
+    v.chRYield = this.chart({ id: 'rYield', w: 1180, series: ryUse.map(n => ({ name: n, color: ryAll[n][1], pts: ryAll[n][0], agg: 'sum' })), kind: 'bar', h: 260, fmt: f$, tf: S.rYield.tf });
+    v.bRYield = this.badge([]);
+    v.rHoldTfChips = this.chips(TF, S.rHoldTf, x => this.setState({ rHoldTf: x }));
+    v.chRHolders = this.chart({ id: 'rHolders', w: 1180, autoMin: true, series: [{ name: 'eETH', color: C.tok.eETH, pts: this.g('holders.eETH') }, { name: 'Total', color: C.acc, pts: this.g('holders.total') }], kind: 'line', h: 300, fmt: fN, tf: S.rHoldTf });
+    v.bRHolders = this.badge(['holders.eETH', 'holders.total']);
+    v.rHoldTabs = this.chips(['eETH', 'eBTC'], S.rHold, x => this.setState({ rHold: x }));
+    const rHoldTot = S.rHold === 'eETH' ? eethTotEth : ebtcTotBtc;
+    const rHoldFmt = S.rHold === 'eETH' ? (x => fN(x) + ' ETH') : (x => fN(x) + ' BTC');
+    v.rHoldRows = this.holdRows(S.rHold, rHoldTot, rHoldFmt);
+    v.pieRHold = this.holdPie('pieR', S.rHold, rHoldTot, rHoldFmt);
+    v.bRHold = this.badge(S.rHold === 'eETH' ? ['topHolders.eETH'] : ['topHolders.eBTC']);
+    const liqObj = liqT, liqKeys = Object.keys(liqT);
+    const liqUse = (!S.liquid.sel || !S.liquid.sel.length) ? liqKeys : S.liquid.sel.filter(x => liqObj[x]);
+    v.liquidPlatChips = this.multiChips(liqKeys, S.liquid.sel, x => this.set2('liquid', { sel: x }));
+    v.liquidModeChips = this.chips(['$', '% share'], S.liquid.mode === 'abs' ? '$' : '% share', x => this.set2('liquid', { mode: x === '$' ? 'abs' : 'share' }));
+    v.liquidTfChips = this.chips(TF, S.liquid.tf, x => this.set2('liquid', { tf: x }));
+    v.chLiquid = this.chart({ id: 'liquid', w: 1180, series: liqUse.map(n => ({ name: n, color: C.cat[liqKeys.indexOf(n) % C.cat.length], pts: liqObj[n] })), kind: 'stack', pct: S.liquid.mode === 'share', h: 300, fmt: S.liquid.mode === 'share' ? fP : f$, tf: S.liquid.tf });
+    v.bLiquid = this.badge(['liquidTvl']);
+    v.reStats = [
+      { k: 'Total eETH supply', v: fN(eethNow) + ' ETH', ...this.d30(eethTotEth) },
+      { k: 'Total eBTC supply', v: fN(ebtcNow) + ' BTC', ...this.d30(ebtcTotBtc) },
+      { k: 'Total Liquid TVL', v: f$(liqNow), ...this.d30(liqTot) },
+      { k: 'Total holders', v: fN(this.last(this.g('holders.total'))), sub: 'all restaked assets', subStyle: this.subStyle() }
+    ];
+    // ===== 05 Financials =====
+    const revBySrc = this.g('revBy') || this.mock.revBy;
+    const revSrcKeys = Object.keys(revBySrc).filter(k => k !== 'Total');
+    const rsUse = (!S.rev.sources || !S.rev.sources.length) ? revSrcKeys : S.rev.sources.filter(x => revSrcKeys.includes(x));
+    v.revSourceChips = this.multiChips(revSrcKeys, S.rev.sources, x => this.set2('rev', { sources: x }));
+    v.finTfChips = this.chips(['Q', 'A', 'C'], S.finTf, x => this.setState({ finTf: x }));
+    const finCum = S.finTf === 'C';
+    const rev = this.mock.fin.Revenue, ni = this.mock.fin['Net income'], fees = this.mock.fin.Fees;
+    const finBars = rsUse.map(n => ({ name: n, color: C.cat[revSrcKeys.indexOf(n) % C.cat.length], pts: revBySrc[n], agg: 'sum' }));
+    v.chFinRev = this.chart({ id: 'finRev', w: 1180, total: true, series: finBars, kind: 'bar', h: 320, fmt: f$, tf: S.finTf });
+    v.bFinRev = this.badge(['revBy']);
+    v.bbUnitChips = this.chips(['$ value', 'ETHFI'], S.bb.unit === 'USD' ? '$ value' : 'ETHFI', x => this.set2('bb', { unit: x === '$ value' ? 'USD' : 'ETHFI' }));
+    v.bbTfChips = this.chips(TFF, S.bb.tf, x => this.set2('bb', { tf: x }));
+    v.chBuyback = this.chart({ id: 'buyback', w: 668, series: [{ name: S.bb.unit === 'USD' ? 'Buybacks ($)' : 'Buybacks (ETHFI)', color: C.tok.ETHFI, pts: S.bb.unit === 'USD' ? bbUsd : bbTok, agg: 'sum' }], kind: 'bar', h: 280, fmt: S.bb.unit === 'USD' ? f$ : fN, tf: S.bb.tf });
+    v.bBuyback = this.badge(['buybackEthfi']);
+    v.bBbSummary = this.badge(['buybackEthfi']);
+    const bu = bbUsd, bs = bbTok, endT = bu.length ? bu[bu.length - 1][0] : 0;
+    v.bbRows = [['Past 7 days', 7], ['Past 30 days', 30], ['Past 180 days', 180], ['Past 365 days', 365], ['Total historical', 1e5]].map(([label, days]) => { const cut = endT - days * 86400000, u = bu.filter(p => p[0] >= cut).reduce((a, p) => a + p[1], 0), tk = bs.filter(p => p[0] >= cut).reduce((a, p) => a + p[1], 0); return { period: label, usd: f$(u), tok: fN(tk), avg: tk ? '$' + (u / tk).toFixed(3) : '\u2014' }; });
+    const ttmAt = (pts, t) => { const arr = pts.filter(p => p[0] <= t).slice(-4); return arr.length === 4 ? arr.reduce((a, p) => a + p[1], 0) : null; };
+    const psPts = [], pfPts = [], fdpsPts = [], fdpfPts = [];
+    for (const [t, p] of ethfiPx) { const c = V(ethfiCirc, t); if (!c || !p) continue; const mc = p * c, fdv2 = p * this.mock.ethfiMax, rT = ttmAt(rev, t), fT = ttmAt(fees, t); if (rT) { psPts.push([t, mc / rT]); fdpsPts.push([t, fdv2 / rT]); } if (fT) { pfPts.push([t, mc / fT]); fdpfPts.push([t, fdv2 / fT]); } }
+    const valAll = { 'P/S': [psPts, C.tok.ETHFI], 'P/F': [pfPts, C.acc], 'FD P/S': [fdpsPts, C.cat[2]], 'FD P/F': [fdpfPts, C.cat[4]] };
+    const vmSel0 = S.val.metrics && S.val.metrics.length ? S.val.metrics.filter(m => valAll[m]) : [];
+    const vmUse = vmSel0.length ? vmSel0 : Object.keys(valAll);
+    v.valMetricChips = this.multiChips(Object.keys(valAll), S.val.metrics, x => this.set2('val', { metrics: x }));
+    v.valTfChips = this.chips(TF, S.val.tf, x => this.set2('val', { tf: x }));
+    v.chFinVal = this.chart({ id: 'finVal', w: 1180, series: vmUse.map(m => ({ name: m, color: valAll[m][1], pts: valAll[m][0] })), kind: 'line', h: 300, fmt: fX, tf: S.val.tf });
+    v.bFinVal = this.badge([], { label: 'Price live \u00b7 financials modeled', dot: '#3b9de0' });
+    v.finStats = [
+      { k: 'Total revenue', v: f$(rev.reduce((a, p) => a + p[1], 0)), sub: 'all-time \u00b7 since ETHFI launch', subStyle: this.subStyle() },
+      { k: 'Total buybacks', v: fN(bbTokTotal) + ' ETHFI', sub: (bbTokTotal / this.mock.ethfiMax * 100).toFixed(2) + '% of max supply', subStyle: this.subStyle() },
+      { k: 'Active loans', v: f$(this.last(this.mock.activeLoans)), ...this.d30(this.mock.activeLoans) },
+      { k: 'P/S valuation', v: fX(this.last(psPts)), sub: 'mkt cap / TTM revenue', subStyle: this.subStyle() }
+    ];
+    return v;
+  }
+
+themeVarsObj() {
+    const t = this.themeDef();
+    return { '--bg': t.bg, '--sidebg': t.sidebg, '--card': t.card, '--line': t.line, '--line2': t.line2, '--ink': t.ink, '--mut': t.mut, '--acc': t.acc, '--chipbg': t.chipbg, '--pos': t.pos, '--fhead': t.fhead, '--fbody': t.fbody, '--brandgrad': t.brandgrad, '--radlg': t.radlg, '--radsm': t.radsm, '--fmono': t.fmono || "'IBM Plex Mono'" };
+  }
+  // ---------- PNG export ----------
+  setupDL() {
+    if (this._dlSet) return; this._dlSet = true;
+    const btn = document.createElement('button');
+    btn.setAttribute('data-dl-btn', '1');
+    btn.innerHTML = '<span style="font-size:13px;line-height:1;">\u2b73</span> PNG';
+    btn.style.cssText = 'position:fixed;z-index:99999;display:none;align-items:center;gap:5px;font-family:Inter,sans-serif;font-size:11px;font-weight:600;padding:6px 10px;border-radius:8px;border:1px solid rgba(0,0,0,0.14);background:#fff;color:#1c1c1c;cursor:pointer;box-shadow:0 3px 10px rgba(0,0,0,0.18);';
+    document.body.appendChild(btn);
+    this._dlBtn = btn;
+    let cur = null, hideT = null;
+    const findT = el => { if (!el || !el.closest) return null; const stat = el.closest('[data-stats="1"]>div'); const col = el.closest('[data-col="1"]'); return stat && (!col || col.contains(stat)) ? stat : (col || null); };
+    const place = t => { const r = t.getBoundingClientRect(); btn.style.top = (r.top + 10) + 'px'; btn.style.left = (r.right - 74) + 'px'; btn.style.display = 'flex'; };
+    const show = t => { clearTimeout(hideT); cur = t; place(t); };
+    const hide = () => { hideT = setTimeout(() => { btn.style.display = 'none'; cur = null; }, 120); };
+    document.addEventListener('mouseover', e => { if (btn.contains(e.target)) { clearTimeout(hideT); return; } const t = findT(e.target); if (t) show(t); });
+    document.addEventListener('mouseout', e => { const to = e.relatedTarget; if (to && (btn.contains(to) || findT(to))) return; hide(); });
+    btn.addEventListener('mouseleave', () => hide());
+    window.addEventListener('scroll', () => { if (cur && btn.style.display !== 'none') place(cur); }, true);
+    btn.addEventListener('click', () => { if (cur) this.downloadCard(cur); });
+  }
+  loadLogo(color) {
+    this._logoCache = this._logoCache || {};
+    if (this._logoCache[color]) return this._logoCache[color];
+    const svg = (this.M.MM_LOGO_TPL || '').split('__C__').join(color);
+    const p = new Promise(res => { const img = new Image(); img.onload = () => res(img); img.onerror = () => res(null); img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg); });
+    this._logoCache[color] = p; return p;
+  }
+  async downloadCard(el) {
+    const HT = window.htmlToImage;
+    const btn = this._dlBtn; if (btn) btn.style.display = 'none';
+    if (!HT) { alert('Export library still loading — try again in a moment.'); return; }
+    const C = this.C || {};
+    const cs = getComputedStyle(el);
+    let bg = cs.backgroundColor;
+    if (!bg || bg === 'rgba(0, 0, 0, 0)' || bg === 'transparent') bg = C.card || '#ffffff';
+    const ink = C.ink || '#111', mut = C.mut || '#888', line = C.line || 'rgba(0,0,0,0.1)';
+    const titleEl = el.querySelector('h3') || el.querySelector('div');
+    const title = (titleEl && titleEl.textContent.trim()) || 'ether.fi metric';
+    const s = 2;
+    let cardCanvas;
+    try {
+      cardCanvas = await HT.toCanvas(el, { pixelRatio: s, backgroundColor: bg, cacheBust: true, filter: n => !(n && n.getAttribute && n.getAttribute('data-dl-btn')) });
+    } catch (err) { alert('Could not capture this element (it may contain an embedded chart that blocks export).'); return; }
+    const logo = await this.loadLogo(ink);
+    const pad = 26 * s, headH = 78 * s, foot = 20 * s;
+    const cw = cardCanvas.width, chh = cardCanvas.height;
+    const W = cw + pad * 2, H = chh + headH + foot;
+    const out = document.createElement('canvas'); out.width = W; out.height = H;
+    const ctx = out.getContext('2d');
+    ctx.fillStyle = bg; ctx.fillRect(0, 0, W, H);
+    // header text, top-left
+    ctx.textBaseline = 'alphabetic';
+    ctx.fillStyle = ink;
+    ctx.font = '700 ' + (21 * s) + 'px Sora, Inter, sans-serif';
+    ctx.fillText(title, pad, pad + 22 * s);
+    ctx.fillStyle = mut;
+    ctx.font = '500 ' + (12.5 * s) + 'px Inter, sans-serif';
+    ctx.fillText('ether.fi Dashboard \u00b7 Prepared by Machines & Money', pad, pad + 44 * s);
+    // divider
+    ctx.strokeStyle = line; ctx.lineWidth = s; ctx.beginPath(); ctx.moveTo(pad, headH - 8 * s); ctx.lineTo(W - pad, headH - 8 * s); ctx.stroke();
+    // card body
+    ctx.drawImage(cardCanvas, pad, headH, cw, chh);
+    // watermark logo, faint, centered over body
+    if (logo) {
+      const lw = Math.min(cw * 0.5, 460 * s), lh = lw * (96 / 633);
+      ctx.globalAlpha = 0.06;
+      ctx.drawImage(logo, W / 2 - lw / 2, headH + chh / 2 - lh / 2, lw, lh);
+      ctx.globalAlpha = 1;
+      // small brand mark top-right of header
+      const bw = 132 * s, bh = bw * (96 / 633);
+      ctx.globalAlpha = 0.85;
+      ctx.drawImage(logo, W - pad - bw, pad + 6 * s, bw, bh);
+      ctx.globalAlpha = 1;
+    }
+    const fn = title.replace(/[^\w]+/g, '-').replace(/^-+|-+$/g, '').toLowerCase() || 'etherfi-metric';
+    out.toBlob(b => { if (!b) return; const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = 'etherfi-' + fn + '.png'; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 4000); }, 'image/png');
+  }
+  liveOn() { return (this.props.dataMode ?? 'live') !== 'illustrative'; }
+  g(key) { return (this.liveOn() && this.liveD && this.liveD[key]) || (this.mock && this.mock[key]); }
+  // ---------- formatters ----------
+  f$(v) { if (v == null || isNaN(v)) return '—'; const s = v < 0 ? '−$' : '$', a = Math.abs(v); if (a >= 1e9) return s + (a / 1e9).toFixed(2) + 'B'; if (a >= 1e6) return s + (a / 1e6).toFixed(1) + 'M'; if (a >= 1e3) return s + (a / 1e3).toFixed(1) + 'K'; if (a >= 10) return s + a.toFixed(0); if (a === 0) return '$0'; return s + a.toFixed(3); }
+  fN(v) { if (v == null || isNaN(v)) return '—'; const s = v < 0 ? '−' : '', a = Math.abs(v); if (a >= 1e9) return s + (a / 1e9).toFixed(2) + 'B'; if (a >= 1e6) return s + (a / 1e6).toFixed(1) + 'M'; if (a >= 1e3) return s + (a / 1e3).toFixed(1) + 'K'; return s + a.toFixed(0); }
+  fP(v) { return v == null || isNaN(v) ? '—' : v.toFixed(2) + '%'; }
+  fDate(t) { const d = new Date(t), M = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']; return d.getUTCDate() + ' ' + M[d.getUTCMonth()] + ' ' + d.getUTCFullYear(); }
+  // ---------- series utils ----------
+  agg(pts, tf, mode) {
+    if (!pts || tf === 'D') return pts || [];
+    const out = [], key = t => { const d = new Date(t); if (tf === 'W') { const day = (d.getUTCDay() + 6) % 7; return Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate() - day); } if (tf === 'M') return Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), 1); if (tf === 'Q') return Date.UTC(d.getUTCFullYear(), Math.floor(d.getUTCMonth() / 3) * 3, 1); return Date.UTC(d.getUTCFullYear(), 0, 1); };
+    let curK = null, acc = 0, last = 0;
+    for (const [t, v] of pts) { const k = key(t); if (k !== curK) { if (curK != null) out.push([curK, mode === 'sum' ? acc : last]); curK = k; acc = 0; } acc += v; last = v; }
+    if (curK != null) out.push([curK, mode === 'sum' ? acc : last]);
+    return out;
+  }
+  ds(pts, max = 520) { if (!pts || pts.length <= max) return pts || []; const stride = Math.ceil(pts.length / max), out = []; for (let i = 0; i < pts.length; i += stride) out.push(pts[i]); if (out[out.length - 1] !== pts[pts.length - 1]) out.push(pts[pts.length - 1]); return out; }
+  zoomF(pts, z) { return z ? pts.filter(p => p[0] >= z[0] && p[0] <= z[1]) : pts; }
+  prep(pts, id, tf, mode) { return this.ds(this.agg(this.zoomF(pts || [], this.state.zoom[id]), tf || 'D', mode || 'last')); }
+  ticks(min, max, n = 5) { const span = max - min || 1; let step = Math.pow(10, Math.floor(Math.log10(span / n))); const err = span / n / step; step *= err >= 7.5 ? 10 : err >= 3.5 ? 5 : err >= 1.5 ? 2 : 1; const out = []; for (let v = Math.ceil(min / step) * step; v <= max + 1e-9; v += step) out.push(v); return out; }
+  // ---------- chart ----------
+  chart(cfg) {
+    const R = React.createElement, C = this.C;
+    if (!this.state.ready) return this.ph(cfg.h || 280);
+    const id = cfg.id, W = cfg.w || 1040, H = cfg.h || 300, PL = 74, PR = cfg.dual ? 56 : 14, PT = 14, PB = 30;
+    const hid = this.state.hid[id] || {};
+    const vis = cfg.series.filter(s => !hid[s.name]);
+    const cumOn = cfg.tf === 'C';
+    const data = vis.map(s => ({ ...s, pts: this.prep(s.pts, id, cumOn ? (cfg.cumBase || 'M') : cfg.tf, s.agg || cfg.agg) })).filter(s => s.pts.length > 0);
+    if (cumOn) data.forEach(s => { if (s.agg === 'last') return; let acc = 0; s.pts = s.pts.map(([t, val]) => [t, acc += val]); });
+    if (cfg.norm) data.forEach(s => { let mx = 0; for (const [, val] of s.pts) { const a2 = Math.abs(val); if (a2 > mx) mx = a2; } s._nm = mx || 1; s.pts = s.pts.map(([t2, val]) => [t2, val / s._nm * 100]); });
+    const axisFmt = cfg.norm ? (tv => tv.toFixed(0)) : cfg.fmt;
+    const pillStyle = on => ({ border: '1px solid ' + (on ? C.chipOn : C.line), background: on ? C.chipOn : C.card, borderRadius: C.rad || 7, padding: '3px 10px', fontSize: 11.5, fontWeight: 600, color: on ? (C.chipInk || C.ink) : C.mut, cursor: 'pointer', whiteSpace: 'nowrap' });
+    const resetBtn = this.state.zoom[id] ? R('button', { key: 'rz', onClick: () => { const z = { ...this.state.zoom }; delete z[id]; this.setState({ zoom: z }); this.forceUpdate(); }, style: { ...pillStyle(false), color: C.acc } }, 'Reset zoom') : null;
+    const legendBtns = (cfg.series.length > 1 || cfg.legendAlways) ? cfg.series.map(s => R('button', {
+      key: s.name, onClick: () => { const h = { ...(this.state.hid[id] || {}) }; h[s.name] = !h[s.name]; this.setState({ hid: { ...this.state.hid, [id]: h } }); this.forceUpdate(); },
+      style: { display: 'flex', alignItems: 'center', gap: 6, border: 'none', background: 'transparent', cursor: 'pointer', fontSize: 12, fontWeight: 500, color: hid[s.name] ? C.mut : C.ink, opacity: hid[s.name] ? 0.45 : 1, padding: '3px 6px' }
+    }, R('span', { style: { width: 9, height: 9, borderRadius: 3, background: s.color, flexShrink: 0 } }), s.name)) : null;
+    const legend = R('div', { style: { display: 'flex', gap: 6, flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between' } },
+      R('div', { style: { display: 'flex', gap: 6, flexWrap: 'wrap' } }, legendBtns),
+      R('div', { style: { display: 'flex', gap: 6, alignItems: 'center' } }, resetBtn));
+    if (!data.length) return R('div', null, legend, this.ph(H, 'No data for this selection'));
+    // domain
+    let t0 = Infinity, t1 = -Infinity, vMin = 0, vMax = -Infinity;
+    const times = new Set();
+    for (const s of data) for (const [t] of s.pts) times.add(t);
+    const uts = [...times].sort((a, b) => a - b);
+    t0 = uts[0]; t1 = uts[uts.length - 1]; if (t1 === t0) t1 = t0 + 1;
+    const V = this.M.valueAt;
+    let stackTot = null;
+    if (cfg.kind === 'stack') {
+      stackTot = uts.map(t => data.reduce((a, s) => a + (V(s.pts, t) || 0), 0));
+      vMax = cfg.pct ? 100 : Math.max(...stackTot);
+    } else if (cfg.kind === 'bar') {
+      const barD = data.filter(s => !s.line);
+      if (cfg.group) {
+        barD.forEach(s => { for (const [, val] of s.pts) { if (val > vMax) vMax = val; if (val < vMin) vMin = val; } });
+        stackTot = null;
+      } else {
+        let pMax = 0, nMin = 0;
+        uts.forEach(t => { let pp = 0, nn = 0; barD.forEach(s => { const val = V(s.pts, t) || 0; if (val > 0) pp += val; else nn += val; }); if (pp > pMax) pMax = pp; if (nn < nMin) nMin = nn; });
+        stackTot = barD.length > 1 ? uts.map(t => barD.reduce((a, s) => a + (V(s.pts, t) || 0), 0)) : null;
+        vMax = pMax; vMin = nMin;
+      }
+    } else { for (const s of (cfg.dual ? data.filter(s2 => s2.axis !== 'R') : data)) for (const [, v] of s.pts) { if (v > vMax) vMax = v; if (v < vMin) vMin = v; } }
+    let rMin = 0, rMax = -Infinity;
+    if (cfg.dual) {
+      for (const s of data.filter(s2 => s2.axis === 'R')) for (const [, v] of s.pts) { if (v > rMax) rMax = v; if (v < rMin) rMin = v; }
+      if (rMax === -Infinity) rMax = 1;
+      if (rMax <= rMin) rMax = rMin + 1; rMax *= 1.06; if (rMin < 0) rMin *= 1.08;
+      if (vMax === -Infinity) { vMin = rMin; vMax = rMax / 1.06; }
+    }
+    if (cfg.autoMin && cfg.kind !== 'bar' && cfg.kind !== 'stack') { let dmin = Infinity; for (const s of (cfg.dual ? data.filter(s2 => s2.axis !== 'R') : data)) for (const p of s.pts) if (p[1] < dmin) dmin = p[1]; if (dmin !== Infinity && dmin > 0) vMin = Math.max(0, dmin - (vMax - dmin) * 0.25); }
+    if (vMax <= vMin) vMax = vMin + 1;
+    vMax *= 1.06; if (vMin < 0) vMin *= 1.08;
+    const X = t => PL + (t - t0) / (t1 - t0) * (W - PL - PR);
+    const barMode = cfg.kind === 'bar';
+    const slot = (W - PL - PR) / Math.max(1, uts.length);
+    const bcx = i => PL + (i + 0.5) * slot;
+    const Y = v => PT + (1 - (v - vMin) / (vMax - vMin)) * (H - PT - PB);
+    const YR = v => PT + (1 - (v - rMin) / (rMax - rMin)) * (H - PT - PB);
+    const yOf = s => (cfg.dual && s.axis === 'R') ? YR : Y;
+    const yTicks = this.ticks(vMin, vMax, 5);
+    const span = t1 - t0, xTicks = []; for (let i = 0; i <= 5; i++) xTicks.push(t0 + span * i / 5);
+    const xl = t => { const d = new Date(t), M = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']; if (span > 3.2e10 * 3) return '' + d.getUTCFullYear(); if (span > 2e10) return M[d.getUTCMonth()] + ' \u2019' + ('' + d.getUTCFullYear()).slice(2); return d.getUTCDate() + ' ' + M[d.getUTCMonth()]; };
+    const kids = [];
+    yTicks.forEach(v => { kids.push(R('line', { key: 'g' + v, x1: PL, x2: W - PR, y1: Y(v), y2: Y(v), stroke: v === 0 && vMin < 0 ? C.mut : C.grid, strokeWidth: v === 0 && vMin < 0 ? 1.2 : 1 })); kids.push(R('text', { key: 'gy' + v, x: PL - 8, y: Y(v) + 3.5, textAnchor: 'end', fontSize: 10.5, fill: C.mut, fontFamily: "var(--fmono,'IBM Plex Mono'),monospace" }, axisFmt(v))); });
+    if (cfg.norm) kids.push(R('text', { key: 'nrm', x: W - PR, y: PT + 10, textAnchor: 'end', fontSize: 10, fill: C.mut, fontFamily: "var(--fmono,'IBM Plex Mono'),monospace" }, 'indexed \u00b7 peak = 100'));
+    if (cfg.dual) this.ticks(rMin, rMax, 5).forEach(tv => kids.push(R('text', { key: 'ry' + tv, x: W - PR + 8, y: YR(tv) + 3.5, textAnchor: 'start', fontSize: 10.5, fill: C.mut, fontFamily: "var(--fmono,'IBM Plex Mono'),monospace" }, (cfg.rFmt || cfg.fmt)(tv))));
+    if (barMode) { const nT = Math.min(uts.length, 6); for (let k = 0; k < nT; k++) { const i = nT <= 1 ? 0 : Math.round(k * (uts.length - 1) / (nT - 1)); kids.push(R('text', { key: 'gx' + i, x: bcx(i), y: H - 8, textAnchor: nT <= 1 ? 'middle' : k === 0 ? 'start' : k === nT - 1 ? 'end' : 'middle', fontSize: 10.5, fill: C.mut, fontFamily: "var(--fmono,'IBM Plex Mono'),monospace" }, xl(uts[i]))); } }
+    else xTicks.forEach((t, i) => kids.push(R('text', { key: 'gx' + i, x: X(t), y: H - 8, textAnchor: i === 0 ? 'start' : i === 5 ? 'end' : 'middle', fontSize: 10.5, fill: C.mut, fontFamily: "var(--fmono,'IBM Plex Mono'),monospace" }, xl(t))));
+    if (cfg.kind === 'stack') {
+      let below = uts.map(() => 0);
+      data.forEach((s, si) => {
+        const tops = uts.map((t, i) => { let v = V(s.pts, t) || 0; if (cfg.pct) v = stackTot[i] ? v / stackTot[i] * 100 : 0; return below[i] + v; });
+        let dTop = '', dBot = '';
+        uts.forEach((t, i) => { dTop += (i ? 'L' : 'M') + X(t).toFixed(1) + ' ' + Y(tops[i]).toFixed(1); });
+        for (let i = uts.length - 1; i >= 0; i--) dBot += 'L' + X(uts[i]).toFixed(1) + ' ' + Y(below[i]).toFixed(1);
+        kids.push(R('path', { key: 'st' + si, d: dTop + dBot + 'Z', fill: s.color, fillOpacity: 0.78, stroke: s.color, strokeWidth: 1 }));
+        below = tops;
+      });
+    } else if (cfg.kind === 'bar') {
+      const barD = data.filter(s => !s.line), lineD = data.filter(s => s.line);
+      const bw = Math.max(2, (W - PL - PR) / uts.length * 0.68);
+      uts.forEach((t, i) => {
+        if (cfg.group) {
+          const gw = bw / Math.max(1, barD.length);
+          barD.forEach((s, si) => {
+            const val = V(s.pts, t); if (val == null) return;
+            kids.push(R('rect', { key: 'b' + si + '_' + i, x: bcx(i) - bw / 2 + si * gw, y: Y(Math.max(0, val)), width: Math.max(1, gw - 1), height: Math.max(0.5, Math.abs(Y(0) - Y(val))), fill: s.color, fillOpacity: 0.88, rx: gw > 6 ? 2 : 0 }));
+          });
+          return;
+        }
+        let pb = 0, nb = 0;
+        barD.forEach((s, si) => {
+          const val = V(s.pts, t) || 0; if (!val) return;
+          const b0 = val > 0 ? pb : nb, b1 = b0 + val;
+          kids.push(R('rect', { key: 'b' + si + '_' + i, x: bcx(i) - bw / 2, y: Y(Math.max(b0, b1)), width: bw, height: Math.max(0.5, Math.abs(Y(b0) - Y(b1))), fill: s.color, fillOpacity: 0.88, rx: bw > 6 ? 2 : 0 }));
+          if (val > 0) pb = b1; else nb = b1;
+        });
+      });
+      lineD.forEach((s, si) => {
+        const Yf = yOf(s); let dd = '', started = false;
+        uts.forEach((t, i) => { const val = V(s.pts, t); if (val == null) return; dd += (started ? 'L' : 'M') + bcx(i).toFixed(1) + ' ' + Yf(val).toFixed(1); started = true; });
+        kids.push(R('path', { key: 'bl' + si, d: dd, fill: 'none', stroke: s.color, strokeWidth: 2, strokeLinejoin: 'round' }));
+      });
+    } else {
+      data.forEach((s, si) => {
+        const Yf = yOf(s);
+        let d = ''; s.pts.forEach((p, i) => { d += (i ? 'L' : 'M') + X(p[0]).toFixed(1) + ' ' + Yf(p[1]).toFixed(1); });
+        if (cfg.kind === 'area') { const base = Yf(Math.max(0, (cfg.dual && s.axis === 'R') ? rMin : vMin)); const d2 = d + 'L' + X(s.pts[s.pts.length - 1][0]).toFixed(1) + ' ' + base.toFixed(1) + 'L' + X(s.pts[0][0]).toFixed(1) + ' ' + base.toFixed(1) + 'Z'; kids.push(R('path', { key: 'a' + si, d: d2, fill: s.color, fillOpacity: 0.1 })); }
+        kids.push(R('path', { key: 'l' + si, d, fill: 'none', stroke: s.color, strokeWidth: 2, strokeLinejoin: 'round' }));
+      });
+    }
+    // hover
+    const hov = this.state.hov;
+    if (hov && hov.id === id && uts.length) {
+      let bi = 0, bd = Infinity; uts.forEach((t, i) => { const dd = Math.abs(t - hov.t); if (dd < bd) { bd = dd; bi = i; } });
+      const ht = uts[bi], hx = barMode ? bcx(bi) : X(ht);
+      kids.push(R('line', { key: 'hv', x1: hx, x2: hx, y1: PT, y2: H - PB, stroke: C.mut, strokeWidth: 1, strokeDasharray: '3 3' }));
+      const rows = []; let below = 0;
+      data.forEach((s, si) => { let v = V(s.pts, ht); if (v == null) return; if (cfg.kind === 'stack' && cfg.pct) v = stackTot[bi] ? v / stackTot[bi] * 100 : 0; rows.push({ n: s.name, c: s.color, v, f: s.fmt || cfg.fmt, nm: cfg.norm ? s._nm : null }); if (cfg.kind !== 'stack' && cfg.kind !== 'bar') kids.push(R('circle', { key: 'hc' + si, cx: hx, cy: yOf(s)(v), r: 3.5, fill: s.color, stroke: C.card, strokeWidth: 1.5 })); });
+      if (cfg.total && rows.length > 1) rows.push({ n: 'Total', c: C.ink, v: rows.reduce((a, r2) => a + r2.v, 0), f: cfg.fmt });
+      const bh = 24 + rows.length * 17, bw2 = 208, bx = hx + 12 + bw2 > W - PR ? hx - bw2 - 12 : hx + 12;
+      kids.push(R('foreignObject', { key: 'tt', x: bx, y: PT + 4, width: bw2, height: bh + 8, style: { pointerEvents: 'none' } },
+        R('div', { style: { background: C.tipbg, borderRadius: 8, padding: '7px 10px', color: '#fff', fontSize: 11, fontFamily: "'Instrument Sans',sans-serif" } },
+          R('div', { style: { color: 'rgba(255,255,255,0.6)', fontFamily: "var(--fmono,'IBM Plex Mono'),monospace", fontSize: 10, marginBottom: 3 } }, this.fDate(ht)),
+          rows.map((r2, i) => R('div', { key: i, style: { display: 'flex', justifyContent: 'space-between', gap: 10, alignItems: 'center', lineHeight: '17px' } },
+            R('span', { style: { display: 'flex', alignItems: 'center', gap: 5, minWidth: 0 } }, R('span', { style: { width: 7, height: 7, borderRadius: 2, background: r2.c, flexShrink: 0 } }), R('span', { style: { overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' } }, r2.n)),
+            R('span', { style: { fontFamily: "var(--fmono,'IBM Plex Mono'),monospace" } }, r2.nm ? r2.f(r2.v * r2.nm / 100) : r2.f(r2.v)))))));
+    }
+    const drag = this.state.drag;
+    if (drag && drag.id === id) { const x1 = Math.min(drag.a, drag.b), x2 = Math.max(drag.a, drag.b); kids.push(R('rect', { key: 'dz', x: x1, y: PT, width: x2 - x1, height: H - PT - PB, fill: C.acc, fillOpacity: 0.1, stroke: C.acc, strokeOpacity: 0.5 })); }
+    const toT = xvb => t0 + Math.min(1, Math.max(0, (xvb - PL) / (W - PL - PR))) * (t1 - t0);
+    const getX = e => { const r = e.currentTarget.getBoundingClientRect(); return (e.clientX - r.left) / r.width * W; };
+    const svg = R('svg', {
+      viewBox: '0 0 ' + W + ' ' + H, style: { width: '100%', height: 'auto', display: 'block', cursor: 'crosshair', touchAction: 'pan-y' },
+      onPointerDown: e => { const x = getX(e); e.currentTarget.setPointerCapture(e.pointerId); this.setState({ drag: { id, a: x, b: x } }); },
+      onPointerMove: e => { const x = getX(e); if (this.state.drag && this.state.drag.id === id) { this.setState({ drag: { ...this.state.drag, b: x } }); return; } const t = toT(x); const prev = this.state.hov; if (prev && prev.id === id && Math.abs(prev.t - t) < span / 200) return; this.setState({ hov: { id, t } }); },
+      onPointerUp: e => { const d = this.state.drag; if (d && d.id === id && Math.abs(d.a - d.b) > 16) { const za = toT(Math.min(d.a, d.b)), zb = toT(Math.max(d.a, d.b)); this.setState({ drag: null, zoom: { ...this.state.zoom, [id]: [za, zb] }, hov: null }); } else this.setState({ drag: null }); },
+      onPointerLeave: () => { const s = {}; if (this.state.hov && this.state.hov.id === id) s.hov = null; if (this.state.drag && this.state.drag.id === id) s.drag = null; if (Object.keys(s).length) this.setState(s); },
+      onDoubleClick: () => { const z = { ...this.state.zoom }; delete z[id]; this.setState({ zoom: z }); }
+    }, kids);
+    return R('div', { style: { display: 'flex', flexDirection: 'column', gap: 8 } }, legend, svg);
+  }
+  ph(h, txt) { return React.createElement('div', { style: { height: h, display: 'flex', alignItems: 'center', justifyContent: 'center', color: this.C.mut, fontSize: 12.5, fontFamily: "var(--fmono,'IBM Plex Mono'),monospace", background: this.C.phbg, borderRadius: 10 } }, txt || 'Loading data\u2026'); }
+  pie(cfg) {
+    const R = React.createElement, C = this.C;
+    if (!this.state.ready) return this.ph(240);
+    const total = cfg.slices.reduce((a, s) => a + s.v, 0);
+    if (!total) return this.ph(240, 'No data');
+    const cx = 130, cy = 130, RO = 118, RI = 72;
+    let a0 = -Math.PI / 2; const paths = [];
+    const hovI = this.state.pieHov && this.state.pieHov.id === cfg.id ? this.state.pieHov.i : null;
+    cfg.slices.forEach((s, i) => {
+      const f = s.v / total, a1 = a0 + f * Math.PI * 2;
+      const large = f > 0.5 ? 1 : 0, m = (a0 + a1) / 2;
+      const off = hovI === i ? 5 : 0, ox = Math.cos(m) * off, oy = Math.sin(m) * off;
+      const p = (r, a) => (cx + ox + Math.cos(a) * r).toFixed(2) + ' ' + (cy + oy + Math.sin(a) * r).toFixed(2);
+      paths.push(R('path', {
+        key: i, d: 'M' + p(RO, a0) + 'A' + RO + ' ' + RO + ' 0 ' + large + ' 1 ' + p(RO, a1) + 'L' + p(RI, a1) + 'A' + RI + ' ' + RI + ' 0 ' + large + ' 0 ' + p(RI, a0) + 'Z',
+        fill: s.color, fillOpacity: hovI == null || hovI === i ? 0.92 : 0.35, stroke: C.card, strokeWidth: 1.5, style: { cursor: 'pointer', transition: 'fill-opacity .15s' },
+        onPointerEnter: () => this.setState({ pieHov: { id: cfg.id, i } }), onPointerLeave: () => this.setState({ pieHov: null })
+      }));
+      a0 = a1;
+    });
+    const hs = hovI != null ? cfg.slices[hovI] : null;
+    const center = hs ? [R('div', { key: 'n', style: { fontSize: 11.5, fontWeight: 600, color: C.ink, maxWidth: 110, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' } }, hs.name), R('div', { key: 'p', style: { fontFamily: "var(--fmono,'IBM Plex Mono'),monospace", fontSize: 17, fontWeight: 600, color: C.ink } }, (hs.v / total * 100).toFixed(1) + '%'), R('div', { key: 'v', style: { fontFamily: "var(--fmono,'IBM Plex Mono'),monospace", fontSize: 11, color: C.mut } }, cfg.fmt(hs.v))]
+      : [R('div', { key: 'n', style: { fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', color: C.mut, fontWeight: 600 } }, cfg.centerLabel || 'Total'), R('div', { key: 'v', style: { fontFamily: "var(--fmono,'IBM Plex Mono'),monospace", fontSize: 16, fontWeight: 600, color: C.ink } }, cfg.fmt(total))];
+    return R('div', { style: { display: 'flex', flexDirection: 'column', gap: 12, alignItems: 'center' } },
+      R('div', { style: { position: 'relative', width: 260, height: 260 } },
+        R('svg', { viewBox: '0 0 260 260', style: { width: 260, height: 260, display: 'block' } }, paths),
+        R('div', { style: { position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', pointerEvents: 'none', textAlign: 'center', gap: 1 } }, center)),
+      R('div', { style: { display: 'flex', flexDirection: 'column', gap: 3, width: '100%' } }, cfg.slices.map((s, i) => R('div', {
+        key: i, onPointerEnter: () => this.setState({ pieHov: { id: cfg.id, i } }), onPointerLeave: () => this.setState({ pieHov: null }),
+        style: { display: 'flex', alignItems: 'center', gap: 7, fontSize: 11.5, cursor: 'default', opacity: hovI == null || hovI === i ? 1 : 0.45 }
+      }, R('span', { style: { width: 8, height: 8, borderRadius: 2.5, background: s.color, flexShrink: 0 } }),
+        R('span', { style: { flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', color: C.ink } }, s.name),
+        R('span', { style: { fontFamily: "var(--fmono,'IBM Plex Mono'),monospace", color: C.mut } }, (s.v / total * 100).toFixed(1) + '%')))));
+  }
+  badge(keys, custom) {
+    if (this.props.showBadges === false) return undefined;
+    const R = React.createElement;
+    const live = (keys || []).filter(k => this.state.src[k]);
+    let label, dot;
+    if (custom) { label = custom.label; dot = custom.dot || '#3b9de0'; }
+    else if (!this.liveOn() || !keys || !keys.length || !live.length) { label = 'Illustrative'; dot = '#d3922e'; }
+    else { const srcs = [...new Set(live.map(k => this.state.src[k]))].join(' + '); if (live.length === keys.length) { label = 'Live \u00b7 ' + srcs; dot = '#2f9e6e'; } else { label = 'Partly live \u00b7 ' + srcs; dot = '#3b9de0'; } }
+    return R('div', { style: { display: 'flex', alignItems: 'center', gap: 6, fontSize: 10.5, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', color: this.C.mut, background: this.C.chipbg, border: '1px solid ' + this.C.line, borderRadius: 999, padding: '4px 10px', whiteSpace: 'nowrap' } },
+      R('span', { style: { width: 7, height: 7, borderRadius: 999, background: dot } }), label);
+  }
+  chips(list, cur, set) { const C = this.C; return list.map(l => ({ label: l, click: () => { set(l); this.forceUpdate(); }, style: { padding: '4.5px 11px', borderRadius: C.rad || 7, fontSize: 12, fontWeight: 600, border: 'none', cursor: 'pointer', background: l === cur ? C.chipOn : 'transparent', color: l === cur ? (C.chipInk || C.ink) : C.mut, boxShadow: l === cur && !C.chipInk ? '0 1px 4px rgba(30,25,90,0.15)' : 'none', transition: 'all .15s', whiteSpace: 'nowrap' } })); }
+  multiChips(list, sel, set) {
+    const C = this.C, all = !sel || !sel.length;
+    const st = on => ({ padding: '4.5px 11px', borderRadius: C.rad || 7, fontSize: 12, fontWeight: 600, border: 'none', cursor: 'pointer', background: on ? C.chipOn : 'transparent', color: on ? (C.chipInk || C.ink) : C.mut, boxShadow: on && !C.chipInk ? '0 1px 4px rgba(30,25,90,0.15)' : 'none', transition: 'all .15s', whiteSpace: 'nowrap' });
+    return [{ label: 'All', click: () => { set(null); this.forceUpdate(); }, style: st(all) }, ...list.map(l => ({
+      label: l, style: st(!all && sel.includes(l)),
+      click: () => { let n2; const s2 = sel; if (all) n2 = [l]; else if (s2.includes(l)) { n2 = s2.filter(x => x !== l); if (!n2.length) n2 = null; } else n2 = [...s2, l]; set(n2); this.forceUpdate(); }
+    }))];
+  }
+  sumSel(chainsObj, sel) {
+    if (!chainsObj) return [];
+    const keys = (!sel || !sel.length) ? Object.keys(chainsObj) : sel.filter(k => chainsObj[k]);
+    if (keys.length === 1) return chainsObj[keys[0]] || [];
+    return this.M.mergeSum(keys.map(k => chainsObj[k]));
+  }
+  set2(group, patch) { this.setState(s => ({ [group]: { ...s[group], ...patch } })); this.forceUpdate(); }
+  last(pts) { return pts && pts.length ? pts[pts.length - 1][1] : null; }
+  d30(pts) {
+    if (!pts || pts.length < 2) return { sub: '', subStyle: this.subStyle() };
+    const [t1, v1] = pts[pts.length - 1], v0 = this.M.valueAt(pts, t1 - 30 * 86400000);
+    if (!v0) return { sub: '', subStyle: this.subStyle() };
+    const p = (v1 - v0) / v0 * 100, up = p >= 0;
+    return { sub: (up ? '+' : '\u2212') + Math.abs(p).toFixed(1) + '% vs 30d ago', subStyle: this.subStyle(up ? this.C.pos : this.C.neg) };
+  }
+  subStyle(color) { return { fontSize: 11.5, fontWeight: 500, color: color || this.C.mut, minHeight: '14px' }; }
+  holdList(asset) { const l = this.liveOn() && this.liveD && this.liveD.topH && this.liveD.topH[asset]; return l || this.mock.topHolders[asset] || []; }
+  holdRows(asset, totalPts, fmtAmt) {
+    const list = this.holdList(asset), total = this.last(totalPts) || 1;
+    return list.map((h2, i) => ({ i: String(i + 1).padStart(2, '0'), name: h2.name, addr: h2.addr.slice(0, 6) + '\u2026' + h2.addr.slice(-4), amt: fmtAmt(h2.amt), pct: (h2.amt / total * 100).toFixed(2) + '%' }));
+  }
+  holdPie(id, asset, totalPts, fmt) {
+    const list = this.holdList(asset), total = this.last(totalPts) || 0;
+    const sum = list.reduce((a, h2) => a + h2.amt, 0);
+    const slices = list.map((h2, i) => ({ name: h2.name, v: h2.amt, color: this.C.cat[i % this.C.cat.length] }));
+    if (total > sum) slices.push({ name: 'Others', v: total - sum, color: '#b6bac9' });
+    return this.pie({ id, slices, fmt, centerLabel: asset + ' supply' });
+  }
+  sumC(chainsObj, chain) { if (!chainsObj) return []; if (chain === 'All') return this.M.mergeSum(Object.values(chainsObj)); return chainsObj[chain] || []; }
+  topChains(objs, n = 7) {
+    const score = {};
+    for (const o of objs) for (const [name, pts] of Object.entries(o || {})) { const v = this.last(pts) || 0; score[name] = (score[name] || 0) + v; }
+    return Object.keys(score).sort((a, b) => score[b] - score[a]).slice(0, n);
+  }
+  
+}
+</script>
+</body>
+</html>
