@@ -156,16 +156,26 @@ export function buildMock(){
   const qs=[];for(let y=2024;y<=2026;y++)for(let q=0;q<4;q++){const t=Date.parse(`${y}-${String(q*3+3).padStart(2,'0')}-28`);if(t<=END&&t>=Date.parse('2024-03-01'))qs.push(t);}
   const qSeries=(anchors,seed,vol=0.08)=>{const r=mulberry32(seed);return qs.map(t=>{if(t<Date.parse(anchors[0][0]))return null;let ai=0;while(ai<anchors.length-1&&Date.parse(anchors[ai+1][0])<=t)ai++;const a=anchors[ai],b=anchors[ai+1];let base;if(!b)base=a[1];else{const ta=Date.parse(a[0]),tb=Date.parse(b[0]);base=a[1]+(b[1]-a[1])*((t-ta)/(tb-ta));}return[t,base*(1+(r()-0.5)*vol)];}).filter(Boolean);};
   const mq=(an,seed,vol)=>qSeries(an.map(([a,b])=>[a,b*1e6]),seed,vol);
-  d.revBy={
+  // quarterly totals (for financial statements / valuation TTM)
+  const finQ={
     Restaking:mq([['2024-03-01',3],['2024-09-01',8],['2025-03-01',10],['2025-09-01',12],['2026-06-28',14.5]],101),
     Cash:mq([['2025-03-01',0.5],['2025-09-01',2],['2026-03-01',3.2],['2026-06-28',4.3]],102),
     Liquid:mq([['2024-06-01',1],['2025-06-01',3],['2026-06-28',5.1]],103),
     Other:mq([['2024-03-01',0.6],['2025-06-01',1.6],['2026-06-28',2.3]],104)
   };
-  d.revBy.Total=qs.map(t=>{let s=0,has=false;for(const key of['Restaking','Cash','Liquid','Other']){const v=valueAt(d.revBy[key],t);if(v!=null&&d.revBy[key][0][0]<=t){s+=v;has=true;}}return has?[t,s]:null;}).filter(Boolean);
-  d.fin={Revenue:d.revBy.Total};
-  d.fin['Net income']=qs.map(t=>{const r=valueAt(d.revBy.Total,t);if(r==null)return null;const marginAnchor=t<Date.parse('2025-01-01')?0.34:t<Date.parse('2026-01-01')?0.44:0.5;return[t,r*marginAnchor];}).filter(Boolean);
-  d.fin.Fees=d.revBy.Total.map(([t,v])=>[t,v*1.85]); // gross protocol fees > net revenue
+  const finTotalQ=qs.map(t=>{let s=0,has=false;for(const key of['Restaking','Cash','Liquid','Other']){const v=valueAt(finQ[key],t);if(v!=null&&finQ[key][0][0]<=t){s+=v;has=true;}}return has?[t,s]:null;}).filter(Boolean);
+  // daily flow series (for the revenue-by-source chart: aggregates to W/M/Q/A/C)
+  const mf=(an,seed)=>genFlow(an.map(([a,b])=>[a,b*1e6/13]),{seed});
+  d.revBy={
+    Restaking:mf([['2024-03-01',3],['2024-09-01',8],['2025-03-01',10],['2025-09-01',12],['2026-06-28',14.5]],101),
+    Cash:mf([['2025-03-01',0.5],['2025-09-01',2],['2026-03-01',3.2],['2026-06-28',4.3]],102),
+    Liquid:mf([['2024-06-01',1],['2025-06-01',3],['2026-06-28',5.1]],103),
+    Other:mf([['2024-03-01',0.6],['2025-06-01',1.6],['2026-06-28',2.3]],104)
+  };
+  d.revBy.Total=mergeSum([d.revBy.Restaking,d.revBy.Cash,d.revBy.Liquid,d.revBy.Other]);
+  d.fin={Revenue:finTotalQ};
+  d.fin['Net income']=qs.map(t=>{const r=valueAt(finTotalQ,t);if(r==null)return null;const marginAnchor=t<Date.parse('2025-01-01')?0.34:t<Date.parse('2026-01-01')?0.44:0.5;return[t,r*marginAnchor];}).filter(Boolean);
+  d.fin.Fees=finTotalQ.map(([t,v])=>[t,v*1.85]); // gross protocol fees > net revenue
   d.activeLoans=genDaily([['2024-12-01',12],['2025-06-01',120],['2025-12-01',260],['2026-04-01',360],['2026-07-15',430]].map(([a,b])=>[a,b*1e6]),{seed:110,vol:0.02});
   return d;
 }

@@ -11,7 +11,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Sora:wght@400;600;700&family=Instrument+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Sora:wght@400;600;700&family=Instrument+Sans:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.13/dist/html-to-image.js"></script>
 <style>
 html,body{margin:0;padding:0;background:#f4f3fb;}
@@ -31,8 +31,9 @@ button{font-family:inherit;}
 .thm-mm [data-col="1"]:not([data-stats])::before,.thm-mm [data-stats="1"]>div::before{content:"";position:absolute;top:-1px;left:-1px;width:16px;height:16px;border-top:1.5px solid #f0a545;border-left:1.5px solid #f0a545;pointer-events:none;z-index:2;filter:drop-shadow(0 0 3px rgba(240,165,69,.6));}
 .thm-mm [data-col="1"]:not([data-stats])::after,.thm-mm [data-stats="1"]>div::after{content:"";position:absolute;bottom:-1px;right:-1px;width:16px;height:16px;border-bottom:1.5px solid #f0a545;border-right:1.5px solid #f0a545;pointer-events:none;z-index:2;filter:drop-shadow(0 0 3px rgba(240,165,69,.6));}
 .thm-mm [data-stats="1"]>div>div:nth-of-type(2){text-shadow:0 0 15px rgba(240,165,69,.42);}
-.thm-etherfi [data-side]{border-right:1px solid rgba(255,255,255,0.08);}
-.thm-etherfi header h2{background:linear-gradient(90deg,#6d63f5,#38c6d9);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
+.thm-etherfi [data-shell]{background:radial-gradient(125% 72% at 50% -6%,#221E63 0%,#12112E 42%,#08080C 80%)!important;}
+.thm-etherfi [data-side]{background:#08080cf2!important;border-right:1px solid rgba(255,255,255,0.08);}
+.thm-etherfi header h2{background:linear-gradient(90deg,#5EA8F5,#C56FD8);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
 ::-webkit-scrollbar{height:8px;width:8px;}
 ::-webkit-scrollbar-thumb{background:rgba(140,140,160,0.4);border-radius:4px;}
 @media (max-width:920px){
@@ -394,6 +395,7 @@ button{font-family:inherit;}
           <div style="display:flex;gap:16px;flex-wrap:wrap;align-items:center;">
             <div style="display:flex;gap:3px;background:var(--chipbg,#efeef8);padding:3px;border-radius:9px;flex-wrap:wrap;"><sc-for list="{{ revSourceChips }}" as="c" hint-placeholder-count="5"><button sc-camel-on-click="{{ c.click }}" style="{{ c.style }}">{{ c.label }}</button></sc-for></div>
             <div style="display:flex;gap:3px;background:var(--chipbg,#efeef8);padding:3px;border-radius:9px;"><sc-for list="{{ finTfChips }}" as="c" hint-placeholder-count="3"><button sc-camel-on-click="{{ c.click }}" style="{{ c.style }}">{{ c.label }}</button></sc-for></div>
+            <div style="display:flex;gap:3px;background:var(--chipbg,#efeef8);padding:3px;border-radius:9px;"><sc-for list="{{ revModeChips }}" as="c" hint-placeholder-count="2"><button sc-camel-on-click="{{ c.click }}" style="{{ c.style }}">{{ c.label }}</button></sc-for></div>
           </div>
           <div style="min-height:320px;">{{ chFinRev }}</div>
         </div>
@@ -458,7 +460,7 @@ class Component extends DCLogic {
     eeth: { platforms: null, tf: 'W', denom: 'ETH' }, ebtc: { platforms: null, tf: 'W', denom: 'BTC' },
     rApy: ['eETH APY'], rApyTf: 'W', rYield: { sel: null, tf: 'M' }, rHold: 'eETH', rHoldTf: 'W',
     liquid: { view: 'TVL', sel: null, mode: 'abs', tf: 'W' },
-    finTf: 'Q', rev: { sources: null }, bb: { unit: 'ETHFI', tf: 'W' }, val: { metrics: ['P/S'], tf: 'W' }
+    finTf: 'Q', rev: { sources: null, mode: 'abs' }, bb: { unit: 'ETHFI', tf: 'W' }, val: { metrics: ['P/S'], tf: 'W' }
   };
   theme() { return this.state.theme ?? this.props.theme ?? 'mm'; }
   themeDef() {
@@ -472,9 +474,9 @@ class Component extends DCLogic {
       light: { radlg: '16px', radsm: '14px', rad: 7, bg: '#f6f6f4', sidebg: '#1d2430', card: '#ffffff', line: '#e4e3de', line2: '#efeeea', ink: '#22252a', mut: '#72757d', acc: '#2f4b7c', chipbg: '#edece8', chipOn: '#ffffff', grid: '#eeede9', phbg: '#f2f1ed', tipbg: 'rgba(29,36,48,0.95)', pos: '#2f7d5c', neg: '#b04a49', fhead: "'Sora'", fbody: "'Instrument Sans'", brandgrad: 'linear-gradient(135deg,#2f4b7c,#4a6b9c)',
         tok: { eETH: '#2f4b7c', weETH: '#4d7fb0', eBTC: '#b58946', Liquid: '#3f8f7a', ETHFI: '#665191', Cash: '#a05b74' },
         cat: ['#2f6fb0', '#e0862e', '#2f9e6e', '#7c4dbf', '#c0392b', '#0e9aa7', '#c78a1f', '#c2578f', '#8a6d3b', '#6b7280'] },
-      etherfi: { radlg: '16px', radsm: '14px', rad: 7, bg: '#f4f3fb', sidebg: '#1b1830', card: '#ffffff', line: '#e7e5f2', line2: '#f0eff7', ink: '#211d3a', mut: '#7b7897', acc: '#5b53e0', chipbg: '#efeef8', chipOn: '#ffffff', grid: '#edecf6', phbg: '#f2f1fa', tipbg: 'rgba(27,24,48,0.95)', pos: '#2f9e6e', neg: '#d0524f', fhead: "'Sora'", fbody: "'Instrument Sans'", brandgrad: 'linear-gradient(135deg,#6d63f5,#38c6d9)',
-        tok: { eETH: '#5b53e0', weETH: '#8079ee', eBTC: '#e08a3a', Liquid: '#2bb3c4', ETHFI: '#7b3fd1', Cash: '#e0568f' },
-        cat: ['#5b53e0', '#e0862e', '#2bb3c4', '#38b48e', '#d0524f', '#c9628f', '#c78a1f', '#7b6fe8', '#8a6d3b', '#9aa0b5'] }
+      etherfi: { radlg: '18px', radsm: '14px', rad: 7, bg: '#08080C', sidebg: '#08080c', card: 'rgba(255,255,255,0.04)', line: 'rgba(255,255,255,0.1)', line2: 'rgba(255,255,255,0.06)', ink: '#F4F4F8', mut: '#A6A6C0', acc: '#5EA8F5', chipbg: 'rgba(255,255,255,0.06)', chipOn: 'rgba(255,255,255,0.16)', grid: 'rgba(255,255,255,0.07)', phbg: 'rgba(255,255,255,0.035)', tipbg: 'rgba(18,17,46,0.96)', pos: '#5fd39a', neg: '#f2857a', fhead: "'Space Grotesk'", fbody: "'Space Grotesk'", fmono: "'JetBrains Mono'", brandgrad: 'linear-gradient(135deg,#5EA8F5,#8B6FE8)',
+        tok: { eETH: '#5EA8F5', weETH: '#7FB4F5', eBTC: '#E8934A', Liquid: '#4BD6C4', ETHFI: '#8B6FE8', Cash: '#C56FD8' },
+        cat: ['#5EA8F5', '#E8934A', '#C56FD8', '#4BD6C4', '#8B6FE8', '#F0C954', '#E86A9C', '#7FB4F5', '#6BE0A8', '#9AA0C0'] }
     };
     return T[this.theme()] || T.mm;
   }
@@ -538,7 +540,7 @@ class Component extends DCLogic {
       label, click: () => this.setState({ theme: key }),
       style: { flex: 1, padding: '5px 4px', borderRadius: this.theme() === 'mm' ? 4 : 7, fontSize: 11, fontWeight: 600, border: 'none', cursor: 'pointer', background: this.theme() === key ? (this.theme() === 'mm' ? '#b87f35' : 'rgba(255,255,255,0.22)') : 'transparent', color: this.theme() === key ? (this.theme() === 'mm' ? '#0a0a0a' : '#fff') : 'rgba(255,255,255,0.6)', transition: 'all .15s', whiteSpace: 'nowrap' }
     }));
-    v.tvSrc = 'https://s.tradingview.com/widgetembed/?symbol=BINANCE%3AETHFIUSDT&interval=D&theme=' + (['mm', 'dark'].includes(this.theme()) ? 'dark' : 'light') + '&style=1&withdateranges=1&hidesidetoolbar=0&allow_symbol_change=1&saveimage=0&locale=en';
+    v.tvSrc = 'https://s.tradingview.com/widgetembed/?symbol=BINANCE%3AETHFIUSDT&interval=D&theme=' + (['mm', 'dark', 'etherfi'].includes(this.theme()) ? 'dark' : 'light') + '&style=1&withdateranges=1&hidesidetoolbar=0&allow_symbol_change=1&saveimage=0&locale=en';
     const liveN = Object.keys(S.src).length;
     v.liveStatus = !S.ready ? 'Loading\u2026' : !this.liveOn() ? 'Illustrative mode' : liveN ? liveN + ' live feed' + (liveN > 1 ? 's' : '') + ' active' : 'Connecting live feeds\u2026';
     v.liveDotStyle = { width: 7, height: 7, borderRadius: 999, background: liveN && this.liveOn() ? '#2f9e6e' : '#d3922e', flexShrink: 0 };
@@ -549,7 +551,7 @@ class Component extends DCLogic {
       ['chOvRestaked', 'chOvCash', 'chOvRev', 'chEthfiPrice', 'chEthfiSupply', 'chEthfiHolders', 'chCashVol', 'chCashAmt', 'chCashUser', 'chCashTxAmt', 'chCashRamp', 'chUserSafe', 'chHours', 'chEeth', 'chEbtc', 'chRApy', 'chRUtil', 'chRYield', 'chRHolders', 'chLiquid', 'chFinRev', 'chBuyback', 'chFinVal'].forEach(k => v[k] = ph);
       ['pieEthfiHold', 'pieRHold'].forEach(k => v[k] = this.ph(240));
       ['ovStats', 'ovStats2', 'ethfiStats', 'cashStats', 'reStats', 'finStats', 'ethfiHoldRows', 'rHoldRows', 'bbRows', 'navItems2'].forEach(k => v[k] = v[k] || []);
-      ['ovTfChips', 'ethfiMetricChips', 'ethfiTfChips', 'ethfiSupTfChips', 'cashVolChips', 'cashVolTfChips', 'cashAmtChips', 'cashAmtTfChips', 'cashAmtModeChips', 'cashUserChips', 'cashUserTfChips', 'cashTxAmtChips', 'cashTxAmtTfChips', 'rampDirChips', 'rampDenomChips', 'rampTfChips', 'userSafeChips', 'userSafeModeChips', 'userSafeTfChips', 'hoursTzChips', 'eethDenomChips', 'eethPlatChips', 'eethTfChips', 'ebtcDenomChips', 'ebtcPlatChips', 'ebtcTfChips', 'rApyChips', 'rApyTfChips', 'rYieldChips', 'rYieldTfChips', 'rHoldTfChips', 'rHoldTabs', 'liquidViewChips', 'liquidPlatChips', 'liquidModeChips', 'liquidTfChips', 'revSourceChips', 'finTfChips', 'bbUnitChips', 'bbTfChips', 'valMetricChips', 'valTfChips'].forEach(k => v[k] = []);
+      ['ovTfChips', 'ethfiMetricChips', 'ethfiTfChips', 'ethfiSupTfChips', 'cashVolChips', 'cashVolTfChips', 'cashAmtChips', 'cashAmtTfChips', 'cashAmtModeChips', 'cashUserChips', 'cashUserTfChips', 'cashTxAmtChips', 'cashTxAmtTfChips', 'rampDirChips', 'rampDenomChips', 'rampTfChips', 'userSafeChips', 'userSafeModeChips', 'userSafeTfChips', 'hoursTzChips', 'eethDenomChips', 'eethPlatChips', 'eethTfChips', 'ebtcDenomChips', 'ebtcPlatChips', 'ebtcTfChips', 'rApyChips', 'rApyTfChips', 'rYieldChips', 'rYieldTfChips', 'rHoldTfChips', 'rHoldTabs', 'liquidViewChips', 'liquidPlatChips', 'liquidModeChips', 'liquidTfChips', 'revSourceChips', 'revModeChips', 'finTfChips', 'bbUnitChips', 'bbTfChips', 'valMetricChips', 'valTfChips'].forEach(k => v[k] = []);
       ['bOvRestaked', 'bOvCash', 'bOvRev', 'bEthfiPrice', 'bEthfiSupply', 'bEthfiHolders', 'bCashVol', 'bCashAmt', 'bCashUser', 'bCashTxAmt', 'bCashRamp', 'bUserSafe', 'bEeth', 'bEbtc', 'bRApy', 'bRUtil', 'bRYield', 'bBbSummary', 'bRHolders', 'bLiquid', 'bFinRev', 'bBuyback', 'bFinVal', 'bEthfiHold', 'bHours', 'bRHold'].forEach(k => v[k] = '');
       return v;
     }
@@ -592,7 +594,7 @@ class Component extends DCLogic {
     // ===== 02 ETHFI =====
     const mcap = ethfiPx.map(([t, p]) => { const c = V(ethfiCirc, t); return c ? [t, p * c] : null; }).filter(Boolean);
     const fdv = ethfiPx.map(([t, p]) => [t, p * this.mock.ethfiMax]);
-    const emAll = { Price: [ethfiPx, C.tok.ETHFI], 'Market cap': [mcap, C.acc], FDV: [fdv, C.cat[2]] };
+    const emAll = { Price: [ethfiPx, C.cat[0]], 'Market cap': [mcap, C.cat[1]], FDV: [fdv, C.cat[2]] };
     const emSel0 = S.ethfi.metrics && S.ethfi.metrics.length ? S.ethfi.metrics.filter(m => emAll[m]) : [];
     const emUse = emSel0.length ? emSel0 : Object.keys(emAll);
     const emDual = emUse.includes('Price') && emUse.some(m => m !== 'Price');
@@ -704,7 +706,7 @@ class Component extends DCLogic {
     v.chRYield = this.chart({ id: 'rYield', w: 1180, series: ryUse.map(n => ({ name: n, color: ryAll[n][1], pts: ryAll[n][0], agg: 'sum' })), kind: 'bar', h: 260, fmt: f$, tf: S.rYield.tf });
     v.bRYield = this.badge([]);
     v.rHoldTfChips = this.chips(TF, S.rHoldTf, x => this.setState({ rHoldTf: x }));
-    v.chRHolders = this.chart({ id: 'rHolders', w: 1180, autoMin: true, series: [{ name: 'eETH', color: C.tok.eETH, pts: this.g('holders.eETH') }, { name: 'Total', color: C.acc, pts: this.g('holders.total') }], kind: 'line', h: 300, fmt: fN, tf: S.rHoldTf });
+    v.chRHolders = this.chart({ id: 'rHolders', w: 1180, autoMin: true, series: [{ name: 'eETH', color: C.cat[0], pts: this.g('holders.eETH') }, { name: 'Total', color: C.cat[4], pts: this.g('holders.total') }], kind: 'line', h: 300, fmt: fN, tf: S.rHoldTf });
     v.bRHolders = this.badge(['holders.eETH', 'holders.total']);
     v.rHoldTabs = this.chips(['eETH', 'eBTC'], S.rHold, x => this.setState({ rHold: x }));
     const rHoldTot = S.rHold === 'eETH' ? eethTotEth : ebtcTotBtc;
@@ -730,11 +732,12 @@ class Component extends DCLogic {
     const revSrcKeys = Object.keys(revBySrc).filter(k => k !== 'Total');
     const rsUse = (!S.rev.sources || !S.rev.sources.length) ? revSrcKeys : S.rev.sources.filter(x => revSrcKeys.includes(x));
     v.revSourceChips = this.multiChips(revSrcKeys, S.rev.sources, x => this.set2('rev', { sources: x }));
-    v.finTfChips = this.chips(['Q', 'A', 'C'], S.finTf, x => this.setState({ finTf: x }));
+    v.finTfChips = this.chips(['W', 'M', 'Q', 'A', 'C'], S.finTf, x => this.setState({ finTf: x }));
+    v.revModeChips = this.chips(['$', '% share'], S.rev.mode === 'share' ? '% share' : '$', x => this.set2('rev', { mode: x === '$' ? 'abs' : 'share' }));
     const finCum = S.finTf === 'C';
     const rev = this.mock.fin.Revenue, ni = this.mock.fin['Net income'], fees = this.mock.fin.Fees;
     const finBars = rsUse.map(n => ({ name: n, color: C.cat[revSrcKeys.indexOf(n) % C.cat.length], pts: revBySrc[n], agg: 'sum' }));
-    v.chFinRev = this.chart({ id: 'finRev', w: 1180, total: true, series: finBars, kind: 'bar', h: 320, fmt: f$, tf: S.finTf });
+    v.chFinRev = this.chart({ id: 'finRev', w: 1180, total: S.rev.mode !== 'share', series: finBars, kind: 'bar', pct: S.rev.mode === 'share', h: 320, fmt: S.rev.mode === 'share' ? fP : f$, tf: S.finTf });
     v.bFinRev = this.badge(['revBy']);
     v.bbUnitChips = this.chips(['$ value', 'ETHFI'], S.bb.unit === 'USD' ? '$ value' : 'ETHFI', x => this.set2('bb', { unit: x === '$ value' ? 'USD' : 'ETHFI' }));
     v.bbTfChips = this.chips(TFF, S.bb.tf, x => this.set2('bb', { tf: x }));
@@ -743,16 +746,19 @@ class Component extends DCLogic {
     v.bBbSummary = this.badge(['buybackEthfi']);
     const bu = bbUsd, bs = bbTok, endT = bu.length ? bu[bu.length - 1][0] : 0;
     v.bbRows = [['Past 7 days', 7], ['Past 30 days', 30], ['Past 180 days', 180], ['Past 365 days', 365], ['Total historical', 1e5]].map(([label, days]) => { const cut = endT - days * 86400000, u = bu.filter(p => p[0] >= cut).reduce((a, p) => a + p[1], 0), tk = bs.filter(p => p[0] >= cut).reduce((a, p) => a + p[1], 0); return { period: label, usd: f$(u), tok: fN(tk), avg: tk ? '$' + (u / tk).toFixed(3) : '\u2014' }; });
-    const ttmAt = (pts, t) => { const arr = pts.filter(p => p[0] <= t).slice(-4); return arr.length === 4 ? arr.reduce((a, p) => a + p[1], 0) : null; };
+    const liveRevBy = (this.liveOn() && this.liveD && this.liveD.revBy) ? this.liveD.revBy : null;
+    const revTotal = liveRevBy ? this.M.mergeSum(Object.keys(liveRevBy).filter(k => k !== 'Total').map(k => liveRevBy[k])) : this.mock.revBy.Total;
+    const feesTotal = (this.liveOn() && this.liveD && this.liveD.feesTotal) ? this.liveD.feesTotal : this.mock.fin.Fees;
+    const ttmWin = (pts, t) => { if (!pts || !pts.length) return null; const lo = t - 365 * 86400000; let s = 0, n = 0; for (const [pt, pv] of pts) { if (pt > t) break; if (pt >= lo) { s += pv; n++; } } if (!n) return null; const first = pts[0][0]; if (t - first < 300 * 86400000) return null; return s; };
     const psPts = [], pfPts = [], fdpsPts = [], fdpfPts = [];
-    for (const [t, p] of ethfiPx) { const c = V(ethfiCirc, t); if (!c || !p) continue; const mc = p * c, fdv2 = p * this.mock.ethfiMax, rT = ttmAt(rev, t), fT = ttmAt(fees, t); if (rT) { psPts.push([t, mc / rT]); fdpsPts.push([t, fdv2 / rT]); } if (fT) { pfPts.push([t, mc / fT]); fdpfPts.push([t, fdv2 / fT]); } }
-    const valAll = { 'P/S': [psPts, C.tok.ETHFI], 'P/F': [pfPts, C.acc], 'FD P/S': [fdpsPts, C.cat[2]], 'FD P/F': [fdpfPts, C.cat[4]] };
+    for (const [t, p] of ethfiPx) { const c = V(ethfiCirc, t); if (!c || !p) continue; const mc = p * c, fdv2 = p * this.mock.ethfiMax, rT = ttmWin(revTotal, t), fT = ttmWin(feesTotal, t); if (rT) { psPts.push([t, mc / rT]); fdpsPts.push([t, fdv2 / rT]); } if (fT) { pfPts.push([t, mc / fT]); fdpfPts.push([t, fdv2 / fT]); } }
+    const valAll = { 'P/S': [psPts, C.cat[0]], 'P/F': [pfPts, C.cat[1]], 'FD P/S': [fdpsPts, C.cat[2]], 'FD P/F': [fdpfPts, C.cat[4]] };
     const vmSel0 = S.val.metrics && S.val.metrics.length ? S.val.metrics.filter(m => valAll[m]) : [];
     const vmUse = vmSel0.length ? vmSel0 : Object.keys(valAll);
     v.valMetricChips = this.multiChips(Object.keys(valAll), S.val.metrics, x => this.set2('val', { metrics: x }));
     v.valTfChips = this.chips(TF, S.val.tf, x => this.set2('val', { tf: x }));
     v.chFinVal = this.chart({ id: 'finVal', w: 1180, series: vmUse.map(m => ({ name: m, color: valAll[m][1], pts: valAll[m][0] })), kind: 'line', h: 300, fmt: fX, tf: S.val.tf });
-    v.bFinVal = this.badge([], { label: 'Price live \u00b7 financials modeled', dot: '#3b9de0' });
+    v.bFinVal = this.badge((this.liveOn() && this.liveD && (this.liveD.revBy || this.liveD.feesTotal)) ? ['ethfiPrice', 'revBy'] : ['ethfiPrice'], (this.liveOn() && this.liveD && (this.liveD.revBy || this.liveD.feesTotal)) ? undefined : { label: 'Price live \u00b7 financials modeled', dot: '#3b9de0' });
     v.finStats = [
       { k: 'Total revenue', v: f$(rev.reduce((a, p) => a + p[1], 0)), sub: 'all-time \u00b7 since ETHFI launch', subStyle: this.subStyle() },
       { k: 'Total buybacks', v: fN(bbTokTotal) + ' ETHFI', sub: (bbTokTotal / this.mock.ethfiMax * 100).toFixed(2) + '% of max supply', subStyle: this.subStyle() },
@@ -905,7 +911,7 @@ themeVarsObj() {
         let pMax = 0, nMin = 0;
         uts.forEach(t => { let pp = 0, nn = 0; barD.forEach(s => { const val = V(s.pts, t) || 0; if (val > 0) pp += val; else nn += val; }); if (pp > pMax) pMax = pp; if (nn < nMin) nMin = nn; });
         stackTot = barD.length > 1 ? uts.map(t => barD.reduce((a, s) => a + (V(s.pts, t) || 0), 0)) : null;
-        vMax = pMax; vMin = nMin;
+        vMax = cfg.pct ? 100 : pMax; vMin = cfg.pct ? 0 : nMin;
       }
     } else { for (const s of (cfg.dual ? data.filter(s2 => s2.axis !== 'R') : data)) for (const [, v] of s.pts) { if (v > vMax) vMax = v; if (v < vMin) vMin = v; } }
     let rMin = 0, rMax = -Infinity;
@@ -958,7 +964,8 @@ themeVarsObj() {
         }
         let pb = 0, nb = 0;
         barD.forEach((s, si) => {
-          const val = V(s.pts, t) || 0; if (!val) return;
+          let val = V(s.pts, t) || 0; if (!val) return;
+          if (cfg.pct) val = stackTot && stackTot[i] ? val / stackTot[i] * 100 : 0;
           const b0 = val > 0 ? pb : nb, b1 = b0 + val;
           kids.push(R('rect', { key: 'b' + si + '_' + i, x: bcx(i) - bw / 2, y: Y(Math.max(b0, b1)), width: bw, height: Math.max(0.5, Math.abs(Y(b0) - Y(b1))), fill: s.color, fillOpacity: 0.88, rx: bw > 6 ? 2 : 0 }));
           if (val > 0) pb = b1; else nb = b1;
@@ -984,7 +991,7 @@ themeVarsObj() {
       const ht = uts[bi], hx = barMode ? bcx(bi) : X(ht);
       kids.push(R('line', { key: 'hv', x1: hx, x2: hx, y1: PT, y2: H - PB, stroke: C.mut, strokeWidth: 1, strokeDasharray: '3 3' }));
       const rows = []; let below = 0;
-      data.forEach((s, si) => { let v = V(s.pts, ht); if (v == null) return; if (cfg.kind === 'stack' && cfg.pct) v = stackTot[bi] ? v / stackTot[bi] * 100 : 0; rows.push({ n: s.name, c: s.color, v, f: s.fmt || cfg.fmt, nm: cfg.norm ? s._nm : null }); if (cfg.kind !== 'stack' && cfg.kind !== 'bar') kids.push(R('circle', { key: 'hc' + si, cx: hx, cy: yOf(s)(v), r: 3.5, fill: s.color, stroke: C.card, strokeWidth: 1.5 })); });
+      data.forEach((s, si) => { let v = V(s.pts, ht); if (v == null) return; if ((cfg.kind === 'stack' || cfg.kind === 'bar') && cfg.pct) v = stackTot && stackTot[bi] ? v / stackTot[bi] * 100 : 0; rows.push({ n: s.name, c: s.color, v, f: s.fmt || cfg.fmt, nm: cfg.norm ? s._nm : null }); if (cfg.kind !== 'stack' && cfg.kind !== 'bar') kids.push(R('circle', { key: 'hc' + si, cx: hx, cy: yOf(s)(v), r: 3.5, fill: s.color, stroke: C.card, strokeWidth: 1.5 })); });
       if (cfg.total && rows.length > 1) rows.push({ n: 'Total', c: C.ink, v: rows.reduce((a, r2) => a + r2.v, 0), f: cfg.fmt });
       const bh = 24 + rows.length * 17, bw2 = 208, bx = hx + 12 + bw2 > W - PR ? hx - bw2 - 12 : hx + 12;
       kids.push(R('foreignObject', { key: 'tt', x: bx, y: PT + 4, width: bw2, height: bh + 8, style: { pointerEvents: 'none' } },
