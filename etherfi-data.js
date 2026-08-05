@@ -215,7 +215,7 @@ export async function fetchLive(update){
   // Blockscout: ETHFI top holders (labels where available)
   (async()=>{
     try{
-      const r=await j('https://eth.blockscout.com/api/v2/tokens/0xFe0c30065B384F05761f15d0CC899D4F9F9Cc0eB/holders?limit=15');
+      const r=await j('https://eth.blockscout.com/api/v2/tokens/0xFe0c30065B384F05761f15d0CC899D4F9F9Cc0eB/holders');
       const items=r.items||r.holders||[];
       const out=items.map(h=>{const a=h.address||{};const addr=String(a.hash||'').toLowerCase();const tag=a.metadata&&a.metadata.tags&&a.metadata.tags[0]&&a.metadata.tags[0].name;const name=a.name||a.ens_domain_name||tag||('Unlabeled \u00b7 '+addr.slice(0,6)+'\u2026');const dec=(h.token&&h.token.decimals)?+h.token.decimals:18;return{name,amt:Number(h.value)/Math.pow(10,dec),addr};}).filter(h=>h.amt>0).slice(0,10);
       if(out.length>=5)update('topHolders.ETHFI',out,'Blockscout');
@@ -245,14 +245,15 @@ export async function fetchLive(update){
     const hr=await dp('4533951');
     if(hr.length){const arr=new Array(24).fill(0);let tot=0;for(const r of hr){const h=+r.hour_of_day,v=+r.hour_trait||+r.hour_volume||0;if(h>=0&&h<24){arr[h]=v;tot+=v;}}if(tot>0)update('activeHoursUTC',arr.map(v=>v/tot*100),'Dune');}
     await sleep(250);
-    const es=await dp('3961816');const eethTot=es.length?ser(es,'day','token_supply_eth'):null;if(eethTot&&eethTot.length)update('eethSupplyTot',eethTot,'Dune');
+    const es=await dp('3961816');const eethTot=es.length&&es.length>=60?ser(es,'day','token_supply_eth'):null;if(eethTot&&eethTot.length)update('eethSupplyTot',eethTot,'Dune');
     await sleep(250);
-    const ep=await dp('3915815');if(ep.length)update('eethPlatforms',collapse(pivot(ep,'day','category','balance'),eethTot,['Aave','EOAs','Morpho','Spark','Others']),'Dune');
+    const usable=rows=>{if(!rows||!rows.length)return false;const cats=new Set(),days=new Set();for(const r of rows){cats.add(clean(r.category));days.add(String(r.day).slice(0,10));}return cats.size>=3&&days.size>=60;};
+    const ep=await dp('3915815');if(usable(ep))update('eethPlatforms',collapse(pivot(ep,'day','category','balance'),eethTot,['Aave','EOAs','Morpho','Spark','Others']),'Dune');
     await sleep(250);
     const ebs=await dp('4494068');let ebtcTot=null;
     if(ebs.length){const m=new Map();for(const r of ebs){const t=ms(r.day),vb=+r.token_supply_base_asset_type;if(t&&!isNaN(vb))m.set(t,Math.max(m.get(t)||0,vb));}ebtcTot=[...m].sort((a,b)=>a[0]-b[0]);if(ebtcTot.length)update('ebtcSupplyTot',ebtcTot,'Dune');}
     await sleep(250);
-    const bp=await dp('4267621');if(bp.length)update('ebtcPlatforms',collapse(pivot(bp,'day','category','balance'),ebtcTot,['EOAs','Aave','ether.fi','Fluid','Others']),'Dune');
+    const bp=await dp('4267621');if(usable(bp))update('ebtcPlatforms',collapse(pivot(bp,'day','category','balance'),ebtcTot,['EOAs','Aave','ether.fi','Fluid','Others']),'Dune');
     await sleep(250);
     const eh=await dp('5153772');
     if(eh.length){const m=new Map();for(const r of eh){const t=ms(r.granularity_day),v=+r.total_unique_holders;if(t&&!isNaN(v))m.set(t,v);}const pts=[...m].sort((a,b)=>a[0]-b[0]);if(pts.length)update('holders.eETH',pts,'Dune');}

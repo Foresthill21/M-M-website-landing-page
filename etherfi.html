@@ -23,7 +23,7 @@ button{font-family:inherit;}
 .thm-mm [data-shell]::before{content:"";position:absolute;inset:0;pointer-events:none;z-index:0;background-image:linear-gradient(rgba(184,127,53,.055) 1px,transparent 1px),linear-gradient(90deg,rgba(184,127,53,.055) 1px,transparent 1px);background-size:46px 46px;-webkit-mask-image:radial-gradient(1200px 720px at 70% 0%,#000 0%,transparent 92%);mask-image:radial-gradient(1200px 720px at 70% 0%,#000 0%,transparent 92%);}
 .thm-mm [data-shell]::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:0;background:repeating-linear-gradient(0deg,rgba(0,0,0,.14) 0 1px,transparent 1px 3px);opacity:.45;}
 .thm-mm [data-side]{position:relative;z-index:5;background:#0c0603!important;border-right:1px solid rgba(184,127,53,0.18);}
-.thm-mm [data-main]{position:relative;z-index:1;}
+.thm-mm [data-main]{position:relative;z-index:2;}
 .thm-mm h2,.thm-mm h3{letter-spacing:-0.02em;}
 .thm-mm header h2::after{content:"";display:inline-block;width:.5em;height:1.02em;margin-left:.16em;vertical-align:-0.14em;background:#f0a545;box-shadow:0 0 14px rgba(240,165,69,.75);animation:tblink 1.15s steps(1) infinite;}
 @keyframes tblink{0%,50%{opacity:1}50.01%,100%{opacity:0}}
@@ -31,6 +31,12 @@ button{font-family:inherit;}
 .thm-mm [data-col="1"]:not([data-stats])::before,.thm-mm [data-stats="1"]>div::before{content:"";position:absolute;top:-1px;left:-1px;width:16px;height:16px;border-top:1.5px solid #f0a545;border-left:1.5px solid #f0a545;pointer-events:none;z-index:2;filter:drop-shadow(0 0 3px rgba(240,165,69,.6));}
 .thm-mm [data-col="1"]:not([data-stats])::after,.thm-mm [data-stats="1"]>div::after{content:"";position:absolute;bottom:-1px;right:-1px;width:16px;height:16px;border-bottom:1.5px solid #f0a545;border-right:1.5px solid #f0a545;pointer-events:none;z-index:2;filter:drop-shadow(0 0 3px rgba(240,165,69,.6));}
 .thm-mm [data-stats="1"]>div>div:nth-of-type(2){text-shadow:0 0 15px rgba(240,165,69,.42);}
+.thm-dark [data-shell]{position:relative;background:#000000!important;}
+.thm-dark [data-shell]::before{content:"";position:absolute;inset:0;pointer-events:none;z-index:0;background:repeating-linear-gradient(90deg,transparent 0 15px,rgba(0,200,55,.05) 15px 16px,transparent 16px 32px);}
+.thm-dark [data-shell]::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:0;background:repeating-linear-gradient(0deg,rgba(0,0,0,.16) 0 1px,transparent 1px 3px);opacity:.5;}
+.thm-dark [data-side]{position:relative;z-index:5;background:#000000!important;border-right:1px solid rgba(0,220,60,0.22);}
+.thm-dark [data-main]{position:relative;z-index:2;}
+.thm-dark header h2::after{content:"";display:inline-block;width:.55em;height:1.02em;margin-left:.16em;vertical-align:-0.14em;background:#00dd3a;box-shadow:0 0 12px rgba(0,221,58,.8);animation:tblink 1.15s steps(1) infinite;}
 .thm-etherfi [data-shell]{background:radial-gradient(125% 72% at 50% -6%,#221E63 0%,#12112E 42%,#08080C 80%)!important;}
 .thm-etherfi [data-side]{background:#08080cf2!important;border-right:1px solid rgba(255,255,255,0.08);}
 .thm-etherfi header h2{background:linear-gradient(90deg,#5EA8F5,#C56FD8);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
@@ -49,10 +55,11 @@ button{font-family:inherit;}
 }
 </style>
 </helmet>
-<div class="thm-{{ themeName }}" style="{{ themeVars }}"><div data-shell="1" style="display:flex;min-height:100vh;background:var(--bg,#f4f3fb);font-family:var(--fbody,'Instrument Sans'),sans-serif;color:var(--ink,#211d3a);">
+<div class="thm-{{ themeName }}" style="{{ themeVars }}"><div data-shell="1" style="position:relative;overflow:hidden;display:flex;min-height:100vh;background:var(--bg,#f4f3fb);font-family:var(--fbody,'Instrument Sans'),sans-serif;color:var(--ink,#211d3a);">
+  <div data-wm="1" style="position:absolute;top:-26px;right:-46px;width:min(500px,40vw);height:min(500px,40vw);pointer-events:none;z-index:0;background:var(--acc,#5b53e0);-webkit-mask:url(etherfi-mark.png) top right/contain no-repeat;mask:url(etherfi-mark.png) top right/contain no-repeat;opacity:0.09;"></div>
   <aside data-side="1" style="position:fixed;left:0;top:0;bottom:0;width:248px;background:var(--sidebg,#1b1830);display:flex;flex-direction:column;gap:24px;padding:24px 18px;z-index:5;">
     <div style="display:flex;align-items:center;gap:11px;padding:0 6px;">
-      <div style="width:34px;height:34px;border-radius:10px;background:var(--brandgrad,linear-gradient(135deg,#6d63f5,#38c6d9));display:flex;align-items:center;justify-content:center;color:#fff;font-family:var(--fhead,'Sora'),sans-serif;font-weight:700;font-size:15px;flex-shrink:0;letter-spacing:-0.03em;">e</div>
+      <div style="width:34px;height:34px;border-radius:9px;overflow:hidden;flex-shrink:0;box-shadow:0 0 0 1px rgba(255,255,255,0.08);"><img src="etherfi-icon.png" alt="ether.fi" style="width:100%;height:100%;display:block;object-fit:cover;" /></div>
       <div>
         <div style="color:#fff;font-family:var(--fhead,'Sora'),sans-serif;font-weight:700;font-size:15px;line-height:1.15;">ether.fi</div>
         <div data-brandsub="1" style="color:rgba(255,255,255,0.5);font-size:11px;margin-top:2px;">Research dashboard</div>
@@ -64,8 +71,8 @@ button{font-family:inherit;}
       </sc-for>
     </nav>
     <div style="display:flex;flex-direction:column;gap:7px;padding:0 6px;">
-      <span style="font-size:10px;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.42);font-weight:600;">Color scheme</span>
-      <div style="display:flex;gap:3px;background:rgba(255,255,255,0.09);padding:3px;border-radius:9px;">
+      <span style="font-size:10px;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.42);font-weight:600;">Layouts</span>
+      <div style="display:flex;flex-direction:column;gap:3px;">
         <sc-for list="{{ themeChips }}" as="c" hint-placeholder-count="4"><button sc-camel-on-click="{{ c.click }}" style="{{ c.style }}">{{ c.label }}</button></sc-for>
       </div>
     </div>
@@ -75,7 +82,7 @@ button{font-family:inherit;}
       <div style="font-size:11px;color:rgba(255,255,255,0.4);line-height:1.5;">Prepared by Machines &amp; Money<br>July 2026 · machinesandmoney.xyz</div>
     </div>
   </aside>
-  <main data-main="1" style="flex:1;margin-left:248px;padding:34px 38px 60px;min-width:0;">
+  <main data-main="1" style="position:relative;z-index:2;flex:1;margin-left:248px;padding:34px 38px 60px;min-width:0;">
 
     <sc-if value="{{ secOv }}" hint-placeholder-val="{{ true }}">
     <section data-screen-label="Overview" style="display:flex;flex-direction:column;gap:20px;max-width:1240px;margin:0 auto;">
@@ -91,6 +98,7 @@ button{font-family:inherit;}
             <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.05em;color:var(--mut,#7b7897);font-weight:600;">{{ s.k }}</div>
             <div style="font-family:var(--fmono,'IBM Plex Mono'),monospace;font-size:19px;font-weight:600;">{{ s.v }}</div>
             <div style="{{ s.subStyle }}">{{ s.sub }}</div>
+            <div style="{{ s.srcStyle }}">{{ s.srcLabel }}</div>
           </div>
         </sc-for>
       </div>
@@ -100,6 +108,7 @@ button{font-family:inherit;}
             <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.05em;color:var(--mut,#7b7897);font-weight:600;">{{ s.k }}</div>
             <div style="font-family:var(--fmono,'IBM Plex Mono'),monospace;font-size:19px;font-weight:600;">{{ s.v }}</div>
             <div style="{{ s.subStyle }}">{{ s.sub }}</div>
+            <div style="{{ s.srcStyle }}">{{ s.srcLabel }}</div>
           </div>
         </sc-for>
       </div>
@@ -115,10 +124,12 @@ button{font-family:inherit;}
         </div>
         <div data-col="1" style="grid-column:span 7;background:var(--card,#fff);border:1px solid var(--line,#e7e5f2);border-radius:var(--radlg,16px);padding:22px 24px;display:flex;flex-direction:column;gap:14px;">
           <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:flex-start;"><div><h3 style="margin:0;font-family:var(--fhead,'Sora'),sans-serif;font-size:15.5px;font-weight:600;">Cash spend &amp; transactions</h3><p style="margin:3px 0 0;font-size:12.5px;color:var(--mut,#7b7897);">Card spend volume ($) with daily transactions on the right axis</p></div>{{ bOvCash }}</div>
+          <div style="display:flex;gap:7px;align-items:center;"><span style="font-size:10.5px;text-transform:uppercase;letter-spacing:0.06em;color:var(--mut,#7b7897);font-weight:600;">Timeframe</span><div style="display:flex;gap:3px;background:var(--chipbg,#efeef8);padding:3px;border-radius:9px;"><sc-for list="{{ ovCashTfChips }}" as="c" hint-placeholder-count="6"><button sc-camel-on-click="{{ c.click }}" style="{{ c.style }}">{{ c.label }}</button></sc-for></div></div>
           <div style="min-height:280px;">{{ chOvCash }}</div>
         </div>
         <div data-col="1" style="grid-column:span 5;background:var(--card,#fff);border:1px solid var(--line,#e7e5f2);border-radius:var(--radlg,16px);padding:22px 24px;display:flex;flex-direction:column;gap:14px;">
           <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:flex-start;"><div><h3 style="margin:0;font-family:var(--fhead,'Sora'),sans-serif;font-size:15.5px;font-weight:600;">Revenue by source</h3><p style="margin:3px 0 0;font-size:12.5px;color:var(--mut,#7b7897);">Quarterly protocol revenue · modeled</p></div>{{ bOvRev }}</div>
+          <div style="display:flex;gap:7px;align-items:center;"><span style="font-size:10.5px;text-transform:uppercase;letter-spacing:0.06em;color:var(--mut,#7b7897);font-weight:600;">Timeframe</span><div style="display:flex;gap:3px;background:var(--chipbg,#efeef8);padding:3px;border-radius:9px;"><sc-for list="{{ ovRevTfChips }}" as="c" hint-placeholder-count="6"><button sc-camel-on-click="{{ c.click }}" style="{{ c.style }}">{{ c.label }}</button></sc-for></div></div>
           <div style="min-height:280px;">{{ chOvRev }}</div>
         </div>
       </div>
@@ -138,6 +149,7 @@ button{font-family:inherit;}
             <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.05em;color:var(--mut,#7b7897);font-weight:600;">{{ s.k }}</div>
             <div style="font-family:var(--fmono,'IBM Plex Mono'),monospace;font-size:20px;font-weight:600;">{{ s.v }}</div>
             <div style="{{ s.subStyle }}">{{ s.sub }}</div>
+            <div style="{{ s.srcStyle }}">{{ s.srcLabel }}</div>
           </div>
         </sc-for>
       </div>
@@ -157,6 +169,7 @@ button{font-family:inherit;}
         </div>
         <div data-col="1" style="grid-column:span 5;background:var(--card,#fff);border:1px solid var(--line,#e7e5f2);border-radius:var(--radlg,16px);padding:22px 24px;display:flex;flex-direction:column;gap:14px;">
           <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:flex-start;"><div><h3 style="margin:0;font-family:var(--fhead,'Sora'),sans-serif;font-size:15.5px;font-weight:600;">Holders</h3><p style="margin:3px 0 0;font-size:12.5px;color:var(--mut,#7b7897);">Unique ETHFI addresses · latest count live via Blockscout</p></div>{{ bEthfiHolders }}</div>
+          <div style="display:flex;gap:7px;align-items:center;"><span style="font-size:10.5px;text-transform:uppercase;letter-spacing:0.06em;color:var(--mut,#7b7897);font-weight:600;">Timeframe</span><div style="display:flex;gap:3px;background:var(--chipbg,#efeef8);padding:3px;border-radius:9px;"><sc-for list="{{ ethfiHoldTfChips }}" as="c" hint-placeholder-count="6"><button sc-camel-on-click="{{ c.click }}" style="{{ c.style }}">{{ c.label }}</button></sc-for></div></div>
           <div style="min-height:280px;">{{ chEthfiHolders }}</div>
         </div>
         <div data-col="1" style="grid-column:span 12;background:var(--card,#fff);border:1px solid var(--line,#e7e5f2);border-radius:var(--radlg,16px);padding:22px 24px;display:flex;flex-direction:column;gap:16px;">
@@ -204,6 +217,7 @@ button{font-family:inherit;}
             <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.05em;color:var(--mut,#7b7897);font-weight:600;">{{ s.k }}</div>
             <div style="font-family:var(--fmono,'IBM Plex Mono'),monospace;font-size:20px;font-weight:600;">{{ s.v }}</div>
             <div style="{{ s.subStyle }}">{{ s.sub }}</div>
+            <div style="{{ s.srcStyle }}">{{ s.srcLabel }}</div>
           </div>
         </sc-for>
       </div>
@@ -283,12 +297,13 @@ button{font-family:inherit;}
             <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.05em;color:var(--mut,#7b7897);font-weight:600;">{{ s.k }}</div>
             <div style="font-family:var(--fmono,'IBM Plex Mono'),monospace;font-size:20px;font-weight:600;">{{ s.v }}</div>
             <div style="{{ s.subStyle }}">{{ s.sub }}</div>
+            <div style="{{ s.srcStyle }}">{{ s.srcLabel }}</div>
           </div>
         </sc-for>
       </div>
       <div style="display:grid;grid-template-columns:repeat(12,1fr);gap:18px;">
         <div data-col="1" style="grid-column:span 6;background:var(--card,#fff);border:1px solid var(--line,#e7e5f2);border-radius:var(--radlg,16px);padding:22px 24px;display:flex;flex-direction:column;gap:14px;">
-          <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:flex-start;"><div><h3 style="margin:0;font-family:var(--fhead,'Sora'),sans-serif;font-size:15.5px;font-weight:600;">eETH supply by platform</h3><p style="margin:3px 0 0;font-size:12.5px;color:var(--mut,#7b7897);">weETH held across integrations · stacked</p></div>{{ bEeth }}</div>
+          <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:flex-start;"><div><h3 style="margin:0;font-family:var(--fhead,'Sora'),sans-serif;font-size:15.5px;font-weight:600;">weETH supply by platform</h3><p style="margin:3px 0 0;font-size:12.5px;color:var(--mut,#7b7897);">weETH held across integrations · stacked</p></div>{{ bEeth }}</div>
           <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;">
             <div style="display:flex;gap:3px;background:var(--chipbg,#efeef8);padding:3px;border-radius:9px;"><sc-for list="{{ eethDenomChips }}" as="c" hint-placeholder-count="2"><button sc-camel-on-click="{{ c.click }}" style="{{ c.style }}">{{ c.label }}</button></sc-for></div>
             <div style="display:flex;gap:3px;background:var(--chipbg,#efeef8);padding:3px;border-radius:9px;flex-wrap:wrap;"><sc-for list="{{ eethPlatChips }}" as="c" hint-placeholder-count="6"><button sc-camel-on-click="{{ c.click }}" style="{{ c.style }}">{{ c.label }}</button></sc-for></div>
@@ -386,6 +401,7 @@ button{font-family:inherit;}
             <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.05em;color:var(--mut,#7b7897);font-weight:600;">{{ s.k }}</div>
             <div style="font-family:var(--fmono,'IBM Plex Mono'),monospace;font-size:20px;font-weight:600;">{{ s.v }}</div>
             <div style="{{ s.subStyle }}">{{ s.sub }}</div>
+            <div style="{{ s.srcStyle }}">{{ s.srcLabel }}</div>
           </div>
         </sc-for>
       </div>
@@ -453,7 +469,7 @@ button{font-family:inherit;}
 class Component extends DCLogic {
   state = {
     sec: 0, ready: 0, zoom: {}, hov: null, drag: null, pieHov: null, hid: {}, src: {}, theme: null,
-    ov: { tf: 'W' },
+    ov: { tf: 'W' }, ovCashTf: 'W', ovRevTf: 'Q', ethfiHoldTf: 'W',
     ethfi: { metrics: ['Price'], tf: 'W' }, ethfiSupTf: 'W',
     cashVol: { metrics: ['Spend'], tf: 'W' }, cashAmt: { sel: null, tf: 'W', mode: 'abs' }, cashUser: 'Transactions', cashUserTf: 'W',
     cashTxAmt: { sel: null, tf: 'W' }, ramp: { dir: 'All', denom: 'All', tf: 'W' }, uSafe: { sel: null, mode: 'abs', tf: 'W' }, hoursTz: 'UTC',
@@ -468,9 +484,9 @@ class Component extends DCLogic {
       mm: { bg: '#130b07', sidebg: '#0d0704', card: 'rgba(37,22,14,0.5)', line: 'rgba(184,127,53,0.18)', line2: 'rgba(184,127,53,0.10)', ink: '#f3ece3', mut: '#b5a596', acc: '#e0913f', chipbg: 'rgba(184,127,53,0.10)', chipOn: '#b87f35', chipInk: '#130b07', grid: 'rgba(184,127,53,0.10)', phbg: 'rgba(184,127,53,0.06)', tipbg: '#1c110a', pos: '#7bd46a', neg: '#e56b5a', radlg: '0px', radsm: '0px', rad: 0, fmono: "'Geist Mono','IBM Plex Mono'", fhead: "'Archivo'", fbody: "'Archivo'", brandgrad: 'linear-gradient(135deg,#e0913f,#b87f35)',
         tok: { eETH: '#6580E1', weETH: '#8f9bff', eBTC: '#FD8A4C', Liquid: '#55C9A7', ETHFI: '#F0A545', Cash: '#4FA8A8' },
         cat: ['#5B8DEF', '#F0A545', '#3FD08F', '#B98BEF', '#E85D5D', '#39C2D9', '#D9E24C', '#F08FB5', '#9AA7C7', '#7d8aa0'] },
-      dark: { radlg: '16px', radsm: '14px', rad: 7, bg: '#0a0c10', sidebg: '#06080c', card: '#12151c', line: 'rgba(255,255,255,0.09)', line2: 'rgba(255,255,255,0.055)', ink: '#e6e4da', mut: '#8f96a3', acc: '#ffa028', chipbg: 'rgba(255,255,255,0.06)', chipOn: 'rgba(255,255,255,0.16)', grid: 'rgba(255,255,255,0.06)', phbg: 'rgba(255,255,255,0.035)', tipbg: 'rgba(6,8,12,0.96)', pos: '#37d29c', neg: '#ff6b6b', fhead: "'IBM Plex Mono'", fbody: "'Instrument Sans'", brandgrad: 'linear-gradient(135deg,#ffa028,#c46a00)',
-        tok: { eETH: '#4fb3ff', weETH: '#7f9cf5', eBTC: '#ffa028', Liquid: '#37d29c', ETHFI: '#c792ea', Cash: '#ffd166' },
-        cat: ['#4fb3ff', '#ffa028', '#37d29c', '#c792ea', '#ff6b6b', '#26c6da', '#ffd166', '#f48fb1', '#a1887f', '#8f9bb3'] },
+      dark: { radlg: '0px', radsm: '0px', rad: 0, bg: '#000000', sidebg: '#000000', card: 'rgba(2,10,3,0.82)', line: 'rgba(0,220,60,0.22)', line2: 'rgba(0,220,60,0.12)', ink: '#33dd55', mut: '#2a9c48', acc: '#00dd3a', chipbg: 'rgba(0,220,60,0.08)', chipOn: 'rgba(0,220,60,0.20)', grid: 'rgba(0,220,60,0.11)', phbg: 'rgba(0,220,60,0.05)', tipbg: '#010a03', pos: '#33dd55', neg: '#e04444', fhead: "'IBM Plex Mono'", fbody: "'IBM Plex Mono'", fmono: "'IBM Plex Mono'", brandgrad: 'linear-gradient(135deg,#00dd3a,#0a8f2b)',
+        tok: { eETH: '#00dd3a', weETH: '#5fe57e', eBTC: '#ffb000', Liquid: '#35e0e0', ETHFI: '#c98cff', Cash: '#ff5cc8' },
+        cat: ['#00dd3a', '#ffb000', '#35e0e0', '#ff5cc8', '#c98cff', '#5fe57e', '#9ad86a', '#e0b64c', '#66c0ff', '#8f9bb3'] },
       light: { radlg: '16px', radsm: '14px', rad: 7, bg: '#f6f6f4', sidebg: '#1d2430', card: '#ffffff', line: '#e4e3de', line2: '#efeeea', ink: '#22252a', mut: '#72757d', acc: '#2f4b7c', chipbg: '#edece8', chipOn: '#ffffff', grid: '#eeede9', phbg: '#f2f1ed', tipbg: 'rgba(29,36,48,0.95)', pos: '#2f7d5c', neg: '#b04a49', fhead: "'Sora'", fbody: "'Instrument Sans'", brandgrad: 'linear-gradient(135deg,#2f4b7c,#4a6b9c)',
         tok: { eETH: '#2f4b7c', weETH: '#4d7fb0', eBTC: '#b58946', Liquid: '#3f8f7a', ETHFI: '#665191', Cash: '#a05b74' },
         cat: ['#2f6fb0', '#e0862e', '#2f9e6e', '#7c4dbf', '#c0392b', '#0e9aa7', '#c78a1f', '#c2578f', '#8a6d3b', '#6b7280'] },
@@ -536,9 +552,9 @@ class Component extends DCLogic {
     v.themeVars = this.themeVarsObj();
     v.themeName = this.theme();
     v.mmLogo = this.M ? R('img', { src: 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(this.M.MM_LOGO_TPL.split('__C__').join('#ffffff')), alt: 'Machines & Money', style: { width: '100%', maxWidth: 164, height: 'auto', opacity: 0.8, display: 'block' } }) : null;
-    v.themeChips = [['M&M', 'mm'], ['Dark', 'dark'], ['Light', 'light'], ['ether.fi', 'etherfi']].map(([label, key]) => ({
+    v.themeChips = [['M&M', 'mm'], ['Terminal', 'dark'], ['Corporate', 'light'], ['ether.fi', 'etherfi']].map(([label, key]) => ({
       label, click: () => this.setState({ theme: key }),
-      style: { flex: 1, padding: '5px 4px', borderRadius: this.theme() === 'mm' ? 4 : 7, fontSize: 11, fontWeight: 600, border: 'none', cursor: 'pointer', background: this.theme() === key ? (this.theme() === 'mm' ? '#b87f35' : 'rgba(255,255,255,0.22)') : 'transparent', color: this.theme() === key ? (this.theme() === 'mm' ? '#0a0a0a' : '#fff') : 'rgba(255,255,255,0.6)', transition: 'all .15s', whiteSpace: 'nowrap' }
+      style: { display: 'block', width: '100%', textAlign: 'left', padding: '8px 12px', borderRadius: this.theme() === 'mm' ? 4 : 8, fontSize: 12.5, fontWeight: 600, border: 'none', cursor: 'pointer', background: this.theme() === key ? (this.theme() === 'mm' ? 'rgba(224,145,63,0.14)' : 'rgba(255,255,255,0.13)') : 'transparent', color: this.theme() === key ? '#fff' : 'rgba(255,255,255,0.55)', boxShadow: this.theme() === key && this.theme() === 'mm' ? 'inset 2px 0 0 #b87f35' : 'none', transition: 'all .15s', whiteSpace: 'nowrap' }
     }));
     v.tvSrc = 'https://s.tradingview.com/widgetembed/?symbol=BINANCE%3AETHFIUSDT&interval=D&theme=' + (['mm', 'dark', 'etherfi'].includes(this.theme()) ? 'dark' : 'light') + '&style=1&withdateranges=1&hidesidetoolbar=0&allow_symbol_change=1&saveimage=0&locale=en';
     const liveN = Object.keys(S.src).length;
@@ -551,7 +567,7 @@ class Component extends DCLogic {
       ['chOvRestaked', 'chOvCash', 'chOvRev', 'chEthfiPrice', 'chEthfiSupply', 'chEthfiHolders', 'chCashVol', 'chCashAmt', 'chCashUser', 'chCashTxAmt', 'chCashRamp', 'chUserSafe', 'chHours', 'chEeth', 'chEbtc', 'chRApy', 'chRUtil', 'chRYield', 'chRHolders', 'chLiquid', 'chFinRev', 'chBuyback', 'chFinVal'].forEach(k => v[k] = ph);
       ['pieEthfiHold', 'pieRHold'].forEach(k => v[k] = this.ph(240));
       ['ovStats', 'ovStats2', 'ethfiStats', 'cashStats', 'reStats', 'finStats', 'ethfiHoldRows', 'rHoldRows', 'bbRows', 'navItems2'].forEach(k => v[k] = v[k] || []);
-      ['ovTfChips', 'ethfiMetricChips', 'ethfiTfChips', 'ethfiSupTfChips', 'cashVolChips', 'cashVolTfChips', 'cashAmtChips', 'cashAmtTfChips', 'cashAmtModeChips', 'cashUserChips', 'cashUserTfChips', 'cashTxAmtChips', 'cashTxAmtTfChips', 'rampDirChips', 'rampDenomChips', 'rampTfChips', 'userSafeChips', 'userSafeModeChips', 'userSafeTfChips', 'hoursTzChips', 'eethDenomChips', 'eethPlatChips', 'eethTfChips', 'ebtcDenomChips', 'ebtcPlatChips', 'ebtcTfChips', 'rApyChips', 'rApyTfChips', 'rYieldChips', 'rYieldTfChips', 'rHoldTfChips', 'rHoldTabs', 'liquidViewChips', 'liquidPlatChips', 'liquidModeChips', 'liquidTfChips', 'revSourceChips', 'revModeChips', 'finTfChips', 'bbUnitChips', 'bbTfChips', 'valMetricChips', 'valTfChips'].forEach(k => v[k] = []);
+      ['ovTfChips', 'ovCashTfChips', 'ovRevTfChips', 'ethfiHoldTfChips', 'ethfiMetricChips', 'ethfiTfChips', 'ethfiSupTfChips', 'cashVolChips', 'cashVolTfChips', 'cashAmtChips', 'cashAmtTfChips', 'cashAmtModeChips', 'cashUserChips', 'cashUserTfChips', 'cashTxAmtChips', 'cashTxAmtTfChips', 'rampDirChips', 'rampDenomChips', 'rampTfChips', 'userSafeChips', 'userSafeModeChips', 'userSafeTfChips', 'hoursTzChips', 'eethDenomChips', 'eethPlatChips', 'eethTfChips', 'ebtcDenomChips', 'ebtcPlatChips', 'ebtcTfChips', 'rApyChips', 'rApyTfChips', 'rYieldChips', 'rYieldTfChips', 'rHoldTfChips', 'rHoldTabs', 'liquidViewChips', 'liquidPlatChips', 'liquidModeChips', 'liquidTfChips', 'revSourceChips', 'revModeChips', 'finTfChips', 'bbUnitChips', 'bbTfChips', 'valMetricChips', 'valTfChips'].forEach(k => v[k] = []);
       ['bOvRestaked', 'bOvCash', 'bOvRev', 'bEthfiPrice', 'bEthfiSupply', 'bEthfiHolders', 'bCashVol', 'bCashAmt', 'bCashUser', 'bCashTxAmt', 'bCashRamp', 'bUserSafe', 'bEeth', 'bEbtc', 'bRApy', 'bRUtil', 'bRYield', 'bBbSummary', 'bRHolders', 'bLiquid', 'bFinRev', 'bBuyback', 'bFinVal', 'bEthfiHold', 'bHours', 'bRHold'].forEach(k => v[k] = '');
       return v;
     }
@@ -571,25 +587,27 @@ class Component extends DCLogic {
     const bbCumUsd = this.usd(bbCum, ethfiPx);
     // ===== 01 Overview =====
     v.ovTfChips = this.chips(TF, S.ov.tf, x => this.set2('ov', { tf: x }));
-    v.chOvRestaked = this.chart({ id: 'ovRestaked', w: 1180, series: [{ name: 'eETH', color: C.tok.eETH, pts: usd(eethTotEth, ethPx) }, { name: 'eBTC', color: C.tok.eBTC, pts: usd(ebtcTotBtc, btcPx) }, { name: 'Liquid', color: C.tok.Liquid, pts: liqTot }], kind: 'stack', h: 300, fmt: f$, tf: S.ov.tf });
+    const reStart = Math.max(Date.parse('2026-01-01'), ...[usd(eethTotEth, ethPx), usd(ebtcTotBtc, btcPx), liqTot].map(s => s && s.length ? s[0][0] : 0)); const clip = s => (s || []).filter(p => p[0] >= reStart); v.chOvRestaked = this.chart({ id: 'ovRestaked', w: 1180, series: [{ name: 'eETH', color: C.tok.eETH, pts: clip(usd(eethTotEth, ethPx)) }, { name: 'eBTC', color: C.tok.eBTC, pts: clip(usd(ebtcTotBtc, btcPx)) }, { name: 'Liquid', color: C.tok.Liquid, pts: clip(liqTot) }], kind: 'stack', h: 300, fmt: f$, tf: S.ov.tf });
     v.bOvRestaked = this.badge(['restakedTvl', 'ethPrice', 'btcPrice']);
-    v.chOvCash = this.chart({ id: 'ovCash', w: 668, dual: true, rFmt: fN, h: 280, fmt: f$, tf: S.ov.tf, series: [{ name: 'Spend ($)', color: C.tok.Cash, pts: this.g('cashSpend'), agg: 'sum' }, { name: 'Transactions', color: C.acc, pts: this.g('cashTx'), axis: 'R', fmt: fN, line: true, agg: 'sum' }], kind: 'bar' });
+    v.ovCashTfChips = this.chips(TF, S.ovCashTf, x => this.setState({ ovCashTf: x }));
+    v.chOvCash = this.chart({ id: 'ovCash', w: 668, dual: true, rFmt: fN, h: 280, fmt: f$, tf: S.ovCashTf, series: [{ name: 'Spend ($)', color: C.tok.Cash, pts: this.g('cashSpend'), agg: 'sum' }, { name: 'Transactions', color: C.acc, pts: this.g('cashTx'), axis: 'R', fmt: fN, line: true, agg: 'sum' }], kind: 'bar' });
     v.bOvCash = this.badge(['cashSpend', 'cashTx']);
-    v.chOvRev = this.chart({ id: 'ovRev', w: 456, total: true, series: (() => { const rb = this.g('revBy') || this.mock.revBy; return Object.keys(rb).filter(k => k !== 'Total').map((n, i) => ({ name: n, color: C.cat[i % C.cat.length], pts: rb[n], agg: 'sum' })); })(), kind: 'bar', h: 280, fmt: f$, tf: 'Q' });
+    v.chOvRev = this.chart({ id: 'ovRev', w: 456, total: true, series: (() => { const rb = this.g('revBy') || this.mock.revBy; return Object.keys(rb).filter(k => k !== 'Total').map((n, i) => ({ name: n, color: C.cat[i % C.cat.length], pts: rb[n], agg: 'sum' })); })(), kind: 'bar', h: 280, fmt: f$, tf: S.ovRevTf });
+    v.ovRevTfChips = this.chips(TF, S.ovRevTf, x => this.setState({ ovRevTf: x }));
     v.bOvRev = this.badge(['revBy']);
     const allTimeSpend = this.g('cashSpend').reduce((a, p) => a + p[1], 0);
     const ttmRev = this.mock.fin.Revenue.slice(-4).reduce((a, p) => a + p[1], 0);
     v.ovStats = [
-      { k: 'ETHFI price', v: ethfiNow ? '$' + ethfiNow.toFixed(3) : '\u2014', ...this.d30(ethfiPx) },
-      { k: 'All-time Cash spend', v: f$(allTimeSpend), sub: 'cumulative card volume', subStyle: this.subStyle() },
-      { k: 'Total restaked value', v: f$(restakedNowUsd), sub: 'eETH + eBTC + Liquid', subStyle: this.subStyle() },
-      { k: 'TTM revenue', v: f$(ttmRev), sub: 'trailing 4 quarters \u00b7 modeled', subStyle: this.subStyle() }
+      { k: 'ETHFI price', v: ethfiNow ? '$' + ethfiNow.toFixed(3) : '\u2014', ...this.d30(ethfiPx), ...this.srcMeta(['ethfiPrice']) },
+      { k: 'All-time Cash spend', v: f$(allTimeSpend), sub: 'cumulative card volume', subStyle: this.subStyle(), ...this.srcMeta(['cashSpend']) },
+      { k: 'Total restaked value', v: f$(restakedNowUsd), sub: 'eETH + eBTC + Liquid', subStyle: this.subStyle(), ...this.srcMeta(['eethSupplyTot', 'restakedTvl']) },
+      { k: 'TTM revenue', v: f$(ttmRev), sub: 'trailing 4 quarters', subStyle: this.subStyle(), ...this.srcMeta(['revBy']) }
     ];
     v.ovStats2 = [
-      { k: 'eETH TVL', v: f$(eethNow * ethNow), ...this.d30(usd(eethTotEth, ethPx)) },
-      { k: 'eBTC TVL', v: f$(ebtcNow * btcNow), ...this.d30(usd(ebtcTotBtc, btcPx)) },
-      { k: 'Liquid TVL', v: f$(liqNow), ...this.d30(liqTot) },
-      { k: 'Total holders', v: fN(this.last(this.g('holders.total'))), sub: 'unique ecosystem addresses', subStyle: this.subStyle() }
+      { k: 'eETH TVL', v: f$(eethNow * ethNow), ...this.d30(usd(eethTotEth, ethPx)), ...this.srcMeta(['eethSupplyTot']) },
+      { k: 'eBTC TVL', v: f$(ebtcNow * btcNow), ...this.d30(usd(ebtcTotBtc, btcPx)), ...this.srcMeta(['ebtcSupplyTot']) },
+      { k: 'Liquid TVL', v: f$(liqNow), ...this.d30(liqTot), ...this.srcMeta(['liquidTvl']) },
+      { k: 'Total holders', v: fN(this.last(this.g('holders.total'))), sub: 'unique ecosystem addresses', subStyle: this.subStyle(), ...this.srcMeta(['holders.total']) }
     ];
     // ===== 02 ETHFI =====
     const mcap = ethfiPx.map(([t, p]) => { const c = V(ethfiCirc, t); return c ? [t, p * c] : null; }).filter(Boolean);
@@ -605,7 +623,8 @@ class Component extends DCLogic {
     v.ethfiSupTfChips = this.chips(TF, S.ethfiSupTf, x => this.setState({ ethfiSupTf: x }));
     v.chEthfiSupply = this.chart({ id: 'ethfiSupply', w: 668, series: [{ name: 'Circulating ETHFI', color: C.tok.ETHFI, pts: ethfiCirc }], kind: 'area', h: 280, fmt: fN, tf: S.ethfiSupTf });
     v.bEthfiSupply = this.badge(['ethfiCirc']);
-    v.chEthfiHolders = this.chart({ id: 'ethfiHolders', w: 456, series: [{ name: 'ETHFI holders', color: C.tok.ETHFI, pts: this.g('holders.ETHFI') }], kind: 'area', h: 280, fmt: fN });
+    v.ethfiHoldTfChips = this.chips(TF, S.ethfiHoldTf, x => this.setState({ ethfiHoldTf: x }));
+    v.chEthfiHolders = this.chart({ id: 'ethfiHolders', w: 456, series: [{ name: 'ETHFI holders', color: C.tok.ETHFI, pts: this.g('holders.ETHFI') }], kind: 'area', h: 280, fmt: fN, tf: S.ethfiHoldTf });
     v.bEthfiHolders = this.badge(['anchor.holders.ETHFI']);
     v.ethfiHoldRows = this.holdRows('ETHFI', ethfiCirc, x => fN(x));
     v.pieEthfiHold = this.holdPie('pieEthfi', 'ETHFI', ethfiCirc, x => fN(x) + ' ETHFI');
@@ -617,10 +636,10 @@ class Component extends DCLogic {
     const holdPrev = V(holdEthfi, holdEnd - 365 * 86400000), holdNowE = this.last(holdEthfi);
     const holdYoY = holdNowE && holdPrev ? ((holdNowE - holdPrev) / holdPrev * 100) : null;
     v.ethfiStats = [
-      { k: 'ETHFI price', v: ethfiNow ? '$' + ethfiNow.toFixed(3) : '\u2014', ...this.d30(ethfiPx) },
-      { k: 'Circulating supply', v: fN(circNow) + ' ETHFI', sub: (circNow / this.mock.ethfiMax * 100).toFixed(1) + '% of 1B max', subStyle: this.subStyle() },
-      { k: 'TTM buybacks', v: f$(bbUsdTTM), sub: fN(bbTokTotal) + ' ETHFI all-time', subStyle: this.subStyle() },
-      { k: 'Total holders', v: fN(holdNowE), sub: holdYoY != null ? ((holdYoY >= 0 ? '+' : '\u2212') + Math.abs(holdYoY).toFixed(0) + '% TTM YoY') : '', subStyle: this.subStyle(holdYoY >= 0 ? C.pos : C.neg) }
+      { k: 'ETHFI price', v: ethfiNow ? '$' + ethfiNow.toFixed(3) : '\u2014', ...this.d30(ethfiPx), ...this.srcMeta(['ethfiPrice']) },
+      { k: 'Circulating supply', v: fN(circNow) + ' ETHFI', sub: (circNow / this.mock.ethfiMax * 100).toFixed(1) + '% of 1B max', subStyle: this.subStyle(), ...this.srcMeta(['ethfiCirc']) },
+      { k: 'TTM buybacks', v: f$(bbUsdTTM), sub: fN(bbTokTotal) + ' ETHFI all-time', subStyle: this.subStyle(), ...this.srcMeta(['buybackEthfi']) },
+      { k: 'Total holders', v: fN(holdNowE), sub: holdYoY != null ? ((holdYoY >= 0 ? '+' : '\u2212') + Math.abs(holdYoY).toFixed(0) + '% TTM YoY') : '', subStyle: this.subStyle(holdYoY >= 0 ? C.pos : C.neg), ...this.srcMeta(['anchor.holders.ETHFI', 'holders.ETHFI']) }
     ];
     // ===== 03 Cash =====
     const cvAll = { Spend: [this.g('cashSpend'), f$, C.tok.Cash, 'sum', false], Cashback: [this.g('cashback'), f$, C.cat[3], 'sum', false], 'Market share': [this.mock.cashShare, fP, C.acc, 'last', true] };
@@ -672,10 +691,10 @@ class Component extends DCLogic {
     const spendPrev30 = spendArr.filter(p => p[0] >= spEnd - 60 * 86400000 && p[0] < spEnd - 30 * 86400000).reduce((a, p) => a + p[1], 0);
     const momPct = spendPrev30 ? ((spend30 - spendPrev30) / spendPrev30 * 100) : null;
     v.cashStats = [
-      { k: 'Total spend volume', v: f$(allTimeSpend), sub: 'all-time card spend', subStyle: this.subStyle() },
-      { k: '30D spend volume', v: f$(spend30), sub: momPct != null ? ((momPct >= 0 ? '+' : '\u2212') + Math.abs(momPct).toFixed(1) + '% MoM') : '', subStyle: this.subStyle(momPct >= 0 ? C.pos : C.neg) },
-      { k: 'Total transactions', v: fN(this.g('cashTx').reduce((a, p) => a + p[1], 0)), sub: 'all-time count', subStyle: this.subStyle() },
-      { k: 'Active users', v: fN(this.last(this.g('activeCards'))), sub: 'current active cards', subStyle: this.subStyle() }
+      { k: 'Total spend volume', v: f$(allTimeSpend), sub: 'all-time card spend', subStyle: this.subStyle(), ...this.srcMeta(['cashSpend']) },
+      { k: '30D spend volume', v: f$(spend30), sub: momPct != null ? ((momPct >= 0 ? '+' : '\u2212') + Math.abs(momPct).toFixed(1) + '% MoM') : '', subStyle: this.subStyle(momPct >= 0 ? C.pos : C.neg), ...this.srcMeta(['cashSpend']) },
+      { k: 'Total transactions', v: fN(this.g('cashTx').reduce((a, p) => a + p[1], 0)), sub: 'all-time count', subStyle: this.subStyle(), ...this.srcMeta(['cashTx']) },
+      { k: 'Active users', v: fN(this.last(this.g('activeCards'))), sub: 'current active cards', subStyle: this.subStyle(), ...this.srcMeta(['activeCards']) }
     ];
     // ===== 04 Restaking =====
     v.eethDenomChips = this.chips(['ETH', 'USD'], S.eeth.denom, x => this.set2('eeth', { denom: x }));
@@ -702,7 +721,7 @@ class Component extends DCLogic {
     const ryAll = { eETH: [this.mock['yield.eETH'], C.tok.eETH], eBTC: [this.mock['yield.eBTC'], C.tok.eBTC], Liquid: [this.mock['yield.Liquid'], C.tok.Liquid] };
     const ryKeys = Object.keys(ryAll), ryUse = (!S.rYield.sel || !S.rYield.sel.length) ? ryKeys : S.rYield.sel.filter(x => ryAll[x]);
     v.rYieldChips = this.multiChips(ryKeys, S.rYield.sel, x => this.set2('rYield', { sel: x }));
-    v.rYieldTfChips = this.chips(TFF, S.rYield.tf, x => this.set2('rYield', { tf: x }));
+    v.rYieldTfChips = this.chips(TF, S.rYield.tf, x => this.set2('rYield', { tf: x }));
     v.chRYield = this.chart({ id: 'rYield', w: 1180, series: ryUse.map(n => ({ name: n, color: ryAll[n][1], pts: ryAll[n][0], agg: 'sum' })), kind: 'bar', h: 260, fmt: f$, tf: S.rYield.tf });
     v.bRYield = this.badge([]);
     v.rHoldTfChips = this.chips(TF, S.rHoldTf, x => this.setState({ rHoldTf: x }));
@@ -722,17 +741,17 @@ class Component extends DCLogic {
     v.chLiquid = this.chart({ id: 'liquid', w: 1180, series: liqUse.map(n => ({ name: n, color: C.cat[liqKeys.indexOf(n) % C.cat.length], pts: liqObj[n] })), kind: 'stack', pct: S.liquid.mode === 'share', h: 300, fmt: S.liquid.mode === 'share' ? fP : f$, tf: S.liquid.tf });
     v.bLiquid = this.badge(['liquidTvl']);
     v.reStats = [
-      { k: 'Total eETH supply', v: fN(eethNow) + ' ETH', ...this.d30(eethTotEth) },
-      { k: 'Total eBTC supply', v: fN(ebtcNow) + ' BTC', ...this.d30(ebtcTotBtc) },
-      { k: 'Total Liquid TVL', v: f$(liqNow), ...this.d30(liqTot) },
-      { k: 'Total holders', v: fN(this.last(this.g('holders.total'))), sub: 'all restaked assets', subStyle: this.subStyle() }
+      { k: 'Total eETH supply', v: fN(eethNow) + ' ETH', ...this.d30(eethTotEth), ...this.srcMeta(['eethSupplyTot']) },
+      { k: 'Total eBTC supply', v: fN(ebtcNow) + ' BTC', ...this.d30(ebtcTotBtc), ...this.srcMeta(['ebtcSupplyTot']) },
+      { k: 'Total Liquid TVL', v: f$(liqNow), ...this.d30(liqTot), ...this.srcMeta(['liquidTvl']) },
+      { k: 'Total holders', v: fN(this.last(this.g('holders.total'))), sub: 'all restaked assets', subStyle: this.subStyle(), ...this.srcMeta(['holders.total']) }
     ];
     // ===== 05 Financials =====
     const revBySrc = this.g('revBy') || this.mock.revBy;
     const revSrcKeys = Object.keys(revBySrc).filter(k => k !== 'Total');
     const rsUse = (!S.rev.sources || !S.rev.sources.length) ? revSrcKeys : S.rev.sources.filter(x => revSrcKeys.includes(x));
     v.revSourceChips = this.multiChips(revSrcKeys, S.rev.sources, x => this.set2('rev', { sources: x }));
-    v.finTfChips = this.chips(['W', 'M', 'Q', 'A', 'C'], S.finTf, x => this.setState({ finTf: x }));
+    v.finTfChips = this.chips(TF, S.finTf, x => this.setState({ finTf: x }));
     v.revModeChips = this.chips(['$', '% share'], S.rev.mode === 'share' ? '% share' : '$', x => this.set2('rev', { mode: x === '$' ? 'abs' : 'share' }));
     const finCum = S.finTf === 'C';
     const rev = this.mock.fin.Revenue, ni = this.mock.fin['Net income'], fees = this.mock.fin.Fees;
@@ -740,7 +759,7 @@ class Component extends DCLogic {
     v.chFinRev = this.chart({ id: 'finRev', w: 1180, total: S.rev.mode !== 'share', series: finBars, kind: 'bar', pct: S.rev.mode === 'share', h: 320, fmt: S.rev.mode === 'share' ? fP : f$, tf: S.finTf });
     v.bFinRev = this.badge(['revBy']);
     v.bbUnitChips = this.chips(['$ value', 'ETHFI'], S.bb.unit === 'USD' ? '$ value' : 'ETHFI', x => this.set2('bb', { unit: x === '$ value' ? 'USD' : 'ETHFI' }));
-    v.bbTfChips = this.chips(TFF, S.bb.tf, x => this.set2('bb', { tf: x }));
+    v.bbTfChips = this.chips(TF, S.bb.tf, x => this.set2('bb', { tf: x }));
     v.chBuyback = this.chart({ id: 'buyback', w: 668, series: [{ name: S.bb.unit === 'USD' ? 'Buybacks ($)' : 'Buybacks (ETHFI)', color: C.tok.ETHFI, pts: S.bb.unit === 'USD' ? bbUsd : bbTok, agg: 'sum' }], kind: 'bar', h: 280, fmt: S.bb.unit === 'USD' ? f$ : fN, tf: S.bb.tf });
     v.bBuyback = this.badge(['buybackEthfi']);
     v.bBbSummary = this.badge(['buybackEthfi']);
@@ -760,10 +779,10 @@ class Component extends DCLogic {
     v.chFinVal = this.chart({ id: 'finVal', w: 1180, series: vmUse.map(m => ({ name: m, color: valAll[m][1], pts: valAll[m][0] })), kind: 'line', h: 300, fmt: fX, tf: S.val.tf });
     v.bFinVal = this.badge((this.liveOn() && this.liveD && (this.liveD.revBy || this.liveD.feesTotal)) ? ['ethfiPrice', 'revBy'] : ['ethfiPrice'], (this.liveOn() && this.liveD && (this.liveD.revBy || this.liveD.feesTotal)) ? undefined : { label: 'Price live \u00b7 financials modeled', dot: '#3b9de0' });
     v.finStats = [
-      { k: 'Total revenue', v: f$(rev.reduce((a, p) => a + p[1], 0)), sub: 'all-time \u00b7 since ETHFI launch', subStyle: this.subStyle() },
-      { k: 'Total buybacks', v: fN(bbTokTotal) + ' ETHFI', sub: (bbTokTotal / this.mock.ethfiMax * 100).toFixed(2) + '% of max supply', subStyle: this.subStyle() },
-      { k: 'Active loans', v: f$(this.last(this.mock.activeLoans)), ...this.d30(this.mock.activeLoans) },
-      { k: 'P/S valuation', v: fX(this.last(psPts)), sub: 'mkt cap / TTM revenue', subStyle: this.subStyle() }
+      { k: 'Total revenue', v: f$(rev.reduce((a, p) => a + p[1], 0)), sub: 'all-time \u00b7 since ETHFI launch', subStyle: this.subStyle(), ...this.srcMeta(['revBy']) },
+      { k: 'Total buybacks', v: fN(bbTokTotal) + ' ETHFI', sub: (bbTokTotal / this.mock.ethfiMax * 100).toFixed(2) + '% of max supply', subStyle: this.subStyle(), ...this.srcMeta(['buybackEthfi']) },
+      { k: 'Active loans', v: f$(this.last(this.mock.activeLoans)), ...this.d30(this.mock.activeLoans), ...this.srcMeta(['activeLoans']) },
+      { k: 'P/S valuation', v: fX(this.last(psPts)), sub: 'mkt cap / TTM revenue', subStyle: this.subStyle(), ...this.srcMeta(['revBy', 'ethfiPrice']) }
     ];
     return v;
   }
@@ -804,10 +823,10 @@ themeVarsObj() {
     const btn = this._dlBtn; if (btn) btn.style.display = 'none';
     if (!HT) { alert('Export library still loading — try again in a moment.'); return; }
     const C = this.C || {};
-    const cs = getComputedStyle(el);
-    let bg = cs.backgroundColor;
-    if (!bg || bg === 'rgba(0, 0, 0, 0)' || bg === 'transparent') bg = C.card || '#ffffff';
+    const bg = C.bg || '#ffffff';
     const ink = C.ink || '#111', mut = C.mut || '#888', line = C.line || 'rgba(0,0,0,0.1)';
+    const headFam = (C.fhead || "'Sora'").replace(/'/g, '') + ', sans-serif';
+    const bodyFam = (C.fbody || "'Instrument Sans'").replace(/'/g, '') + ', sans-serif';
     const titleEl = el.querySelector('h3') || el.querySelector('div');
     const title = (titleEl && titleEl.textContent.trim()) || 'ether.fi metric';
     const s = 2;
@@ -816,23 +835,34 @@ themeVarsObj() {
       cardCanvas = await HT.toCanvas(el, { pixelRatio: s, backgroundColor: bg, cacheBust: true, filter: n => !(n && n.getAttribute && n.getAttribute('data-dl-btn')) });
     } catch (err) { alert('Could not capture this element (it may contain an embedded chart that blocks export).'); return; }
     const logo = await this.loadLogo(ink);
-    const pad = 26 * s, headH = 78 * s, foot = 20 * s;
+    const pad = 26 * s, foot = 20 * s;
     const cw = cardCanvas.width, chh = cardCanvas.height;
-    const W = cw + pad * 2, H = chh + headH + foot;
+    const W = cw + pad * 2;
+    // current value for each data series shown in this card's chart
+    const idEl = el.querySelector('[data-chart-id]');
+    const cfg = idEl && this._chartCfg ? this._chartCfg[idEl.getAttribute('data-chart-id')] : null;
+    const lastV = pts => { if (!pts) return null; for (let i = pts.length - 1; i >= 0; i--) { const y = pts[i][1]; if (y != null && !isNaN(y)) return y; } return null; };
+    let items = [];
+    if (cfg && cfg.series) items = cfg.series.filter(se => se.pts && se.pts.length).map(se => { const fmt = se.fmt || cfg.fmt || (x => String(x)); const y = lastV(se.pts); return { name: se.name, color: se.color, val: y == null ? '\u2014' : fmt(y) }; });
+    // lay out a wrapping legend of "● name value"
+    const lgFont = '600 ' + (12 * s) + 'px ' + bodyFam, rowH = 22 * s, dotGap = 9 * s, itemGap = 20 * s, dotR = 4 * s;
+    const mctx = document.createElement('canvas').getContext('2d'); mctx.font = lgFont;
+    let rows = items.length ? 1 : 0, lx = pad; const laid = [];
+    for (const it of items) { const label = it.name + '  ' + it.val; const w = dotR * 2 + dotGap + mctx.measureText(label).width; if (lx > pad && lx + w > W - pad) { rows++; lx = pad; } laid.push({ ...it, x: lx, row: rows - 1 }); lx += w + itemGap; }
+    const baseHead = 40 * s, legendH = items.length ? rows * rowH + 8 * s : 0, headH = baseHead + legendH + 14 * s;
+    const H = chh + headH + foot;
     const out = document.createElement('canvas'); out.width = W; out.height = H;
     const ctx = out.getContext('2d');
     ctx.fillStyle = bg; ctx.fillRect(0, 0, W, H);
-    // header text, top-left
     ctx.textBaseline = 'alphabetic';
-    ctx.fillStyle = ink;
-    ctx.font = '700 ' + (21 * s) + 'px Sora, Inter, sans-serif';
-    ctx.fillText(title, pad, pad + 22 * s);
-    ctx.fillStyle = mut;
-    ctx.font = '500 ' + (12.5 * s) + 'px Inter, sans-serif';
-    ctx.fillText('ether.fi Dashboard \u00b7 Prepared by Machines & Money', pad, pad + 44 * s);
-    // divider
+    ctx.fillStyle = ink; ctx.font = '700 ' + (21 * s) + 'px ' + headFam;
+    ctx.fillText(title, pad, pad + 20 * s);
+    // legend with current values
+    if (laid.length) {
+      ctx.font = lgFont; const ly0 = pad + 42 * s;
+      for (const it of laid) { const ly = ly0 + it.row * rowH; ctx.fillStyle = it.color; ctx.beginPath(); ctx.arc(it.x + dotR, ly - 4 * s, dotR, 0, Math.PI * 2); ctx.fill(); const tx = it.x + dotR * 2 + dotGap; ctx.fillStyle = mut; ctx.fillText(it.name + '  ', tx, ly); const nw = ctx.measureText(it.name + '  ').width; ctx.fillStyle = ink; ctx.fillText(it.val, tx + nw, ly); }
+    }
     ctx.strokeStyle = line; ctx.lineWidth = s; ctx.beginPath(); ctx.moveTo(pad, headH - 8 * s); ctx.lineTo(W - pad, headH - 8 * s); ctx.stroke();
-    // card body
     ctx.drawImage(cardCanvas, pad, headH, cw, chh);
     // watermark logo, faint, centered over body
     if (logo) {
@@ -872,6 +902,7 @@ themeVarsObj() {
   // ---------- chart ----------
   chart(cfg) {
     const R = React.createElement, C = this.C;
+    (this._chartCfg = this._chartCfg || {})[cfg.id] = cfg;
     if (!this.state.ready) return this.ph(cfg.h || 280);
     const id = cfg.id, W = cfg.w || 1040, H = cfg.h || 300, PL = 74, PR = cfg.dual ? 56 : 14, PT = 14, PB = 30;
     const hid = this.state.hid[id] || {};
@@ -1006,6 +1037,7 @@ themeVarsObj() {
     const toT = xvb => t0 + Math.min(1, Math.max(0, (xvb - PL) / (W - PL - PR))) * (t1 - t0);
     const getX = e => { const r = e.currentTarget.getBoundingClientRect(); return (e.clientX - r.left) / r.width * W; };
     const svg = R('svg', {
+      'data-chart-id': id,
       viewBox: '0 0 ' + W + ' ' + H, style: { width: '100%', height: 'auto', display: 'block', cursor: 'crosshair', touchAction: 'pan-y' },
       onPointerDown: e => { const x = getX(e); e.currentTarget.setPointerCapture(e.pointerId); this.setState({ drag: { id, a: x, b: x } }); },
       onPointerMove: e => { const x = getX(e); if (this.state.drag && this.state.drag.id === id) { this.setState({ drag: { ...this.state.drag, b: x } }); return; } const t = toT(x); const prev = this.state.hov; if (prev && prev.id === id && Math.abs(prev.t - t) < span / 200) return; this.setState({ hov: { id, t } }); },
@@ -1078,6 +1110,8 @@ themeVarsObj() {
   }
   set2(group, patch) { this.setState(s => ({ [group]: { ...s[group], ...patch } })); this.forceUpdate(); }
   last(pts) { return pts && pts.length ? pts[pts.length - 1][1] : null; }
+  srcTag(keys) { keys = Array.isArray(keys) ? keys : [keys]; for (const k of keys) { const s = this.state.src[k]; if (s) return s; } return null; }
+  srcMeta(keys) { const s = this.srcTag(keys); const live = !!s && this.liveOn(); return { srcLabel: live ? ('\u25cf Live \u00b7 ' + s) : '\u25cb Illustrative', srcStyle: { marginTop: '3px', fontSize: '9.5px', fontWeight: 700, letterSpacing: '0.05em', textTransform: 'uppercase', color: live ? this.C.pos : this.C.mut, opacity: live ? 0.95 : 0.7 } }; }
   d30(pts) {
     if (!pts || pts.length < 2) return { sub: '', subStyle: this.subStyle() };
     const [t1, v1] = pts[pts.length - 1], v0 = this.M.valueAt(pts, t1 - 30 * 86400000);
